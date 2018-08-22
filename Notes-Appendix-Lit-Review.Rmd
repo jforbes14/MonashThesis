@@ -1,19 +1,9 @@
 ---
-chapter: 2
-knit: "bookdown::render_book"
+title: "Notes"
+output: html_notebook
 ---
 
-# Literature Review {#ch:litreview}
 
-This chapter contains a summary of the context in which your research is set. 
-
-Imagine you are writing for your fellow PhD students. Topics that are well-known to them do not have to be included here. But things that they may not know about should be included.
-
-Resist the temptation to discuss everything you've read in the last few years. And you are not writing a textbook either. This chapter is meant to provide the background necessary to understand the material in subsequent chapters. Stick to that.
-
-You will need to organize the literature review around themes, and within each theme provide a story explaining the development of ideas to date. In each theme, you should get to the point where your ideas will fit in. But leave your ideas to later chapters. This way it is clear what has been done beforehand, and what new contributions you are making to the research field.
-
-All citations should be done using markdown notation as shown below. This way, your bibliography will be compiled automatically and correctly.
 
 
 ## Exponential Smoothing {#sec:expsmooth}
@@ -23,6 +13,26 @@ Exponential smoothing was originally developed in the late 1950s [@Brown59;@Brow
 Empirical studies by @MH79 and @Metal82 found little difference in forecast accuracy between exponential smoothing and ARIMA models. This made the family of exponential smoothing procedures an attractive proposition [see @CKOS01].
 
 The methods were less popular in academic circles until  @OKS97 introduced a state space formulation of some of the methods, which was extended in @HKSG02 to cover the full range of exponential smoothing methods.
+
+## Handling Nonresponse
+@DR87 defines three objectives that must be satisfied in an appropriate method for dealing with nonresponse as follows:
+1 - adjusts estimates for the fact that on measured background variables the nonrespondents (or rate of non-response) differs from respondents
+2 - expands standard errors to reflect any reduction in sample size
+3 - exposes sensitivity of estimates and standard errors to possible differences between nonrespondents and respondents
+
+By discarding nonrespondents, biased results will occur if non-responsiveness is correlated with values of variables @DR87.
+
+Using an ad hoc prodecure using the mean, variance and correlation of responding units may seem sensible, but can still be biased. A negative-definite correlation matrix can result, causing negative variances in a regression @DR87.
+
+### Multiple Imputation
+@DR87 Impute m alternative values for the missing data, and run m separate models - one for each complete (imputed) data set.
+
+Allows for us to treat the dataset as complete, and also flexibility in specification of imputed values.
+
+For each posited model for nonresponse, two or more imputations are created (to reflect sample variability with known reason for nonresponsiveness). The m models reflect uncertainty about the reasons for nonresponse.
+
+### Bayesian Methods to Adjust for Nonresponsiveness in aggregated figures
+@YSL08 presents a Bayesian model for estimating classification probabilities and probabilities of respondents’ bias, in the context of self reported crime. With a comparative dataset which is deemed to be more reliable (in terms of responsiveness), empirical Bayes can be used to adjust the reported values to fit the other distribution*.
 
 
 ##Random Effects

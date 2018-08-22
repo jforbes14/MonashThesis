@@ -1,0 +1,276 @@
+% This is a LaTeX thesis template for Monash University.
+% to be used with Rmarkdown
+% This template was produced by Rob Hyndman
+% Version: 6 September 2016
+
+\documentclass{monashthesis}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Add any LaTeX packages and other preamble here if required
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\author{Joe Bloggs}
+\title{Thesis title}
+\degrees{B.Sc. (Hons), University of Tangambalanga}
+\def\degreetitle{Doctor of Philosophy}
+% Add subject and keywords below
+\hypersetup{
+     %pdfsubject={The Subject},
+     %pdfkeywords={Some Keywords},
+     pdfauthor={Joe Bloggs},
+     pdftitle={Thesis title},
+     pdfproducer={Bookdown with LaTeX}
+}
+
+
+\bibliography{thesisrefs}
+
+\begin{document}
+
+\pagenumbering{roman}
+
+\titlepage
+
+{\setstretch{1.2}\sf\tighttoc\doublespacing}
+
+\chapter*{Acknowledgements}\label{acknowledgements}
+\addcontentsline{toc}{chapter}{Acknowledgements}
+
+I would like to thank my pet goldfish for \dots
+
+\chapter*{Declaration}\label{declaration}
+\addcontentsline{toc}{chapter}{Declaration}
+
+I hereby declare that this thesis contains no material which has been
+accepted for the award of any other degree or diploma in any university
+or equivalent institution, and that, to the best of my knowledge and
+belief, this thesis contains no material previously published or written
+by another person, except where due reference is made in the text of the
+thesis.
+
+\vspace*{2cm}\par\authorname
+
+\chapter*{Preface}\label{preface}
+\addcontentsline{toc}{chapter}{Preface}
+
+The material in Chapter \ref{ch:intro} has been submitted to the journal
+\emph{Journal of Impossible Results} for possible publication.
+
+The contribution in Chapter \ref{ch:litreview} of this thesis was
+presented in the International Symposium on Nonsense held in Dublin,
+Ireland, in July 2015.
+
+\chapter*{Abstract}\label{abstract}
+\addcontentsline{toc}{chapter}{Abstract}
+
+This thesis is about \ldots{}
+
+\clearpage\pagenumbering{arabic}\setcounter{page}{0}
+
+\chapter{Introduction}\label{ch:intro}
+
+This research will examine the relationships between socio-demographics
+and voting behaviour in Australian federal elections in the 21st
+century, in order to answer the questions as to why Australians vote the
+way they do, and how this has changed over time. Voting outcomes and
+population characteristics are to be gathered at the electorate level,
+using spatial analysis to map demographics from censuses falling either
+side of an election to that particular election. The study differs from
+more common voting studies in three main ways. First, it uses spatial
+modelling tools to connect socio-demographic information to an election
+from censuses either side of that election. Secondly, it considers
+predictive modelling for voter behaviour, and thirdly it combines
+information across multiple elections.
+
+In order to match information from each census and election since 2001,
+data in the Geographic Information Software (GIS) format will be
+analysed and overlayed - the dominant approach in spatial studies.
+Methodologies for intersecting and interpreting GIS objects are well
+documented, and have been used in previous analysis of Australian voting
+behaviour, along with other studies in other fields including; strategic
+planning (Valcik, 2012), healthcare (Ye et al. 2017) and geosciences.
+
+\chapter{Literature Review}\label{ch:litreview}
+
+Existing literature on socio-spatial analysis of Australian elections
+are limited to examining a single federal election, with
+socio-demographic information pulled from the nearest census. This
+approach by used by Stimson et al. (2005), and later this approach was
+repeated and adapted to an online e-research platform by Liao et al.
+(2009). Both of these studies use GIS to overlay the nearest census to
+the single federal election of interest, and use information
+disaggregated to polling booth locations, which is a finer level of
+disaggregation than the areas this study intends to explore - being
+Commonwealth Electoral Divisions (CEDs), also known as electorates.
+
+An area that is blatantly vacant in Australian literature is the
+examination of these socio-political relationships over time. It appears
+that no study has either attempted to create a collection of
+socio-demographics for multiple elections, nor has any study overlayed
+information to more than one census to a single Australian federal
+election - a problem that naturally arises due to the frequency of the
+two events.
+
+The previous single-election studies have analysed socio-political
+relationships confined to a single electoral division (Forrest 1982), or
+a particular political party (Davis and Stimson 1998). Stimson \& Shyy
+(2012) expanded on this by examining how key demographic and
+socio-economic characteristics affect voter support for political
+parties. This was done using the GIS data from the previously mentioned
+online facility, and used univariate visualisations, linear regressions,
+summary statistics and discriminant analysis to model relationships
+between population variables and votes for a particular party.
+Discriminant analysis was also used by Stimson et al. (2001) because the
+study aimed to distinguish between political parties in their voter
+support, rather than predict how areas would vote. Both descriptive and
+predictive analytics will be undertaken in this research, as it aims to
+only uncover patterns in voters for each party and predict how
+electorates would vote with a given set of characteristics.
+
+The methods for descriptive and predictive modelling are outlined in the
+methodology section of this submission.
+
+\chapter{Data}\label{ch:Data}
+
+The two main data sources for this research are the Australian Census of
+Population and Housing from the Australian Bureau of Statistics (ABS),
+and published election results from the Australian Electoral Commission
+(AEC).
+
+The Census of Population and Housing collects data on the key
+characteristics of every Australian and is conducted every five years.
+There have been four censuses in the 21st century, being that in 2001,
+2006, 2011 and 2016. All of these are used in this study to provide
+socio-demographic information at electorate level. Federal elections
+typically occur every three years, and the those of interest will be
+from 2001, 2004, 2007, 2010, 2013 and 2016. All information from these
+sources is publically available, so this project will be reproducible -
+proving a resource for future research.
+
+\section{Commonwealth Electorate
+Boundaries}\label{commonwealth-electorate-boundaries}
+
+\textcite{AEC-Overview} For the House of Representatives each State and
+Territory is divided into electoral divisions, totalling 150 electorates
+across Australia. The number of these divisions is determined by
+population. To ensure equal representation, the boundaries of these
+divisions have to be redrawn or redistributed periodically.
+Redistributions (changing of boundaries) typically only affect a handful
+of electorates, with most remaining the same as previously defined.
+Redistribution dates can be found in the appendix
+\textcite{AEC-DistDates}.
+
+\textcite{ABS-CED} The Commonwealth Electoral Divisions (CED) are an ABS
+approimation of the AEC electoral division boundaries. CEDs may change
+as the AEC revises boundaries, and the CED update will occur in the
+month of July following the AEC changes.
+
+The boundaries may be redistributed between elections, but this has no
+effect on the House of Representatives until the next election.
+
+\section{Census}\label{census}
+
+Write a summary of the data taken from each census
+
+\subsubsection{Non-response in Census}\label{non-response-in-census}
+
+Like in any survey, non-response bias is a source of potential problems.
+The ABS releases statements with each Census on its data quality, and
+for the years considered, this study assumes reliability of the
+published data.
+
+It is worthwhile noting that total item non-response increased in 2016,
+compared with 2011, for non-imputed items but remains reasonably close
+to levels achieved in 2006 \textcite{ABS-CQ16}. The main contributor to
+item non-response is people who do not respond to the Census at all.
+Amongst those who responded, non-response rates have steady dropped
+since 2006. The ABS has imputed key variables (age, sex, martial status
+and usual residence) for non-response, although is not clear whether
+this has been done in 2001.
+
+Non imputed items are treated as ``not stated'' or ``not applicable'',
+dependent on the imputed age of the person.
+
+The assumption of reliability means that no adjustments or imputations
+will be explicitly made in this study to the values derived from each
+Census. However, the frequency of ``not stated'' responses will be
+recorded for particular questions, and will be included with other
+Census-derived metrics in the electorate profiles.
+
+\section{Election results}\label{election-results}
+
+The three type of vote count published for each federal election that
+have been gathered and formatted for analysis in this study are as
+follows:
+
+\begin{itemize}
+\item
+  Division of preferences: distribution of preferences at each step of
+  reallocation, beginning with first preferences.
+\item
+  Two party preferred: distribution of preferences where, by convention,
+  comparisons are made between the ALP and the leading Liberal/National
+  candidates. In seats where the final two candidates are not from the
+  ALP and the Liberal or National parties, a two party preferred count
+  may be conducted to find the result of preference flows to the ALP and
+  the Liberal/National candidates. Vote swing percentage is calculated
+  for this metric.
+\item
+  Two candidate preffered: distribution of preferences to the two
+  candidates who came first and second in the election.
+\end{itemize}
+
+\section{Mapping Census Information to Electorates at Election
+Times}\label{mapping-census-information-to-electorates-at-election-times}
+
+In order to map Census information to each election, there are two cases
+to consider: elections that fall on the same year as a Census, and those
+that do not.
+
+\subsubsection{Elections that fall on a Census
+year}\label{elections-that-fall-on-a-census-year}
+
+When a Census is conducted in an election year the CEDs used by the ABS
+will match the AEC electoral divisions for that election, so the Census
+profiles can be directly mapped to the electorates at election time.
+This is done for 2001 and 2016.
+
+\subsubsection{Elections that do not fall on a Census
+year}\label{elections-that-do-not-fall-on-a-census-year}
+
+If the election does not fall on the same year a Census is conducted,
+data from the two nearest Censuses will be used to compute estimated
+electorate profiles at election time. These will reflect both the
+changes demographics over time, and the differences in electorate
+boundaries between the election and either Census.
+
+This presents a significant challenge, and requires the use of spatial
+analytics and mapping tools to determine the composition of the
+electorate. For each election and Census the AEC and ABS release a
+shapefile (GIS map) of the electorate boundaries. Using tools
+predominantly from the \(rgeos\) package, boundaries at election time
+can be overlayed with those at Census time to determine what the
+electorate boundary would have looked like, should it have been
+implemented for the Census. This is done for each Census in order to
+compute an estimated socio-demographic profile of this superimposed
+boundary. With estimated profiles from each Census, the profile at
+election time can be interpolated between the two Censuses, depending on
+when the election falls.
+
+(The algorithm to complete this projection is as follows - maybe this is
+for a different section)
+
+\appendix
+
+\chapter{Additional stuff}\label{additional-stuff}
+
+You might put some computer output here, or maybe additional tables.
+
+Note that line 5 must appear before your first appendix. But other
+appendices can just start like any other chapter.
+
+\printbibliography[heading=bibintoc]
+
+
+
+\end{document}

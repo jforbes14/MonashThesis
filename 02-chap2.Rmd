@@ -1,0 +1,29 @@
+---
+chapter: 2
+knit: "bookdown::render_book"
+---
+
+# Literature Review {#ch:litreview}
+
+Existing literature on socio-spatial analysis of Australian elections is limited to examining a single federal election, with socio-demographic information pulled from the nearest census. This approach is used in Stimson et al. (2005), and is adapted to an online e-research platform by Liao et al. (2009). Both use GIS to overlay the nearest census to the single federal election of interest, and use information disaggregated to polling booth locations, which is a finer level of disaggregation than the areas this study explores - being Commonwealth Electoral Divisions (CEDs), also known as electorates. 
+
+An area that is seemingly vacant in Australian literature is the examination of these socio-political relationships over time. It appears that no study has either attempted to create a collection of socio-demographics for multiple elections, nor has any study overlayed information from more than one census to a single Australian federal election. The latter is a a necessary problem to tackle due to the different periodicities of these events. 
+
+Single-election studies typically analyse socio-political relationships confined to a single electoral division (Forrest 1982), or a particular political party (Davis and Stimson 1998). Stimson & Shyy (2012) expand on this by examining how key demographic and socio-economic characteristics affect voter support for political parties. This is done using the GIS data from the previously mentioned online facility, and uses univariate visualisations, linear regressions, summary statistics and discriminant analysis to model relationships between population variables and votes for a particular party. Discriminant analysis is also used by Stimson et al. (2001) because the study aimed to distinguish between political parties in their voter support, rather than predict how areas would vote. 
+
+In order to answer research questions (1) and (2), this study focuses on regression models to conduct both inference and prediction. The response variables of interest for each question are non-negative and sum to unit, so the datasets for each question are (by definition) compositional with $D$ components (Pawlowsky-Glahn and Buccianti, 2011).
+
+The two popular approaches to modelling compositional data are by way of logratio analysis, and the Dirichlet distribution, as these both fit the sum constraint. 
+
+Logratio analysis (Aitchison, 1986) uses a transformation of the components, which then can be treated as a multivariate distribution. Available transformation methods are additive, centred and isometric (Egozcue et al. 2003). A common approach is to treat the transformed data as multivariate normal, which allows for covariation between the parts. In modelling the 2001 Australian federal election, Chong et al. (2005) adopt this approach, using an additive logratio transformation.
+
+The Dirichlet distribution also provides a candidate for modelling the distribution of votes, as the componenets estimated must sum to one. Campbell and Mosimann (1987) propose a covariate extension which allows for different variational behavior by setting the parameters to be functions of common covariates. This approach is adopted by Gueorguieva et al. (2008) in estimating component scores of a psychiatric assessment, with parametric regression used to estimate the Dirichlet parameters.
+
+
+
+(...more on inferential techniques and model assessment criteria goes here...)
+# add more on evaluation criteria and diagnostics
+Diagnostics include measures of overdispersion, Cook’s distance, and a local jackknife influence metric (psych.)
+
+
+
