@@ -1,0 +1,201 @@
+---
+title: "Skeleteon of Thesis Structure"
+output: html_notebook
+---
+
+# What makes Australians vote the way they do? A socio-demographic study of federal elections.
+
+## Acknowledge
+
+## Declaration
+
+## Abstract
+
+To be written last
+
+
+## Introduction
+
+Motivation
+
+- The changing Australian demographic
+
+- Perhaps some news headlines to show it is topical
+
+
+Explicitly state the question to be answered
+
+- Inference
+
+
+Outline the challenges involved
+
+
+Outline the techniques that are going to be used
+
+
+Literature review
+
+- Conclusions from previous Australian election studies
+
+- Imputation methods
+
+- Modelling techniques for elections 
+
+- PCA
+
+- Xway models
+
+
+## The data
+
+State the data sources
+
+
+Summary of the data
+
+- Summary statistics
+
+- Explanation of each metric
+
+
+Insights from the Census data
+
+- Changes in demographics (as alluded to in introduction)
+
+
+Further explanation of the problem
+
+- Changing electorate boundaries
+
+- Changes over time
+
+
+Show the format data was accessed
+
+
+Outline any missingness in the data
+
+
+## Imputation algorithm
+
+Discuss the potential options
+
+- Again reference what has been done
+
+
+Outline the idea behind my algorithm, and why it should perform better
+
+- State assumptions
+
+
+Step through the algorithm
+
+- Include pictures to illustrate
+
+- Use my poster graphic
+
+
+Comparison of imputations
+
+- Be explicit in how I am comparing (MAPE)
+
+- Extreme case example
+
+
+Caveats
+
+- Time scale is much larger
+
+
+## Modelling the two-party preferred
+
+PCA
+
+- Motivation for doing it
+
+- Interpret the PVE and PCs
+
+- Ellipsoids to demonstrate the pockets of ALP/LNP
+
+- PCR for 2016
+
+
+Converting to factors
+
+- Refer to PC loadings interpretation
+
+
+Single year models
+
+- Use 2016 to explain the method, and just print the results for other years
+
+- Start by including the summarised set of variables
+
+- Xway models and conclusions of best predictors
+
+- Interpretation of each year (possible subheadings)
+
+- Diagnostics
+
+
+Longitudinal model
+
+- Method to build up
+
+- Assumptions required
+
+- Model
+
+- Interpretation
+
+- Diagnostics
+
+
+## Modelling full voter preference for 2016 (TBC)
+
+Dirichlet model using the same 'best' covariates from 2016 to model all parties
+
+Do conclusions change?
+
+
+## Discussion
+
+Assumptions of imputation method (TBC - may be repeating myself)
+
+- Uniform distribution
+
+- Linear changes over time (e.g. sudden refugee intake)
+
+- Encouraging: CED performed better than POA
+
+- How time scale is different
+
+
+Further improvements
+
+- ?
+
+
+## Conclusions
+
+Recap
+
+- The need for imputation algorithm and why it helps
+
+- Conclusions of variable importance from models
+
+
+Insights
+
+- What is the most important predictor
+
+- What has changed over the years
+
+
+
+
+
+
+
+
