@@ -1,0 +1,123 @@
+# Modelling {#ch:Modelling}
+
+** To be inserted into chapter 4, as part 1 **
+
+# Two Party Preferred Vote
+
+Question (1) is concerned with modelling the two party preferred vote, $TPP$, to analyse preference between Labor and Liberal/National parties. Since $TPP_{Labor} + TPP_{Liberal} = 1$, we can focus our models on the response $TPP_{Liberal}$, which sits in the interval $(0,1)$. From now on we will refer to $TPP_{i,t}$ as the two party preferred vote in favour of the Liberal party, for electorate $i$, in year year $t$. In an electorate won by either Labor or Liberal, Liberal is the prevailing party if $TPP_{i,t} > 0.5$.
+
+Since all $TPP_{i,t}$ across the six elections are within $[0.24, 0.75]$, the response can be directly modelled using ordinary linear regression, instead of applying a logistic transform.
+
+As previously outlined, the CED imputed socio-demographics are used.
+
+## Principal component analysis
+
+We have 64 socio-demographic variables, and 150 electorates, at our disposal for each election. If we tried to fit a model for a single election using all 64 varibles, we face problems with multi-collinearity and over-fitting, and would lead to erroneous conclusions of variable significance. Therefore a form of dimension reduction is needed to build adequate models. We use principal component analysis to tease out relationships between socio-demographic variables, so that we can summarise similar variables in some way.
+
+Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained. Although the components are not entirely interpretable, we can infer the relative importance of variables in each component based on the magnitude of their loadings.
+
+The components for election year are computed separately and then compared to determine their similarity. If the variables that have higher loadings in each component are reasonably similar across years, we are justified in computing principal component analysis on a combined data set, containing all electorates from all elections. 
+
+These components are then interpreted to extract what we denote as factors - groupings of variables that have loadings clustered together and have an intuitive interpretation.
+
+### Separate elections
+
+The proportion of variance explained noticably drops after the fourth component for each election (figure \@ref(fig:PVE-each)). This indicates a structural break, so we are justified in extracting the first four components for comparison across years. The first four components approximately 75% of the variation in each of the years.
+
+```{r PVE-each}
+# Graph of PVE each year goes here
+```
+
+The larger loadings on each of the first two principal components appear to be relatively similar across years. The first principal component commonly relates to higher incomes, higher education, and more multiculturalism. We see this in the consistently large loadings (around 0.2 or higher) for variables relating to levels of education, income amount and proportion of Australians citizens (figure \@ref(fig:PC1-each)). The second component is predominantly influenced by household structure, with large loadings for variables relating to household size and make up (figure \@ref(fig:PC2-each)). Our interpretation of the second component is that is represents larger families and households.
+
+
+```{r PC1-each}
+# Graph of comparing PC1 loadings goes here
+```
+
+```{r PC2-each}
+# Graph of comparing PC2 loadings goes here
+```
+
+```{r PC3-each}
+# Graph of comparing PC3 loadings goes here
+```
+
+```{r PC4-each}
+# Graph of comparing PC4 loadings goes here
+```
+
+We do the same for the third and fourth components. The third relates to higher household ownership, and marriage rates (figure \@ref(fig:PC3-each)). The fourth component is more interpretable, with higher labor force participation with lewer older people, meaning less retirees (figure \@ref(fig:PC4-each)).
+
+Each election's socio-demographic data independently yields consistent loadings on the first four principal components, so the decision is made to apply principal component analysis to a dataset containing the combined set of profiles.
+
+### A combined data set
+
+Each years' Census profiles are scaled and centred before combining. This way differences in electorate socio-demographics will be be measured relative to that election year. Otherwise, country-wide trends over time will distort comparison. For example, rental prices have increased over time, even after adjusting for inflation, so if rental prices are not standardized each year, then 2016 prices in a relatively cheap electorate will appear comparable with an expensive electorate by 2001 prices.
+
+When PCA is run on the combined (standardized) dataset, the first four components explain $62.27 \%$ of the total variation. We see that the fifth PC contributes significantly less than the fourth (figure \@ref(fig:PVE-all)), so we will only extract information from the first four components.
+
+```{r PVE-all}
+# Graph of PVE for combined data set goes here
+```
+
+Figure \@ref(fig:PCs-all) shows the loadings in each component that we consider to be significant, meaning that they are of magnitude at least $0.15$. We can roughly interpret these components in the same manner as before. 
+
+```{r PCs-all}
+# Graph of large loadings for each PC goes here
+```
+
+Component 1 - High education, higher income, multicultural.
+Component 2 - Bigger family and household size, younger electorates.
+Component 3 - High property ownership and married.
+Component 4 - High labor force participation, few retirees.
+
+### Two-party preference and the first two principal components
+
+We plot the z-scores of each electorate in the directions of the first two principal components, and allocate two-party preference based on which party has $TPP > 0.5$ (figure \@ref(fig:ellipse)). We use 95% confidence ellipsoids to depict the regions that each party is concentrated. Electorate preference between Labor and Liberal is visisbly different in these directions and this does not appear to change substantially each year. We interpret this, with some caution, as Labor appealling more to electorates with household and family sizes that are more extreme - meaning either very large or very small, and Liberal appealling more to low education, low income, monocultural electorates.
+
+
+```{r ellipse}
+# Graph of PCA ellipses by year
+```
+
+
+### Extracting factors
+
+We now construct factors based on intuitive variable combinations from these significant loadings. The derived factors are as follows:
+
+High education levels: 
+
+- $Educ = Bachelor + HighSchool + Postgraduate + Professional + Finance - Laborer - Tradesperson - DipCert$
+
+High incomes:
+
+- $Incomes = MedianFamilyIncome + MedianHouseholdIncome + MedianPersonalIncome$
+
+Higher rent and loan payments:
+
+- $RentLoan = MedianLoanPay + MedianRent$
+
+Bigger family and household sizes:
+
+- $FamHouseSize FamilyRatio + AverageHouseholdSize + Coupe_WChild_House - Couple_NoChild_House - SP_House$
+
+Higher rates of property ownership and marriage: 
+
+- $PropertyMarr = Married + Owned + Mortgage - DiffAddress - Renting - PublicHousing - DeFacto$
+
+High labor force participation, few retirees: 
+
+- $LFRet = LFParticipation - Age65_74 - Age75_84 - Age85plus$
+
+Before constructing factors, we scale and center each socio-demographic variable. All subsequent modelling will therefore be interpreting standardized coefficients. By creating factors, we reduce the presence of any multicollinearity in the socio-demographics, and reduce the dimension of the data set. 
+
+**Some test for multicollinearity**
+
+## Variable importance
+
+### Further dimension reduction
+
+We have shown that many of the socio-demographics can be summarised based on their relationships independent of voting behaviour. To further reduce the dimension of possible predictors, we remove the age variables that were not contained in the factors, leaving $MedianAge$ remaining.
+
+
