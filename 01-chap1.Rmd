@@ -1,43 +1,38 @@
----
-chapter: 1
-knit: "bookdown::render_book"
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE, cache=TRUE)
-# Load any R packages you need here
-library(ggplot2)
-library(tidyverse)
-vis_proposal_vars <- readRDS("vis_proposal_vars.rds")
-```
-
 # Introduction {#ch:intro}
 
-This research examines the relationships between socio-demographics and voting behaviour in Australian federal elections since 2001, in order to answer the questions as to why Australians vote the way they do, and how this has changed over time. Socio-demographics are characteristics of a population, such as percentage breakdowns by age, gender, ethnicity, education level and income, and are gathered from the Australian Census of Population and Housing. Voting outcomes and population characteristics are aggregated at the electorate level, using spatial analysis to map demographics from censuses falling either side of an election to that particular election. 
+Over the last two decades the Australian demographic profile has changed significantly. An ageing population, higher levels of education across the board, soaring house prices, the list goes on. At the same time, the political landscape has been in a state of constant change, with the country recently experiencing four leadership changes in just a five year stretch (2010-2015). And yet the Australian support largely ebbs and flows between the two major parties vying for power.
 
-At the centre of this study is the exploration of two key questions:
+This leads to the question - why do Australians vote the way they do?
 
-1. What are the demographic factors that affect preference between the two major parties?
+This research will explore the relationships that exist between socio-demographics and voting behaviour in Australian federal elections, and how this has changed over time, examining each election since 2001.
 
-2. What factors are linked with electorate support for the full poltiical spectrum?
+Socio-demographics are characteristics of a population, such as percentage breakdowns by age, gender, ethnicity, education level and income. The socio-demographic information used in this study is from the Australian Census of Population and Housing (Census), a country-wide survey conducted by the Australian Bureau of Statistics (ABS) every five years.
 
+Federal elections on the other hand, are generally conducted every three years.
+
+Utilising new tools in spatial analysis, this study involves the construction of socio-demographic profiles for each electorate, at election time, using the available Census information. On reviewing the literature, it appears that the approach of imputing electorate profiles that is proposed in this study is a new innovation in socio-political analysis.
+
+At the centre of this study are three key questions:
+
+1. What demographic factors affect preference between the two major parties?
+2. What factors are linked with electorate support for the full political spectrum?
 3. How have these changed over time?
 
-The study differs from more common voting studies in three main ways. First, it uses spatial modelling tools to connect socio-demographic information to an election from censuses either side of that election. Secondly, it considers predictive modelling for electorate voting behaviour, and thirdly it combines information across multiple elections.  
+There are three ways in which this research differs from other voting studies. Firstly, it uses spatial modelling tools to impute socio-demographic information for an election using Census information from nearby years. Secondly, models account for the sum constraint in compositional data and include multiple regressors, and thirdly it combines information for every election since 2001.
 
-# data sources and merging
-In order to match information from each census and election since 2001, data in the Geographic Information Software (GIS) format is analysed and overlayed - the dominant approach in spatial studies. Methodologies for intersecting and interpreting GIS objects are well documented, and are used in analyses of Australian voting behaviour, along with other studies in other fields including; strategic planning (Valcik, 2012), healthcare (Ye et al. 2017) and geosciences. 
+## Data sources and mapping
 
-# modelling - just describe 'multiple groups'..'proportions'..'appropriate models like ...'
-Answering question (1) involves modelling using the two-party preferred vote (%) as a function of an electorate socio-demographics. The vote for one of the parties $TPP_i$ is mapped as a continuous random variable on $TPP_i \in [0,1]$. Percentage swing vote (movement in percentage points) will also be of interest within question (1). Question (2) involves modelling the division of first preferences $FP_i$ for each party $i$, as a percentage of total votes. The outcome variable for each party is a continuous random variable on $FP_i \in [0,1]$, and the division of preferences $\sum_{i=1}^D FP_i = 1$, where $D$ is the number of parties.
+In order to impute socio-demographics at election time, the algorithm proposed in this research follows the dominant approach in spatial studies by overlaying maps that are in Geographic Information Software (GIS) format. Overlaying GIS maps is used in other analyses of Australian voting behaviour, and other fields including; strategic planning [@Valcik12], healthcare [@Ye17] and geosciences. Maps used here are collected from the ABS and the Australian Electoral Commission (AEC).
 
-# reproducible and openly available
-All content produced is reproducible and data used is publically available, so this project provides a resource for future research.  A key deliverable is the contribution made to the $eechidna$ R package, which includes the GIS maps, data from both all censuses and elections, and the projected socio-demographic electorate profiles at the time of each election. The name $eechidna$ is an acronym for 'Exploring Election and Census Highly Informative Data Nationally for Australia'.
+## Modelling
 
+Answering question (1) involves modelling the preference between the two major political parties as a function of an electorate's socio-demographics. The vote for one of these parties, $TPP_i$, sits in the interval $[0,1]$, and its logistic transform can be modelled, as $\mathbb{R}$, on the real line.
 
+Question (2) involves modelling the votes for multiple groups. The votes for each party in an electorate can be treated as a proportion of the total votes for that electorate. Denoting $FP_i$ as the proportion of vote for party $i$, then $\sum_{i=1}^D FP_i = 1$, for $D$ parties, making this a compositional dataset [@PG11]. Candidate approaches for modelling include Dirichlet regression and regressions applied to logratio transformations of the data.
 
----------
+Observing how these relationships change over time (3) will be embedded in the models addressing questions (1) and (2).
 
-Initial model iterations consider party support (% of votes in electorate) as independent of the support for other parties, but later models account for the relatedness of outcomes (sum to 1) inherent in compositional data. Conclusions are made on models selected by various criteria, including prediction accuracy.
+## Reproducible and openly available
 
+All content produced in this study is reproducible and the data used is publicly available, so this project provides a resource for future research. A key deliverable is the contribution made to the *eechidna* R package, which includes the GIS maps, data from both all Censuses and elections, and the imputed socio-demographic electorate profiles at the time of each election. When the next elections and Censuses come around, the *eechidna* package will provide a resource for anyone wishing to conduct their own socio-political analysis. The name *eechidna* is an acronym for 'Exploring Election and Census Highly Informative Data Nationally for Australia'.
 

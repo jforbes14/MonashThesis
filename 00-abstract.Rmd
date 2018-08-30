@@ -1,10 +1,6 @@
----
-knit: "bookdown::render_book"
----
-
 # Abstract {-}
 
-This thesis is about ...
+This research examines the relationships that exist between socio-demographics and voting behaviour in Australian federal elections, and how this has changed over time. The data used in this study from every election and Census conducted since 2001.
 
 
 
@@ -15,7 +11,8 @@ This thesis is about ...
 
 
 
-<!-- 
+
+<!--
 The following line is required to re-set page numbering after preliminary material. Do not remove
 -->
 \clearpage\pagenumbering{arabic}\setcounter{page}{0}
