@@ -12,9 +12,13 @@ For each election, we compute all possible five variable models ($m = 1, ..., {3
 
 ### A little bit of likelihood theory
 
-Akaike weight, $w_m$, is the weight of evidence in favor of model $m$ being the Kullback-Leibler (K-L) optimum for given set $M$ [@Akaike73]. By minimizing K-L information, we are reducing the information lost by using model $m$ to approximate the true data-generating process [@BurnhamAnderson2002].
+This approach is fundamentally driven by Akaike's information criterion (AIC) [@Akaike73], which uses Kullback-Leibler (K-L) information as a basis for model selection [@BurnhamAnderson2002]. K-L information, $I$, for a true model $f$ and approximating model $g$ is given by:
 
-The difference in AIC between model $m$ and that with minimum AIC in the set, $z$, is $\Delta_m = AIC_m - AIC_{z}$. Akaike weights are assigned to each model, which are calculated:
+$$I(f,g) = \int f(x) \log \Big( \frac {f(x)} {g(x|\theta)} \Big) dx$$ 
+
+The K-L information can be interpreted as the information lost when $g$ is used to approximate $f$. Minimizing K-L distance is our goal in determining best fit, which is what we do by choosing a model (from a set) with minimum AIC.
+
+By comparing the AIC of each model in the set with the minimum (optimal) AIC, we get a measure of relative information lost, and hence performance. Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set. Akaike weights $w_m$ for each model $m$ are then calculated:
 
 $$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delta_r)}$$
 
@@ -39,9 +43,9 @@ The resultant super-set includes: Born_SE_Europe, ManagerAdminClericalSales, One
 2016: ManagerAdminClericalSales, Extractive, Born_SE_Europe, LFRet, RentLoan
 
 
-### Objections
+### An alternative
 
-Although common, there is no consensus on the appropriateness of Akaike weights. @Gillingham17 object its use, and suggest that comparing model-averaged coefficients is advantageous, whilst @GiamOlden16 opposes these claims. We compare the our conclusions on variable imporance with conclusions we would have made using model-averaged coefficients.
+An alternative measure of variable importance is to compare model-averaged coefficients, when the data has been scaled and centered (mean of zero, variance of one). This approach is suggested to be more appropriate by @Gillingham17, who suggests it may be more appropriate, although these claims are opposed by @GiamOlden16. We compare the our conclusions on variable imporance with conclusions we would have made using model-averaged coefficients.
 
 2001: OtherLanguageHome, Born_SE_Europe, OneParent_House, Islam, ManagerAdminClericalSales
 2004: OtherLanguageHome, Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Unemployed

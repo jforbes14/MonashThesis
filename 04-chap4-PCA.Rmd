@@ -100,15 +100,11 @@ Higher rent and loan payments:
 
 Bigger family and household sizes:
 
-- $FamHouseSize FamilyRatio + AverageHouseholdSize + Coupe_WChild_House - Couple_NoChild_House - SP_House$
+- $FamHouseSize = FamilyRatio + AverageHouseholdSize + Coupe_WChild_House - Couple_NoChild_House - SP_House + Age00_04 + Age05_14$
 
 Higher rates of property ownership and marriage: 
 
 - $PropertyMarr = Married + Owned + Mortgage - DiffAddress - Renting - PublicHousing - DeFacto$
-
-High labor force participation, few retirees: 
-
-- $LFRet = LFParticipation - Age65_74 - Age75_84 - Age85plus$
 
 Before constructing factors, we scale and center each socio-demographic variable. All subsequent modelling will therefore be interpreting standardized coefficients. By creating factors, we reduce the presence of any multicollinearity in the socio-demographics, and reduce the dimension of the data set. 
 
