@@ -1,0 +1,58 @@
+# Modelling {#ch:Modelling}
+
+** To be inserted into chapter 4, as part 2 **
+
+## Variable importance
+
+We begin this chapter by making one thing absolutely clear. Full reality cannot be included in a model [@BurnhamAnderson2002]. Rather, we seek to estimate a good model to yield an estimate the impacts of socio-demographics, based on the empirical data in hand. 
+
+Even after reducing the dimension of our data set, we still have 30 possible predictors to choose from, and only 150 observations. Our approach in estimating a *good* model uses variable selection to further reduce this to a set of around 12 variables that is able to capture the *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
+
+For each election, we compute all possible five variable models ($m = 1, ..., {30 \choose 5}$) and use this as our model set from which to draw conclusions.
+
+### A little bit of likelihood theory
+
+Akaike weight, $w_m$, is the weight of evidence in favor of model $m$ being the Kullback-Leibler (K-L) optimum for given set $M$ [@Akaike73]. By minimizing K-L information, we are reducing the information lost by using model $m$ to approximate the true data-generating process [@BurnhamAnderson2002].
+
+The difference in AIC between model $m$ and that with minimum AIC in the set, $z$, is $\Delta_m = AIC_m - AIC_{z}$. Akaike weights are assigned to each model, which are calculated:
+
+$$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delta_r)}$$
+
+The Akaike weight represents the posterior probability that model $m$ is the best model in the set, without any beliefs a priori. The $w_m$ sum to one.
+
+For each variable, we compute the sum of Akaike weights over models that include that variable, and use these as a measure of variable importance [@BurnhamAnderson2002]. Let $I$ denote the indicator function.
+
+$$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
+
+We select the five variables with largest $s_j$ across all $j \in J$ for each election, and use the super-set of these variables as our chosen predictors to be used across *all* elections.
+
+** Include table of top weights in appendix **
+
+The resultant super-set includes: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet, Educ, Extractive, Born_UK, RentLoan and NoReligion. We have opted to add also include the variable $Incomes$, because we expect that policies relating to changes in taxation should influence electorate behaviour.
+
+
+2001: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet
+2004: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Educ, Extractive
+2007: Born_SE_Europe, ManagerAdminClericalSales, Extractive, Born_UK, OneParent_House
+2010: ManagerAdminClericalSales, Extractive, Born_SE_Europe, RentLoan, NoReligion
+2013: ManagerAdminClericalSales, Extractive, Born_SE_Europe, RentLoan, LFRet
+2016: ManagerAdminClericalSales, Extractive, Born_SE_Europe, LFRet, RentLoan
+
+
+### Objections
+
+Although common, there is no consensus on the appropriateness of Akaike weights. @Gillingham17 object its use, and suggest that comparing model-averaged coefficients is advantageous, whilst @GiamOlden16 opposes these claims. We compare the our conclusions on variable imporance with conclusions we would have made using model-averaged coefficients.
+
+2001: OtherLanguageHome, Born_SE_Europe, OneParent_House, Islam, ManagerAdminClericalSales
+2004: OtherLanguageHome, Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Unemployed
+2007: OtherLanguageHome, ManagerAdminClericalSales, OneParent_House, Born_SE_Europe, MedianAge
+2010: Born_SE_Europe, Extractive, OneParent_House, OtherLanguageHome, ManagerAdminClericalSales
+2013: OtherLanguageHome, Born_SE_Europe, OneParent_House, Extractive, MedianAge
+2016: ManagerAdminClericalSales, OneParent_House, MedianAge, OtherLanguage, Extractive
+
+The resultant super-set would be: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Extractive
+Islam, OtherLanguageHome, MedianAge, Unemployed.
+
+Whilst there are similarities between the two, the most notable exclusion from our chosen super-set is OtherLanguageHome, which appears in the top 5 model-averaged coefficients every election. We decide to add this to our super-set, to mitigate risk of omitting an important variable.
+
+
