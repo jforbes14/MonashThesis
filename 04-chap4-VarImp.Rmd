@@ -4,9 +4,9 @@
 
 ## Variable importance
 
-We begin this chapter by making one thing absolutely clear. Full reality cannot be included in a model [@BurnhamAnderson2002]. Rather, we seek to estimate a good model to yield an estimate the impacts of socio-demographics, based on the empirical data in hand. 
+We begin this chapter by making one thing absolutely clear. Full reality cannot be included in a model [@BurnhamAnderson2002]. Rather, we seek to estimate a good model to yield an estimate of the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. 
 
-Even after reducing the dimension of our data set, we still have 30 possible predictors to choose from, and only 150 observations. Our approach in estimating a *good* model uses variable selection to further reduce this to a set of around 12 variables that is able to capture the *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
+Even after reducing the dimension of our data set, we still have 30 possible predictors to choose from, and only 150 observations. To estimate a *good* model, we use variable selection to further reduce our data to around 12 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
 
 For each election, we compute all possible five variable models ($m = 1, ..., {30 \choose 5}$) and use this as our model set from which to draw conclusions.
 
@@ -28,35 +28,26 @@ For each variable, we compute the sum of Akaike weights over models that include
 
 $$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
 
-We select the five variables with largest $s_j$ across all $j \in J$ for each election, and use the super-set of these variables as our chosen predictors to be used across *all* elections.
+We select the five variables with largest $s_j$ across all $j \in J$ for each election, and use the super-set of these variables as our chosen predictors to be used across *all* elections. The top five variables for each election are shown in figure \@ref(fig:top4varimp).
 
 ** Include table of top weights in appendix **
 
-The resultant super-set includes: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet, Educ, Extractive, Born_UK, RentLoan and NoReligion. We have opted to add also include the variable $Incomes$, because we expect that policies relating to changes in taxation should influence electorate behaviour.
+```{r top5varimp}
+# table of top 5 most important variables each year
+```
 
-
-2001: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet
-2004: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Educ, Extractive
-2007: Born_SE_Europe, ManagerAdminClericalSales, Extractive, Born_UK, OneParent_House
-2010: ManagerAdminClericalSales, Extractive, Born_SE_Europe, RentLoan, NoReligion
-2013: ManagerAdminClericalSales, Extractive, Born_SE_Europe, RentLoan, LFRet
-2016: ManagerAdminClericalSales, Extractive, Born_SE_Europe, LFRet, RentLoan
+The resultant super-set includes: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet, Educ, Extractive, Born_UK, RentLoan and NoReligion. 
 
 
 ### An alternative
 
 An alternative measure of variable importance is to compare model-averaged coefficients, when the data has been scaled and centered (mean of zero, variance of one). This approach is suggested to be more appropriate by @Gillingham17, who suggests it may be more appropriate, although these claims are opposed by @GiamOlden16. We compare the our conclusions on variable imporance with conclusions we would have made using model-averaged coefficients.
 
-2001: OtherLanguageHome, Born_SE_Europe, OneParent_House, Islam, ManagerAdminClericalSales
-2004: OtherLanguageHome, Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Unemployed
-2007: OtherLanguageHome, ManagerAdminClericalSales, OneParent_House, Born_SE_Europe, MedianAge
-2010: Born_SE_Europe, Extractive, OneParent_House, OtherLanguageHome, ManagerAdminClericalSales
-2013: OtherLanguageHome, Born_SE_Europe, OneParent_House, Extractive, MedianAge
-2016: ManagerAdminClericalSales, OneParent_House, MedianAge, OtherLanguage, Extractive
+The resultant super-set would contain: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Extractive
+OtherLanguageHome, MedianAge and Unemployed.
 
-The resultant super-set would be: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Extractive
-Islam, OtherLanguageHome, MedianAge, Unemployed.
+Whilst there are similarities between the two super-sets, the exclusions from our chosen super-set are OtherLanguageHome, which appears in the top 5 model-averaged coefficients every election, and Unemployed, which appears in the top 5 in two elections. We decide to add these both to our super-set, to mitigate risk of omitting an important variable.
 
-Whilst there are similarities between the two, the most notable exclusion from our chosen super-set is OtherLanguageHome, which appears in the top 5 model-averaged coefficients every election. We decide to add this to our super-set, to mitigate risk of omitting an important variable.
+
 
 
