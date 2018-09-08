@@ -1,0 +1,9 @@
+# Modelling {#ch:Modelling}
+
+** To be inserted into chapter 4, as part 3 **
+
+## Superset Models
+
+Now that we have our variable set, we run an OLS regression for each election year, with $TPP$ as the response.
+
+The models are estimated

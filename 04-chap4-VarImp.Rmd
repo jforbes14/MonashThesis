@@ -49,5 +49,3 @@ OtherLanguageHome, MedianAge and Unemployed.
 Whilst there are similarities between the two super-sets, the exclusions from our chosen super-set are OtherLanguageHome, which appears in the top 5 model-averaged coefficients every election, and Unemployed, which appears in the top 5 in two elections. We decide to add these both to our super-set, to mitigate risk of omitting an important variable.
 
 
-
-
