@@ -8,7 +8,8 @@ We begin this chapter by making one thing absolutely clear. Full reality cannot 
 
 Even after reducing the dimension of our data set, we still have 30 possible predictors to choose from, and only 150 observations. To estimate a *good* model, we use variable selection to further reduce our data to around 12 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
 
-For each election, we compute all possible five variable models ($m = 1, ..., {30 \choose 5}$) and use this as our model set from which to draw conclusions.
+We construct an exhaustive set of potential models by first identifying Incomes, Unemployment and Education as three socio-demographic indicators that we are particularly interested in understanding. Our rationale is that Incomes may be relevant due to differences in party policies on personal (and business) taxation, the unemployment rate is a key indicator of economic conditions in an electorate, and one might expect higher education levels to have a particular party bias. In addition to these three, we include four other covariates in each model, and include every possible unique combination of the remaining 27 variables, resulting in a model set of 17550 models for each election - from which we draw conclusions about variable importance.
+
 
 ### A little bit of likelihood theory
 
@@ -28,7 +29,7 @@ For each variable, we compute the sum of Akaike weights over models that include
 
 $$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
 
-We select the five variables with largest $s_j$ across all $j \in J$ for each election, and use the super-set of these variables as our chosen predictors to be used across *all* elections. The top five variables for each election are shown in figure \@ref(fig:top4varimp).
+We select the four variables with largest $s_j$ (excluding the three fixed variables) across all $j \in J$ for each election, and use the super-set of these variables as our chosen predictors to be used across *all* elections. The top four variables for each election are shown in figure \@ref(fig:top4varimp).
 
 ** Include table of top weights in appendix **
 
@@ -37,15 +38,3 @@ We select the five variables with largest $s_j$ across all $j \in J$ for each el
 ```
 
 The resultant super-set includes: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet, Educ, Extractive, Born_UK, RentLoan and NoReligion. 
-
-
-### An alternative
-
-An alternative measure of variable importance is to compare model-averaged coefficients, when the data has been scaled and centered (mean of zero, variance of one). This approach is suggested to be more appropriate by @Gillingham17, who suggests it may be more appropriate, although these claims are opposed by @GiamOlden16. We compare the our conclusions on variable imporance with conclusions we would have made using model-averaged coefficients.
-
-The resultant super-set would contain: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, Extractive
-OtherLanguageHome, MedianAge and Unemployed.
-
-Whilst there are similarities between the two super-sets, the exclusions from our chosen super-set are OtherLanguageHome, which appears in the top 5 model-averaged coefficients every election, and Unemployed, which appears in the top 5 in two elections. We decide to add these both to our super-set, to mitigate risk of omitting an important variable.
-
-
