@@ -37,4 +37,4 @@ We select the four variables with largest $s_j$ (excluding the three fixed varia
 # table of top 5 most important variables each year
 ```
 
-The resultant super-set includes: Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, CurrentlyStudying, LFRet, Educ, Extractive, Born_UK, RentLoan and NoReligion. 
+The resultant super-set includes: Incomes, Educ, Unemployed, Born_SE_Europe, ManagerAdminClericalSales, OneParent_House, LFParticipation, MedianAge, Extractive, RentLoan and SocialServ. 
