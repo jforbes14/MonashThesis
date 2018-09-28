@@ -50,19 +50,15 @@ $$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
 
 We select the five variables with largest $s_j$ across all $j \in J$ in each election. We then construct a super-set by taking the union these five variables from each election, and use this super-set as our chosen predictors to be used across *all* elections in the final model. 
 
-## Adding two-way interactions
+## Adding interactions
 
+Two-way variable interactions are then added to the model using an iterative procedure. First we fit a model using the super-set of predictors as main effects only. Then, for each election, we compute the number of elections in which each possible two-way interaction significantly adds to the model fit, using a likelihood-ratio test (1% significance level). We then select the interaction that is significant in the most years and re-fit models by adding this interaction to the previous model specification. 
 
+This is repeated until four interactions have been included. We limit this to four so that the number of observations (150) to predictors (14) exceeds a ratio of 10 to 1 (*note that in 2001, $n = 141$*).
 
-## Model assessment and diagnostics
+Final models are then fit using the super-set of 10 main effects and the four two-way interactions.
 
-ADD DIAGNOSTICS HERE
+## Inference
 
-Tests for high leverage and goodness of fit will be done for election. Cook's distance will be used to identify points with high influence,  will determine whether particular electorates are outliers from the rest, in terms of the relationship between socio-demographics and voting behaviour. Tests for high leverage to be conducted will include Cook's distance and Likelihood distance [@RC82].
-
-Goodness of fit tests will determine how well the data fits the imposed model structure. Tests will include Pearson's Chi-Square and Aitchison's ${\text R}^2$ measure of total variability [@JA86].
-
-Comparative model assessment criteria will include Aikaike Information Criteria (AIC) and the Likelihood-ratio test, in order to determine the best models from each category.
-
-A neural network model may also be used in residual diagnostics.
+We conduct inference on the resultant models using tools from the `visreg` package. Main effects are interpreted by visualizing the partial residuals with a prediction line and confidence band. The slope of prediction line is the estimated coefficient of that main effect. Interactions are interpreted using a raster plot, which shows the predicted $TPP$ for combinations of the interacting variables on continuous scales.
 
