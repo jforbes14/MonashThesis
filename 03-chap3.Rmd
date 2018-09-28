@@ -144,13 +144,6 @@ We propose an innovative spatial imputation algorithm using GIS maps, *insert na
 
 It is worth noting that, on average, approximately 20% of division boundaries change by 25% or more between Census and election times, so directly allocating Census information from a Census electorate to an election electorate may ultimately lead to invalid results. This provides further motivation for *insert name*.
 
----- 
-## Notes on data up to here
-
-Add a proper summary table of the data - perhaps this is better to do after imputation.
-
-----
-
 ## K-centroid mapping
 
 For the purpose of illustrating the algorithm, "division" will be used instead of "electorate".
@@ -303,11 +296,32 @@ Adding a subscript $k$ to $\lambda_{i}$ to denote year, $\lambda_{i,k}$.
 
 $$\hat{\lambda_{i,2013}} = \frac{3}{5} \cdot \hat{\lambda_{i,2011}} + \frac{2}{5} \cdot \hat{\lambda_{i,2016}}$$
 
+## A summary of the data
 
+Now that we have imputed socio-demographic profiles for the 2004, 2007, 2010 and 2013 elections, we have a complete collection of data for every electorate in every election. The full set of definitions for socio-demographic variable sare detailed in \@ref(fig:), and summary statistics for each year is shown in \@ref(fig:).
 
-```{r}
-#Mapping_aec13 %>% filter(Election_Division == "Hume", Year == "2016") %>% arrange(Percent_Elec_Composition)
+### Insert variable definitions here
+
+### Insert summary statistics here
+
+## Standardizing the variables
+
+For many of the socio-demographic variables, both mean and variance are changing over the years. Take median rental prices for example. In 2001, the mean electorate median rental price was $ \$ 161.83$, and standard deivation $ \$ 50.89$, whereas in 2016 the mean was $ \$231.49$ and the standard deviation was $ \$ 61.88$, after adjusting prices for inflation to a 2001 index. Since we are interested in modelling each election separately, and then comparing models across years, we need to center and standardize each variable (to have mean $0$ and variance $1$), within the election year, so that scales are consistent across years.
+
+As a result, we interpret the values for an electorate as a being relative to the other electorates in that election. For example, $AusCitizen_j = 1$ in 2013, means that electorate $j$ has a proportion of Australian citizens 1 standard deviation above the mean.
+
+```{r rent_box, out.width="50%", fig.cap = "Median rental prices across the years (inflation adjusted)."}
+abs_all %>% 
+  ggplot(aes(x = year, y = MedianRent)) + 
+  geom_boxplot() +
+  labs(x = "Census Year", y= "Median Rent (dollars, inflation adjusted)")
 ```
+
+
+
+
+
+
 
 
 
