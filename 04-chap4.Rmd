@@ -1,67 +1,64 @@
-# Modelling {#ch:Modelling}
+# Methodology {#ch:Methodology}
 
-Now that estimated socio-demographic profiles have been obtained for each election, we begin modelling to answer the questions that were set out in the introduction:
+Now that estimated socio-demographic profiles have been obtained for each election, we consider how to answer our research question, "What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?". 
 
-1. What demographic factors affect preference between the two major parties?
-2. What factors are linked with electorate support for the full political spectrum?
-3. How have these changed over time?
+## Response variable - two-party preferred vote
 
-## Major party preference
+To answer this question, we set out to model the socio-demographics of electorates that are important in determining the two-party preferred vote, $TPP$. Since the two-party preferred vote is a measure of preference between only the two major parties (Labor and Liberal), we can focus our models on the response in favour of the Liberal party, which sits in the interval $(0,1)$.
 
-Question (1) is concerned with modelling the two party preferred vote, $TPP$, to analyse preference between Labor and Liberal/National parties. Since $TPP_{Labor} + TPP_{Liberal} = 1$, we can focus our models on the response $TPP_{Labor}$, which sits in the interval $(0,1)$. 
+Since the values that $TPP$ assumes are not close to 0 or 1 (minimum $0.24$ and maximum $0.75$), we do not need to worry about modelling the constraint of $TPP \in (0,1)$. Instead we can model the response using linear regression.
 
-Applying the logistic transform to $TPP_{Labor}$, given by $ln(\frac{TPP}{1-TPP})$, creates a response variable that now maps onto the real space, $\mathbb{R}$. The transformed response can then be treated as being normally distributed, with mean $\mu$ and variance $\sigma^2$. 
+Therefore, for a given election year, we assume ${\bf TPP} \sim N({\bf X \beta}, \sigma^2 {\bf I})$, where $\bf TPP$ is an $n \times 1$ vector of two-party preferred vote, $\bf X$ is an ($n \times p$) matrix of socio-demographic predictors, $\bf \beta$ is a ($p \times 1$) vector of coefficients to be estimated, and errors are independent and identically distributed with mean $0$ and variance $\sigma^2$. We estimate $\bf \beta$ and $\sigma^2$ using ordinary least-squares regression, and conduct inference on the output. This estimation is done separately for each election.
 
-The mean $\mu$ is taken as a parametric function of the socio-demographics $\bm{x}$ of each electorate, i.e. $\mu = f(\bm{x})$. We can then use basic regression techniques to estimate the regression coefficients, by way of the `lm()` function.
+It is important to note here that a longitudinal approach would be *less* appropriate than modelling each election separately. Electorate boundaries change regularly, so it would be very difficult to construct a data set that tracks the same spatial units over time - not just because of their socio-demographics, but also because of their voting behaviour.
 
 Inference can then be conducted on the output, in order to determine which factors are statistically significant, and their marginal effects on the two party preferred vote will be computed.
 
-## The full spectrum
+## Dealing with the small $n$, large $p$ problem
 
-In order to model support for all parties, the first preference allocation from the division of prefences is used. Let $\bm{v}_i = (v_{i1}, v_{i2}, \dots, v_{iD})$ denote the vector holding the percentage of first preference votes for parties in electorate $i$, for each of the $D$ parties. This presents an extension to the modelling for the two party preferred vote.
+We have $p = 63$ socio-demographic variables, and $n = 150$ electorates, at our disposal for each election. If we tried to fit a model for a single election using all 63 varibles, we face problems with multi-collinearity and over-fitting, and would lead to erroneous conclusions of variable significance. This presents us with a problem of having small $n$ and relatively large $p$. Therefore a form of dimension reduction is needed to build adequate models. 
 
-The two party preferred vote has $D=2$ parties, so the data is compositional with $D=2$ components. First preference vote has $D>2$ for every electorate in each election, and we still have $\sum_{j=1}^Dv_{ij} = 1$, so we have to consider other avenues for modelling.
+Instead of throwing everything into a model, and using some kind of procedure to reduce the dimension of the data, we decide to adopt a two-stage approach in obtaining a reduced predictor set, from which we will run our final election models. The first step is to identify variables that are similar, and group them together into *factors*. Principal component analysis (PCA) is used to identify variables that are correlated, and we combine variables into a factor if we can reasonably believe that they should be grouped. This reduces our predictor set from $p = 50$ to $p = 30$, from which we still need to do some kind of variable selection, so that we end up with a set of around $10$ variables from which we can model each election.
 
-Two candidate methods for modelling first preferences are:
+The second step is an approach that will allow us to identify a handful of the *most important* variables from each election year. By taking the union of the six resultant variable subsets, a superset is created from which all election models will be re-fit. We therefore seek to estimate a good model that captures the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. 
 
-- Logratio analysis
-- Dirichlet covariate modelling
+Our chosen method is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance [@BurnhamAnderson2002]. 
 
-Both methods will be used to produce models for first preference, and I will draw conclusions based on the consistency of effect that socio-demographics across models.
+## Factor creation
 
-### Logratio analysis
+Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained. Although the components are not entirely interpretable, we can infer the relative importance of variables in each component based on the magnitude of their loadings.
 
-Logratio analysis (Aitchison 1986) uses the transformation of the response $\bm{v}_i$ to $\bm{w}_i$, where $\bm{w}_i \in \mathbb{R}^D$ (or $\mathbb{R}^{D-1}$), so $\dim(\bm{w}_i) \text{ is } D\times1 \text{ or } (D-1) \times 1$, depending on the transformation method. To obtain $\bm{w} =  (w_{i1}, w_{i2}, \dots, w_{iD})$ or $\bm{w} =  (w_{i1}, w_{i2}, \dots, w_{i(D-1)})$ there are three available mappings: additive, centred and isometric. Each of these mapping techniques will be tested to see which performs best, and which is easily interpretable.
+The components for each election year are computed separately and then compared to determine their similarity. If the resultant components are sufficiently similar, we are justified in combining the six data sets, and then re-computing principal component analysis this combined set. We assess similarity by observing whether higher loadings in each component are reasonably similar across elections.
 
-Note that the $D=2$ case using the additive transformation is the same as doing a logistic transform, so answering question (1) is effectively following the same method.
+These components are then interpreted to extract what we denote as factors - groupings of variables that have loadings clustered together and have an intuitive interpretation.
 
-The transformed $\bm{w}_i$ can be modelled as multivariate normal, $\bm{w}_i \sim N(\bm{\mu}_i, \bm{\Sigma})$, where each component has a different mean modelled as a function of socio-demographics, $\bm{\mu}_i = f(\bm{x}_i)$. Parametric specifications of $f(\bm{x}_i)$ will be used. Further investigation is required into a suitable functions for estimating the coefficients in $f(\bm{x}_i)$ and $\bm{\Sigma}$.
+## Superset creation
 
-More on the three transformation methods can be found in the appendix D.
+Even after reducing the dimension of our data set, we still have 30 possible predictors to choose from, and only 150 observations. To estimate a *good* model, we use variable selection to further reduce our data to 10 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
 
-### Dirichlet covariate modelling
+Fundamentally driven by Akaike's information criterion (AIC) [@Akaike73], which is a measure of expective information lost in estimating the true underlying data generating process [@BurnhamAnderson2002]. Minimizing AIC is our in determining best fit - should we be comparing multiple models in a given set $M$.
 
-A modified version of the Dirichlet distribution [@Campbell87] provides another method of modelling the vector of first preferences. This version, called the Dirichlet covariate model, the parameters of the Dirichlet distribution can be estimated as a function of covariates, $\lambda_j = h_j(\bm{x})$.
+Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set $m = 1,2,...,M$. *Akaike weights* $w_m$ for each model $m$ are then calculated:
 
-Dirichlet regression can be done in $R$ using the $DirichReg$ package, and parametric forms of $h(\bm{x})$ will be chosen.
+$$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delta_r)}$$
 
-## Changes over time
+The Akaike weight represents the posterior probability that model $m$ is the best model in the set, without any beliefs a priori. $\sum_{m=1}^{M} w_m$ and $w_m \in (0,1)$.
 
-This is an area that requires some more thought. The current plan is to use two different approaches to model elections.
+For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance [@BurnhamAnderson2002]. Let $I$ denote the indicator function.
 
-1. Single election models
-Each election will be treated as a cross-sectional data set, and models for each election will be estimated separately. Inference will be conducted to determine which factors have consistent effects across elections, and which have varying effects.
+$$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
 
-2. Combining elections
-A combined data set, containing information on all six elections, will be treated as a pooled cross-section - as we have established that electorates change over time. Models will then include time dummies and time-varying coefficients for selected covariates. Approach 1 will inform this selection.
+We select the five variables with largest $s_j$ across all $j \in J$ in each election. We then construct a super-set by taking the union these five variables from each election, and use this super-set as our chosen predictors to be used across *all* elections in the final model. 
 
-A possible extension would be to numerically track electorates over time - however this is tricky since electorate boundaries are changing across elections, and are not standardised. It may be possible to gather votes from a different level of aggregation, like polling booths, and use a similar technique to $k$-centroid mapping to create voting statistics for each election, based on the 2016 boundaries.
+## Adding two-way interactions
+
+
 
 ## Model assessment and diagnostics
 
-Tests for high leverage and goodness of fit will be done for each category of models, as will model selection within each category.
+ADD DIAGNOSTICS HERE
 
-High leverage will determine whether particular electorates are outliers from the rest, in terms of the relationship between socio-demographics and voting behaviour. Tests for high leverage to be conducted will include Cook's distance and Likelihood distance [@RC82].
+Tests for high leverage and goodness of fit will be done for election. Cook's distance will be used to identify points with high influence,  will determine whether particular electorates are outliers from the rest, in terms of the relationship between socio-demographics and voting behaviour. Tests for high leverage to be conducted will include Cook's distance and Likelihood distance [@RC82].
 
 Goodness of fit tests will determine how well the data fits the imposed model structure. Tests will include Pearson's Chi-Square and Aitchison's ${\text R}^2$ measure of total variability [@JA86].
 
