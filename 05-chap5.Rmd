@@ -1,0 +1,38 @@
+# Results {#ch:Results}
+
+Having estimated our model for each election, we now conduct inference to understand the estimated effects of each socio-demographic variable. Using tools from the `visreg` package, main effects are interpreted by visualizing the partial residuals with a prediction line and confidence band. The slope of prediction line is the estimated coefficient of that main effect. Interactions are interpreted using a raster plot, which shows the predicted $TPP$ for combinations of the interacting variables on continuous scales.
+
+
+Having standardized the socio-demographic variables within each election year, and by using consistent model specification across elections, we can directly compare the estimated effects of covariates across elections and hence draw conclusions on how the two-party preferred vote has been affected by socio-demographics.
+
+Five of the ten variables in the model are not included in an interaction, so we can interpret their marginal effects directly. To illustrate these effects, we plot 95% confidence bands for each coefficient over the six elections.
+
+For a variable that is involved in an interaction, we can interpret its main effect as being the marginal effect of a one standard deviation increase in that variable, when any variables it is interacted with assume their mean value. This is because the mean value of a standardized variable corresponds with a value of zero. 
+
+The following section details the interpretation of our models across the six elections. We outline our expectations based of scatterplots with the response, and then interpret the interactions using visualizations from the `visreg` package. Main effects are interpreted by visualizing the partial residuals with a prediction line and confidence band. The slope of prediction line is the estimated coefficient of that main effect. Interactions are interpreted using a raster plot, which shows the predicted $TPP$ for combinations of the interacting variables on continuous scales.
+
+## Insights from the model
+
+### Here we add the insights from the model-interpretation section, but use the plots from the presentation.
+Potentially remove
+- Political commentary
+
+Add
+- Simplified insights
+- Plots from presentation (replace)
+
+### Key takeaways
+
+Summarise the key points
+
+## Model diagnostics
+
+ADD DIAGNOSTICS TO MODELLING SECTION
+
+Residuals are inspected for any signs of non-normality using a QQ plot, and we plot the residuals against the fitted values to detect the presence of residual heteroskedasticity. Non
+
+Residual normality, residual heteroskedasticity, non-linearities (patterns in the residuals vs predictors), residuals vs predictors not in model, influence (cook distance), leverage (hat).
+
+Tests for high leverage and goodness of fit will be done for election. Cook's distance will be used to identify points with high influence,  will determine whether particular electorates are outliers from the rest, in terms of the relationship between socio-demographics and voting behaviour. Tests for high leverage to be conducted will include Cook's distance and Likelihood distance [@RC82].
+
+Goodness of fit tests will determine how well the data fits the imposed model structure. Tests will include Pearson's Chi-Square and Aitchison's ${\text R}^2$ measure of total variability [@JA86].
