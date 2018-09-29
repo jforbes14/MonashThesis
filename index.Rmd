@@ -17,10 +17,12 @@ library(tidyverse)
 library(sp)
 library(rgeos)
 library(jpeg)
+library(broom)
 
 ## New data
 load("../Data/Clean/abs_all.rda")
 load("../Modelling-Elections/Clean-Data/data_mod.rda")
+load("../Modelling-Elections/Clean-Data/superset.rda")
 
 ## New maps
 load("../Data/Clean/Maps/Mapping_aec13.rda")
@@ -29,20 +31,20 @@ load("../Data/Clean/Maps/fortified_2013.rda")
 load("../Data/Clean/Maps/fortified_2016.rda")
 
 ## Old data
-vis_df <- readRDS("data/vis_df.rds")
-vis_df$year <- as.factor(vis_df$year)
-levels(vis_df$year) <- c("2001", "2006", "2011", "2016")
+#vis_df <- readRDS("data/vis_df.rds")
+#vis_df$year <- as.factor(vis_df$year)
+#levels(vis_df$year) <- c("2001", "2006", "2011", "2016")
 
-elec_poly <- readRDS("data/Brisbane_poly.rds")
-cens_poly <- readRDS("data/Census_poly.rds")
-cens_bris_poly <- readRDS("data/cens_bris_poly.rds")
-cens_grif_poly <- readRDS("data/cens_grif_poly.rds")
-cens_lill_poly <- readRDS("data/cens_lill_poly.rds")
-bris_int <- "data/bris_int_poly.rds"
-lill_int <- "data/lill_int_poly.rds"
+#elec_poly <- readRDS("data/Brisbane_poly.rds")
+#cens_poly <- readRDS("data/Census_poly.rds")
+#cens_bris_poly <- readRDS("data/cens_bris_poly.rds")
+#cens_grif_poly <- readRDS("data/cens_grif_poly.rds")
+#cens_lill_poly <- readRDS("data/cens_lill_poly.rds")
+#bris_int <- "data/bris_int_poly.rds"
+#lill_int <- "data/lill_int_poly.rds"
 ```
 
-```{r maps}
+```{r maps, include = FALSE}
 # Join data
 map11 <- left_join(fortified_2011, data_mod, 
             by = c("Election_Division","year"))
@@ -89,6 +91,45 @@ map_hume_surrounds_13 <- map13 %>%
  
 ```
 
+```{r fitting-models, include = FALSE}
+fit_ss_16 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
+                data = data_mod %>% 
+                  filter(year == "2016") %>% 
+                  select(Perc_LNP,  (superset$varname %>% as.character)))
+
+fit_ss_13 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
+                data = data_mod %>% 
+                  filter(year == "2013") %>% 
+                  select(Perc_LNP,  (superset$varname %>% as.character)))
+
+fit_ss_10 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
+                data = data_mod %>% 
+                  filter(year == "2010") %>% 
+                  select(Perc_LNP,  (superset$varname %>% as.character)))
+
+fit_ss_07 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
+                data = data_mod %>% 
+                  filter(year == "2007") %>% 
+                  select(Perc_LNP,  (superset$varname %>% as.character)))
+
+fit_ss_04 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
+                data = data_mod %>% 
+                  filter(year == "2004") %>% 
+                  select(Perc_LNP,  (superset$varname %>% as.character)))
+
+fit_ss_01 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
+                data = data_mod %>% 
+                  filter(year == "2001") %>% 
+                  select(Perc_LNP, (superset$varname %>% as.character)))
+
+# augment
+aug_all <- bind_rows(augment(fit_ss_01) %>% mutate(year = "2001"), 
+                     augment(fit_ss_04) %>% mutate(year = "2004"), 
+                     augment(fit_ss_07) %>% mutate(year = "2007"), 
+                     augment(fit_ss_10) %>% mutate(year = "2010"), 
+                     augment(fit_ss_13) %>% mutate(year = "2013"), 
+                     augment(fit_ss_16) %>% mutate(year = "2016"))
+```
 
 <!--
 Edit these lines as appropriate.
