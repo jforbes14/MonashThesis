@@ -28,7 +28,7 @@ In order to impute socio-demographics at election time, the algorithm proposed i
 
 Answering question (1) involves modelling the preference between the two major political parties as a function of an electorate's socio-demographics. The vote for one of these parties, $TPP_i$, sits in the interval $[0,1]$, and its logistic transform can be modelled, as $\mathbb{R}$, on the real line.
 
-Question (2) involves modelling the votes for multiple groups. The votes for each party in an electorate can be treated as a proportion of the total votes for that electorate. Denoting $FP_i$ as the proportion of vote for party $i$, then $\sum_{i=1}^D FP_i = 1$, for $D$ parties, making this a compositional dataset [@PG11]. Candidate approaches for modelling include Dirichlet regression and regressions applied to logratio transformations of the data.
+Question (2) involves modelling the votes for multiple groups. The votes for each party in an electorate can be treated as a proportion of the total votes for that electorate. Denoting $FP_i$ as the proportion of vote for party $i$, then $\sum_{i=1}^D FP_i = 1$, for $D$ parties, making this a compositional dataset. Candidate approaches for modelling include Dirichlet regression and regressions applied to logratio transformations of the data.
 
 Observing how these relationships change over time (3) will be embedded in the models addressing questions (1) and (2).
 

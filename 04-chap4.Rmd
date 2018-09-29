@@ -28,14 +28,14 @@ Our chosen method is an information-theoretic approach, which uses *Akaike weigh
 
 Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained. Although the components are not entirely interpretable, we can infer the relative importance of variables in each component based on the magnitude of their loadings.
 
-The components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve_each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see Appendix \@ref(fig:loadings-234)). 
+The components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve-each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see Appendix \@ref(fig:loadings-234)). 
 
 Due to the similarity of variation within socio-demographic variables across elections, we combine the information from all years into a single cross-sectional data set ($n = 900$), and re-compute principal components. 
 
 As previously mentioned, each years' Census profiles are scaled and centred before combining. This way differences in electorate socio-demographics will be be measured relative to that election year. Otherwise, country-wide trends over time will distort comparison. For example, rental prices have increased over time, even after adjusting for inflation, so if rental prices are not standardized each year, then 2016 prices in a relatively cheap electorate will appear comparable with an expensive electorate by 2001 prices.
 
 
-```{r pve_each, fig.cap = "Proportion of variance explained by each principal component, for each election year."}
+```{r pve-each, fig.cap = "Proportion of variance explained by each principal component, for each election year."}
 # PVE of separate PCA
 load("../Modelling-Elections/Clean-Data/pve_each.rda")
 
@@ -58,9 +58,9 @@ vis_loadings %>%
 
 The principal components from this combined data set are then interpreted to extract information about which explanatory variables could be grouped together to create a *factor*. A factor is created if there exists is a set of variables that have large loadings in a particular component, and there is an intuitive reason as to why these could represent similar information.
 
-There appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (see figure \@ref(fig:PVE_all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
+There appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (see figure \@ref(fig:PVE-all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
 
-```{r PVE_all, fig.cap = "Cumulative proportion of variance explained by each principal component in the combined data set (across all elections)."}
+```{r PVE-all, fig.cap = "Cumulative proportion of variance explained by each principal component in the combined data set (across all elections)."}
 load("../Modelling-Elections/Clean-Data/pve_all.rda")
 
 # PVE of combined PCA
@@ -158,7 +158,8 @@ Where $\varepsilon_i \sim N(0,\sigma^2)$.
 
 Final models are then fit using the super-set of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
 
-$$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i \\ + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i \\ + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i \\ + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$$
+$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i \\ + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i \\ + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i \\ + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$
+
 Tables \@ref(fig:allmodels1) and \@ref(fig:allmodels2) detail the resultant models.
 
 \newpage

@@ -64,7 +64,7 @@ Figure \@ref(fig:vis-age) shows the distribution of median age of each electorat
 vis_age <- vis_df %>%
   filter(measure %in% c("Age15_19", "Age25_34", "Age55_64", "MedianAge"))
 
-ggplot(vis_age, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8), axis.text.x=element_text(size=6), axis.text.y=element_text(size=8))
+ggplot(vis_age, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8), axis.text.x=element_text(size=6), axis.text.y=element_text(size=8)) + guides(fill = FALSE)
 ```
 
 #### Religion: a thing of the past?
@@ -310,18 +310,9 @@ For many of the socio-demographic variables, both mean and variance are changing
 
 As a result, we interpret the values for an electorate as a being relative to the other electorates in that election. For example, $AusCitizen_j = 1$ in 2013, means that electorate $j$ has a proportion of Australian citizens 1 standard deviation above the mean.
 
-```{r rent_box, out.width="50%", fig.cap = "Median rental prices across the years (inflation adjusted)."}
+```{r rent-box, out.width="50%", fig.cap="Median rental prices across the years (inflation adjusted)"}
 abs_all %>% 
   ggplot(aes(x = year, y = MedianRent)) + 
   geom_boxplot() +
   labs(x = "Census Year", y= "Median Rent (dollars, inflation adjusted)")
 ```
-
-
-
-
-
-
-
-
-
