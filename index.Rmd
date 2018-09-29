@@ -10,7 +10,7 @@ knit: "bookdown::render_book"
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, message=FALSE, cache=TRUE, warning = FALSE, fig.width = "100%")
+knitr::opts_chunk$set(echo = FALSE, message=FALSE, cache=TRUE, warning = FALSE, fig.align = "center")
 # Load any R packages you need here
 library(ggplot2)
 library(tidyverse)
@@ -31,9 +31,9 @@ load("../Data/Clean/Maps/fortified_2013.rda")
 load("../Data/Clean/Maps/fortified_2016.rda")
 
 ## Old data
-#vis_df <- readRDS("data/vis_df.rds")
-#vis_df$year <- as.factor(vis_df$year)
-#levels(vis_df$year) <- c("2001", "2006", "2011", "2016")
+vis_df <- readRDS("data/vis_df.rds")
+vis_df$year <- as.factor(vis_df$year)
+levels(vis_df$year) <- c("2001", "2006", "2011", "2016")
 
 #elec_poly <- readRDS("data/Brisbane_poly.rds")
 #cens_poly <- readRDS("data/Census_poly.rds")
@@ -42,9 +42,9 @@ load("../Data/Clean/Maps/fortified_2016.rda")
 #cens_lill_poly <- readRDS("data/cens_lill_poly.rds")
 #bris_int <- "data/bris_int_poly.rds"
 #lill_int <- "data/lill_int_poly.rds"
-```
 
-```{r maps, include = FALSE}
+#### MAPS ####
+
 # Join data
 map11 <- left_join(fortified_2011, data_mod, 
             by = c("Election_Division","year"))
@@ -88,10 +88,8 @@ map_hume_surrounds_13 <- map13 %>%
   ungroup() %>% 
   filter(lower_lat < max_lat, upper_lat > min_lat, lower_long < max_long, upper_long > min_long,
          !Election_Division %in% c("PARKES", "FARRER"))
- 
-```
 
-```{r fitting-models, include = FALSE}
+#### MODELS ####
 fit_ss_16 <- lm(Perc_LNP ~ . + Educ:MedianAge + Extractive:ManagerAdminClericalSales + Educ:OneParent_House + Educ:ManagerAdminClericalSales, 
                 data = data_mod %>% 
                   filter(year == "2016") %>% 
