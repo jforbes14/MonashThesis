@@ -1,4 +1,4 @@
-# Methodology {#ch:Methodology}
+# Modelling {#ch:Modelling}
 
 Now that estimated socio-demographic profiles have been obtained for each election, we consider how to answer our research question, "What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?". 
 
@@ -14,7 +14,7 @@ It is important to note here that a longitudinal approach would be *less* approp
 
 Inference can then be conducted on the output, in order to determine which factors are statistically significant, and their marginal effects on the two party preferred vote will be computed.
 
-## Dealing with the small $n$, large $p$ problem
+## Dimension reduction
 
 We have $p = 63$ socio-demographic variables, and $n = 150$ electorates, at our disposal for each election. If we tried to fit a model for a single election using all 63 varibles, we face problems with multi-collinearity and over-fitting, and would lead to erroneous conclusions of variable significance. This presents us with a problem of having small $n$ and relatively large $p$. Therefore a form of dimension reduction is needed to build adequate models. 
 
@@ -24,17 +24,87 @@ The second step is an approach that will allow us to identify a handful of the *
 
 Our chosen method is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance [@BurnhamAnderson2002]. 
 
-## Factor creation
+### Factor creation
 
 Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained. Although the components are not entirely interpretable, we can infer the relative importance of variables in each component based on the magnitude of their loadings.
 
-The components for each election year are computed separately and then compared to determine their similarity. If the resultant components are sufficiently similar, we are justified in combining the six data sets, and then re-computing principal component analysis this combined set. We assess similarity by observing whether higher loadings in each component are reasonably similar across elections.
+The components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve_each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see Appendix \@ref(fig:loadings-234)). 
 
-These components are then interpreted to extract what we denote as factors - groupings of variables that have loadings clustered together and have an intuitive interpretation.
+Due to the similarity of variation within socio-demographic variables across elections, we combine the information from all years into a single cross-sectional data set ($n = 900$), and re-compute principal components. 
 
-## Superset creation
+As previously mentioned, each years' Census profiles are scaled and centred before combining. This way differences in electorate socio-demographics will be be measured relative to that election year. Otherwise, country-wide trends over time will distort comparison. For example, rental prices have increased over time, even after adjusting for inflation, so if rental prices are not standardized each year, then 2016 prices in a relatively cheap electorate will appear comparable with an expensive electorate by 2001 prices.
 
-Even after reducing the dimension of our data set, we still have 30 possible predictors to choose from, and only 150 observations. To estimate a *good* model, we use variable selection to further reduce our data to 10 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
+
+```{r pve_each, fig.cap = "Proportion of variance explained by each principal component, for each election year."}
+# PVE of separate PCA
+load("../Modelling-Elections/Clean-Data/pve_each.rda")
+
+# Proportion of variance explained across years
+pve_each %>%  ggplot(aes(x=PC, y=PVE)) + geom_line(aes(col = year)) + lims(x=c(0,20)) +
+  geom_point(col = "grey50") + labs(x="Principal component", y="Proportion of variance explained")
+
+```
+
+```{r loadings-1, fig.cap = "Loadings of each variable in the first principal of each election year (points), with a line showing the range across years."}
+load("../Modelling-Elections/Clean-Data/vis_loadings.rda")
+# Loadings of PC1 for each year
+# PC1
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC1), y=PC1)) + geom_line(col = "orange", size = 2, alpha = 0.7) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component (of respective election)")
+```
+
+The principal components from this combined data set are then interpreted to extract information about which explanatory variables could be grouped together to create a *factor*. A factor is created if there exists is a set of variables that have large loadings in a particular component, and there is an intuitive reason as to why these could represent similar information.
+
+There appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (see figure \@ref(fig:PVE_all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
+
+```{r PVE_all, fig.cap = "Cumulative proportion of variance explained by each principal component in the combined data set (across all elections)."}
+load("../Modelling-Elections/Clean-Data/pve_all.rda")
+
+# PVE of combined PCA
+pve_all %>%
+  ggplot(aes(x=PC, y=TVE)) + 
+  geom_line(col = "blue", size = 1) + 
+  geom_point(size = 2) + 
+  labs(x = "PC", y = "Cumulative Proportion of Variance Explained")
+```
+
+The resultant factors are constructed as follows:
+- Educ = Bachelor + HighSchool + Postgraduate + Professional +  Finance - Laborer - Tradesperson - DipCert
+- FamHouseSize = FamilyRatio + AverageHouseholdSize + Couple_WChild_House - Couple_NoChild_House - SP_House + Age00_04 + Age05_14
+- PropertyMarr = Married + Owned + Mortgage - Renting - DiffAddress - PublicHousing - DeFacto
+- Incomes = MedianFamilyIncome + MedianHouseholdIncome + MedianPersonalIncome
+- RentLoan = MedianLoanPay + MedianRent
+
+Each factor is then standardized to have mean 0 and variance 1 within each election.
+
+Consider the Incomes factor as an illustration. Independent of principal components, we may suspect that median personal income, median household income and median family income are providing similar information about how "well-off" an electorate is. When we look at the loadings in the first principal component (see figure \@ref(PC1)), we find that these three variables all have large loadings (> 0.15). This provides evidence that these variables could be combined in a factor, which we have called "Incomes".
+
+```{r PC1, fig.cap = "Large loadings in the first principal component, with Incomes factor colored red."}
+# Loadings of PC1 from combined PCA
+load("../Modelling-Elections/Clean-Data/pc_all_interpret.rda")
+#PC1
+pc_all_interpret %>% 
+  gather(key = PC, value = Loading, -metric) %>% 
+  filter(PC == "PC1") %>% 
+  filter(abs(Loading) > 0.15) %>% 
+  ggplot(aes(x=reorder(metric,-Loading), y=Loading, 
+             col = factor(metric %in% c("MedianFamilyIncome", "MedianPersonalIncome", "MedianHouseholdIncome")))) + 
+  geom_point(size = 3.5) +
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 7)) + 
+  scale_color_manual(values = c("grey50", "red")) + 
+  guides(col = FALSE)
+```
+
+As a final step, we remove the age variables that are not contained in any of the factors (retaining median age) and any variables that are exact linear combinations of others (Christianity, Other_NonChrist and EnglishOnly). 
+
+The following approach to variable selection is applied on the resultant set of 30 socio-demographic variables.
+
+### Superset creation
+
+To estimate a *good* model, we use variable selection to further reduce our data to 10 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
 
 Fundamentally driven by Akaike's information criterion (AIC) [@Akaike73], which is a measure of expective information lost in estimating the true underlying data generating process [@BurnhamAnderson2002]. Minimizing AIC is our in determining best fit - should we be comparing multiple models in a given set $M$.
 
@@ -48,7 +118,33 @@ For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models 
 
 $$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
 
-We select the five variables with largest $s_j$ across all $j \in J$ in each election. We then construct a super-set by taking the union these five variables from each election, and use this super-set as our chosen predictors to be used across *all* elections in the final model. 
+The ordering of variables by their Akaike weights is a rank of variable importance. The variable with largest $s_j, j \in J$ is deemed to be the most important in the set.
+
+Our approach is to select the five most important variables from each election, and construct a variable super-set by taking the union of these six subsets. By doing so, we are able to capture any variable that appears to be important in a particular year and unimportant in the others, whilst also capturing those that are important in most years. This super-set are the chosen predictors to be used in *all* of the final election models. 
+
+#### Model sets for each election
+
+For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. There are $M = 142,506$ models for each election.
+
+The resultant superset is as follows, with the number of elections in which that variable was in the top five in parenthesis.
+
+- Birthplace: South-Eastern Europe [6] and United Kingdom [1]
+
+- Job: extractive (mining, gas, energy related etc.) [5], administrative (manager, admin, clerical and sales) [6]
+
+- Median rental and loan payments [3]
+
+- Single parent households [3]
+
+- Median age [2]
+
+- No religion [2]
+
+- Education levels [1]
+
+- Student population [1]
+
+For a table of the sums of Akaike weights for variables in each year, see Appendix \@ref(fig:allSAW)
 
 ## Adding interactions
 
@@ -56,9 +152,23 @@ Two-way variable interactions are then added to the model using an iterative pro
 
 This is repeated until four interactions have been included. We limit this to four so that the number of observations (150) to predictors (14) exceeds a ratio of 10 to 1 (*note that in 2001, $n = 141$*).
 
-Final models are then fit using the super-set of 10 main effects and the four two-way interactions.
+Where $\varepsilon_i \sim N(0,\sigma^2)$.
 
-## Inference
+## Models
 
-We conduct inference on the resultant models using tools from the `visreg` package. Main effects are interpreted by visualizing the partial residuals with a prediction line and confidence band. The slope of prediction line is the estimated coefficient of that main effect. Interactions are interpreted using a raster plot, which shows the predicted $TPP$ for combinations of the interacting variables on continuous scales.
+Final models are then fit using the super-set of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
 
+$$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i \\ + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i \\ + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i \\ + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$$
+Tables \@ref(fig:allmodels1) and \@ref(fig:allmodels2) detail the resultant models.
+
+\newpage
+
+```{r allmodels1, results = 'asis'}
+stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, header = FALSE, column.sep.width = "1pt", title = "Models for 2001, 2004 and 2007 elections", dep.var.labels = "Two-party preferred vote in favor of the Liberal party", font.size = "scriptsize")
+```
+
+\newpage
+
+```{r allmodels2, results = 'asis'}
+stargazer::stargazer(fit_ss_10, fit_ss_13, fit_ss_16, header = FALSE, column.sep.width = "1pt", title = "Models for 2010, 2013 and 2016 elections", dep.var.labels = "Two-party preferred vote in favor of the Liberal party", font.size = "scriptsize")
+```
