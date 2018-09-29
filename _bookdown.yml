@@ -11,7 +11,8 @@ rmd_files: ["index.Rmd",
   "02-chap2.Rmd",
   "03-chap3.Rmd",
   "04-chap4.Rmd",
-  "05-discussion.Rmd",
+  "05-chap5.Rmd",
+  "06-discussion.Rmd",
   "A-appA.Rmd"]
 
 delete_merged_file: true
