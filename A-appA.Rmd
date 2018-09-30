@@ -268,3 +268,24 @@ aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>%
 ```
 
 No obvious patterns in the residuals vs omitted variables.
+
+# Summary of variables in each election
+
+```{r summary2001, results = 'asis'}
+stargazer::stargazer(data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2001 election.", header = FALSE)
+```
+```{r summary2004, results = 'asis'}
+stargazer::stargazer(data_mod %>% filter(year == "2004", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2004 election.", header = FALSE)
+```
+```{r summary2007, results = 'asis'}
+stargazer::stargazer(data_mod %>% filter(year == "2007", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2007 election.", header = FALSE)
+```
+```{r summary2010, results = 'asis'}
+stargazer::stargazer(data_mod %>% filter(year == "2010", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2010 election.", header = FALSE)
+```
+```{r summary2013, results = 'asis'}
+stargazer::stargazer(data_mod %>% filter(year == "2013", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2013 election.", header = FALSE)
+```
+```{r summary2016, results = 'asis'}
+stargazer::stargazer(data_mod %>% filter(year == "2016", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2016 election.", header = FALSE)
+```

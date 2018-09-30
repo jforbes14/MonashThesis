@@ -22,7 +22,7 @@ Instead of throwing everything into a model, and using some kind of procedure to
 
 The second step is an approach that will allow us to identify a handful of the *most important* variables from each election year. By taking the union of the six resultant variable subsets, a superset is created from which all election models will be re-fit. We therefore seek to estimate a good model that captures the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. 
 
-Our chosen method is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance [@BurnhamAnderson2002]. 
+Our chosen method is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance (@BurnhamAnderson2002). 
 
 ### Factor creation
 
@@ -95,6 +95,7 @@ pc_all_interpret %>%
   geom_point(size = 3.5) +
   theme(axis.text.x = element_text(angle = 60, hjust=1, size = 7)) + 
   scale_color_manual(values = c("grey50", "red")) + 
+  labs(x = "Variable", y = "Loading") +
   guides(col = FALSE)
 ```
 
@@ -104,9 +105,9 @@ The following approach to variable selection is applied on the resultant set of 
 
 ### Superset creation
 
-To estimate a *good* model, we use variable selection to further reduce our data to 10 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance [@BurnhamAnderson2002].
+To estimate a *good* model, we use variable selection to further reduce our data to 10 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance (@BurnhamAnderson2002).
 
-Fundamentally driven by Akaike's information criterion (AIC) [@Akaike73], which is a measure of expective information lost in estimating the true underlying data generating process [@BurnhamAnderson2002]. Minimizing AIC is our in determining best fit - should we be comparing multiple models in a given set $M$.
+Fundamentally driven by Akaike's information criterion (AIC) (@Akaike73), which is a measure of expective information lost in estimating the true underlying data generating process (@BurnhamAnderson2002). Minimizing AIC is our in determining best fit - should we be comparing multiple models in a given set $M$.
 
 Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set $m = 1,2,...,M$. *Akaike weights* $w_m$ for each model $m$ are then calculated:
 
@@ -114,7 +115,7 @@ $$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delt
 
 The Akaike weight represents the posterior probability that model $m$ is the best model in the set, without any beliefs a priori. $\sum_{m=1}^{M} w_m$ and $w_m \in (0,1)$.
 
-For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance [@BurnhamAnderson2002]. Let $I$ denote the indicator function.
+For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance (@BurnhamAnderson2002). Let $I$ denote the indicator function.
 
 $$s_j = \sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
 
@@ -158,9 +159,9 @@ Where $\varepsilon_i \sim N(0,\sigma^2)$.
 
 Final models are then fit using the super-set of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
 
-$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i \\ + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i \\ + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i \\ + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$
+$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$
 
-Tables \@ref(fig:allmodels1) and \@ref(fig:allmodels2) detail the resultant models.
+Tables 4.1 and 4.2 detail the resultant models.
 
 \newpage
 
