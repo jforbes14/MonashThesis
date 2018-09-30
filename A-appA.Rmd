@@ -6,7 +6,7 @@
 knitr::include_graphics("figures/excel-screenshot.png")
 ```
 
-# Socio-demographic metrics for each electorate {#ch:appendix}
+# Socio-demographic metrics for each electorate
 
 Derived from ABS Census data, spanning years 2001--2016.
 
@@ -242,3 +242,29 @@ ggplot(filter(vis_df, measure %in% c(levels(as.factor(vis_df$measure))[c(40:45)]
        aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y") + theme(text=element_text(size=7), axis.text.x=element_text(size=6), axis.text.y=element_text(size=6)) + labs(x = "Year", y = "Metric (%)")
 ```
 
+# Model diagnostics
+
+## Non-linearities: Residuals against predictors
+```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
+aug_all %>%
+  filter(year == "2016") %>% 
+  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
+  ggplot(aes(x = value, y = .resid)) +
+  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x")
+```
+
+No obvious non-linearities in 2001, 2004, 2007, 2010, 2013, 2016.
+
+## Residuals vs Predictors not in model
+```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No clear ."}
+vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
+
+aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
+  filter(year == "2013") %>% 
+  select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
+  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
+  ggplot(aes(x = value, y = .resid)) +
+  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free")
+```
+
+No obvious patterns in the residuals vs omitted variables.

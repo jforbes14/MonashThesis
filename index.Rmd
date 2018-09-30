@@ -21,6 +21,7 @@ library(broom)
 library(png)
 library(grid)
 library(gridExtra)
+library(visreg)
 
 ## New data
 load("../Data/Clean/abs_all.rda")
