@@ -18,11 +18,15 @@ library(sp)
 library(rgeos)
 library(jpeg)
 library(broom)
+library(png)
+library(grid)
+library(gridExtra)
 
 ## New data
 load("../Data/Clean/abs_all.rda")
 load("../Modelling-Elections/Clean-Data/data_mod.rda")
 load("../Modelling-Elections/Clean-Data/superset.rda")
+load("../Modelling-Elections/Clean-Data/all_coefs.rda")
 
 ## New maps
 load("../Data/Clean/Maps/Mapping_aec13.rda")
