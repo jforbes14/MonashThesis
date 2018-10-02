@@ -18,184 +18,177 @@ To be written last
 
 Motivation
 
-- The changing Australian demographic
+State the question to be answered
 
-- Perhaps some news headlines to show it is topical
-
-
-Explicitly state the question to be answered
-
-- Inference
-
-
-Outline the challenges involved
-
+Why electorate level of aggregation is good!
 
 Outline the techniques that are going to be used
 
+## Literature review
 
-Literature review
+Previous Australian election studies
 
-- Conclusions from previous Australian election studies
-
-- Imputation methods
-
-- Modelling techniques for elections 
-
-- PCA
-
-- Xway models
+Variable importance - Akaike weights
 
 
 ## The data
 
 State the data sources
 
+Explain electorate structure + imputation required
 
-Summary of the data
+Census data
 
-- Summary statistics
+- Sourcing
 
-- Explanation of each metric
+- Description of explanatory variables
 
+- Insights on changing Australian demographic [moved to end of data]
 
-Insights from the Census data
+A note on Census non-response
 
-- Changes in demographics (as alluded to in introduction)
+Election data
 
+- Explain two-party preferred
 
-Further explanation of the problem
+- Timeline
 
-- Changing electorate boundaries
+- Imputation
 
-- Changes over time
+  + Mention the comparison of imputation between Census aggregation of divisions and postal areas
 
+Standardize data
 
-Show the format data was accessed
+Summary statistics
+- Plots to describe socio-demographic trends across elections
+- Both standardized and raw
+- Do this for the variables that are in the model (see section X)
 
-
-Outline any missingness in the data
-
-
-## Imputation algorithm
-
-Discuss the potential options
-
-- Again reference what has been done
-
-
-Outline the idea behind my algorithm, and why it should perform better
-
-- State assumptions
-
-
-Step through the algorithm
-
-- Include pictures to illustrate
-
-- Use my poster graphic
-
-
-Comparison of imputations
-
-- Be explicit in how I am comparing (MAPE)
-
-- Extreme case example
-
-
-Caveats
-
-- Time scale is much larger
+*Omissions*
+- Postal areas instead of divisions and comparison
+- Put this in discussion - no need for more material in appendix
 
 
 ## Modelling the two-party preferred
 
-PCA
+The model
 
-- Motivation for doing it
+- TPP: don't need to double up here
 
-- Interpret the PVE and PCs
+- Using OLS - why have we used this
 
-- Ellipsoids to demonstrate the pockets of ALP/LNP
-
-- PCR for 2016
+- Why we didn't choose longitudinal (can't treat as same unit over time). Pooled analysis of cross-sections. You could pool but then you would lost time varying effects. ***
 
 
-Converting to factors
+Dimension reduction
 
-- Refer to PC loadings interpretation
+- Outline the steps
+
+- Factor creation
+
+  + Theory and idea
+  
+  + Results
+  
+- Top 5 variables
+
+  + Theory 
+  
+  + More discussion about why we have done all 5 variable models - something about the incremental gain in AIC trailing off around 5 (need to look into this)
+  
+  + Results
+  
+  + We capture the most important! Omitted variable bias ** 
+  
+  + Discussion of omitted variables, and that most of their information is included
+
+  
+Interactions
+
+- Procedure
+
+Final model
+
+- Written equation
+
+- Estimated coefficents
+
+## Interpretation?
+
+Explain how we are going to conduct inference using visreg.
+
+Main effects
+
+- Raw data scatterplots (Variable vs. TPP) and what our expectations are
+
+- 95% confidence bands + visreg
+
+- Conclusions on each effect
+
+Interactions
+
+- Raw scatterplots
+
+- Conclusions on each effect
+
+Diagnostics
+
+- Residuals
+
+  + Normal
+  
+  + Non-linearities and omitted variables
+  
+- Influence
+
+  + High influence points (cook distance)
+  
+- Goodness of fit
+
+  + Fitted vs. actual and adjusted R-squared
+  
+A typical electorate
+- Across the years
+
+## Conclusion
+
+Recap of the main insights
+
+Contributions
+- Highlight analysis over time
+
+Relative socio-demographic drivers are consistent across elections
+
+## Extensions and Caveats
+Spatial correlation in errors
+
+Different level of aggregation for imputation
+
+Different level of aggregation for analysis
+
+Other possible questions that could be answered with the data, e.g. Swing vote
 
 
-Single year models
-
-- Use 2016 to explain the method, and just print the results for other years
-
-- Start by including the summarised set of variables
-
-- Xway models and conclusions of best predictors
-
-- Interpretation of each year (possible subheadings)
-
-- Diagnostics
-
-
-Longitudinal model
-
-- Method to build up
-
-- Assumptions required
-
-- Model
-
-- Interpretation
-
-- Diagnostics
-
-
-## Modelling full voter preference for 2016 (TBC)
-
-Dirichlet model using the same 'best' covariates from 2016 to model all parties
-
-Do conclusions change?
-
-
-## Discussion
-
-Assumptions of imputation method (TBC - may be repeating myself)
-
-- Uniform distribution
-
-- Linear changes over time (e.g. sudden refugee intake)
-
-- Encouraging: CED performed better than POA
-
-- How time scale is different
-
-
-Further improvements
-
-- ?
-
-
-## Conclusions
-
-Recap
-
-- The need for imputation algorithm and why it helps
-
-- Conclusions of variable importance from models
-
-
-Insights
-
-- What is the most important predictor
-
-- What has changed over the years
+## Where to include?
 
 
 
 
+## Other stuff to add - think about questions asked 
+
+Speak with Klaus about spatial imputation - get references.
 
 
 
 
+## Formatting / Manual for AMS math
+- Examples of aligning writing
+- `amsldoc`
+
+Don't need 3 dps for model output
+- All 6 models on 1 page
+
+
+### Order
+
+Begin with conclusion
