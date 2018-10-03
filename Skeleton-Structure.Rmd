@@ -64,10 +64,6 @@ Summary statistics
 - Both standardized and raw
 - Do this for the variables that are in the model (see section X)
 
-*Omissions*
-- Postal areas instead of divisions and comparison
-- Put this in discussion - no need for more material in appendix
-
 
 ## Modelling the two-party preferred
 
@@ -152,12 +148,16 @@ A typical electorate
 
 ## Conclusion
 
+Recap the motivation and method
+
 Recap of the main insights
 
-Contributions
-- Highlight analysis over time
-
 Relative socio-demographic drivers are consistent across elections
+
+Contributions
+- Analysis over time
+- Collation of data being made available
+
 
 ## Extensions and Caveats
 Spatial correlation in errors
