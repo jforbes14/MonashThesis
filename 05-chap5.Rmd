@@ -99,7 +99,7 @@ all_coefs %>% filter(term == "NoReligion") %>%
   labs(x = "", y = "Coefficient estimate: NoReligion")
 ```
 
-```{r norelig2, fig.cap="Partial residual plots against proportion of electorate population not identifying with a religion, with a line illustrating the modelled effect in each election.}
+```{r norelig2, fig.cap="Partial residual plots against proportion of electorate population not identifying with a religion, with a line illustrating the modelled effect in each election."}
 NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
