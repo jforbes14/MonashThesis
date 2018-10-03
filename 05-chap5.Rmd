@@ -8,11 +8,11 @@ Raster plots are constructed for each of the two-way interactions, which illustr
 
 Note that partial residuals for a variable $j$ are given by: ${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$, where -j subscript indicates the removal of the jth column/element (@Faraway16). These are equivalent $y$ adjusted for all variables other than $x_j$. In a partial residual plot, if we can draw a horizontal line all the way through the 95% confidence band, then the effect is not significant.
 
-## Insights: main effects
+## Main effects
 
 ### Immigrant population
 
-Scatterplots of the proportion of South-Eastern European immigrants against the two-party preferred vote indicate a negative relationship (figure \@ref(fig:rawSE)). This means that areas with more immigrants from South-Eastern Europe should have a strong relationship with Labor support. After adjusting for other socio-demographics, we find that this holds true. The partial residual plots depict a significantly negative slope, and it does not change much across years (figure \@ref(fig:SE2)). 
+Scatterplots of the proportion of South-Eastern European immigrants against the two-party preferred vote indicate a negative relationship (figure \@ref(fig:rawSE)). This means that areas with more immigrants from South-Eastern Europe should have a strong relationship with Labor support. After adjusting for other socio-demographics, we find that this holds true. The partial residual plots depict a significantly negative slope, and it does not change much across years (see figures \@ref(fig:SE1) and \@ref(fig:SE2)). 
 
 The other immgrant region in our model is the United Kingdom, which does not have a significant effect on two-party preference in any of the elections. This too aligns with expectations from inspection of the same type of scatterplot, which depicts a weakly positive relationship between larger populations from the United Kingdom and support for the Liberal party. These plots can be found in the appendix F.
 
@@ -23,7 +23,7 @@ We conclude that an electorate's distribution of birthplace is influential, but 
 data_mod %>% ggplot(aes(x = Born_SE_Europe, y = Perc_LNP)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in South-Eastern Europe", y = "Two-party preferred (%)")
 ```
 
-```{r SE1, fig.cap="Estimated coefficients for population born in South-Eastern Europe across years with 95% confidence bands."}
+```{r SE1, fig.cap="Estimated coefficients for population born in South-Eastern Europe across years with 95\\% confidence bands."}
 # Coefficients
 all_coefs %>% filter(term == "Born_SE_Europe") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -34,8 +34,9 @@ all_coefs %>% filter(term == "Born_SE_Europe") %>%
   theme(axis.text.x = element_text(size = 12), axis.text.y = element_text(size = 12), 
         axis.title = element_text(size = 12)) + 
   coord_fixed(0.15) + 
-  labs(x = "", y = "Coefficient estimate: BornSEEurope")
+  labs(x = "Year", y = "Coefficient estimate: BornSEEurope")
 ```
+
 
 ```{r SE2, fig.cap="Partial residual plots for effect of populations born in South-Eastern Europe across years."}
 Born_SE_01 <- visreg(fit_ss_01, "Born_SE_Europe", gg = T, print.cond = FALSE) + 
@@ -78,14 +79,15 @@ grid.arrange(Born_SE_01, Born_SE_04, Born_SE_07, Born_SE_10, Born_SE_13, Born_SE
 
 ### No Religion
 
-In section X we found that the proportion of people that do not identify with a religion has been increasing over time, and yet the raw data scatterplots (figure \@ref(fig:rawNoRelig)) do not indicate an effect two-party preference. In the elections up to 2007, proportions of areligiousity did not have a significant effect. What we find from 2010 onwards, is quite revealing - less religious electorates are more supporting of the Labor party. The significantly negative slopes do not appear to change much over these last three elections, indicating a lasting shift stemming from the 2010 election (figure \@ref(fig:norelig2)).
+In section X we found that the proportion of people that do not identify with a religion has been increasing over time, and yet the raw data scatterplots (figure \@ref(fig:rawNoRelig)) do not indicate an effect two-party preference. In the elections up to 2007, proportions of areligiousity did not have a significant effect. What we find from 2010 onwards, is quite revealing - less religious electorates are more supporting of the Labor party. The significantly negative slopes do not appear to change much over these last three elections, indicating a lasting shift stemming from the 2010 election (figures \@ref(fig:norelig1) and \@ref(fig:norelig2)).
 
 ```{r rawNoRelig, fig.cap="Scatterplot of population not identifying with a religion against two-party preferred vote."}
 ## Voting against NoReligion
 data_mod %>% ggplot(aes(x = NoReligion, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of population not identifying with a religion", y = "Two-party preferred (%)")
 ```
 
-```{r norelig1, fig.cap="Estimated coefficients for population not identifying with a religion across years with 95% confidence bands."}
+
+```{r norelig1, fig.cap="Estimated coefficients for population not identifying with a religion with 95\\% confidence bands."}
 # Coefficients
 all_coefs %>% filter(term == "NoReligion") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -96,10 +98,11 @@ all_coefs %>% filter(term == "NoReligion") %>%
   theme(axis.text.x = element_text(size = 12), axis.text.y = element_text(size = 12), 
         axis.title = element_text(size = 12)) + 
   coord_fixed(0.15) + 
-  labs(x = "", y = "Coefficient estimate: NoReligion")
+  labs(x = "Year", y = "Coefficient estimate: NoReligion")
 ```
 
-```{r norelig2, fig.cap="Partial residual plots against proportion of electorate population not identifying with a religion, with a line illustrating the modelled effect in each election."}
+
+```{r norelig2, fig.cap="Partial residual plots against population not identifying with a religion."}
 NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -146,7 +149,7 @@ Education policy is typically a key policy issue in the weeks leading up to a fe
 
 There is no reason to expect rental prices and mortgage loan repayments to have a distinct relationship with party preference, based on the scatterplots. We find that in the 2010 election, higher median payment amounts had a significant positive relationship with support for the Liberal party, whereas there was no effect in the others.
 
-## Insights: Interactions
+## Interactions
 
 ### Education and Age
 
@@ -161,10 +164,12 @@ Even though the population is ageing, and education levels have been improving a
 data_mod %>% ggplot(aes(x = Educ, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education level", y = "Two-party preferred (%)")
 ```
 
+
 ```{r rawage, fig.cap="Scatterplot of median age against two-party preferred vote."}
 ## Voting against MedianAge
 data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Median age", y = "Two-party preferred (%)")
 ```
+
 
 ```{r educage, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and median age."}
 educage_df <- data.frame(
@@ -386,6 +391,7 @@ Two industries of work are included in our model - extractive and administrative
 data_mod %>% ggplot(aes(x = Extractive, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Jobs in extractive industries", y = "Two-party preferred (%)")
 ```
 
+
 ```{r, fig.cap="Scatterplot of population working in administrative jobs against two-party preferred vote."}
 ## Voting against ManagerAdminClericalSales
 data_mod %>% ggplot(aes(x = ManagerAdminClericalSales, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Administrative jobs", y = "Two-party preferred (%)")
@@ -550,7 +556,7 @@ The most influential electorate is Kalgoorlie in 2001, with cook distance of 0.3
 
 The election models have adjusted R-squared between $[0.67, 0.77]$, indicating that socio-demographics are able to explain most of the variation in two-party preference.
 
-```{r model_fit, fig.cap = "Fitted versus actual two-party preferred vote in each election"}
+```{r modelfit, fig.cap = "Fitted versus actual two-party preferred vote in each election"}
 aug_all %>% 
   ggplot(aes(x=.fitted, y=Perc_LNP)) + 
   geom_abline(col = "blue", alpha = 0.5, size = 1) + 
