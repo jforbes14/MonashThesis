@@ -26,16 +26,15 @@ Instead of throwing everything into a model and using some kind of procedure to 
 
 The second step is an approach that will allow us to identify a handful of the *most important* variables from each election year. By taking the union of the most important variables from each of the six elections, a superset is created from which all election models will be re-fit. We therefore seek to estimate a good model that captures the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. Our chosen method for this step is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance (@BurnhamAnderson2002). 
 
-### Factor creation (here)
+### Factor creation
 
-Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained. Although the components are not entirely interpretable, we can infer the relative importance of variables in each component based on the magnitude of their loadings.
+Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained, and the loadings in a component represent the correlation of each variable with that component. We can infer which variables are correlated with each other based on the magnitude of their loadings in a given component.
 
-The components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve-each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see Appendix \@ref(fig:loadings-234)). 
+The principal components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve-each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see Appendix \@ref(fig:loadings-234)). 
 
 Due to the similarity of variation within socio-demographic variables across elections, we combine the information from all years into a single cross-sectional data set ($n = 900$), and re-compute principal components. 
 
 As previously mentioned, each years' Census profiles are scaled and centred before combining. This way differences in electorate socio-demographics will be be measured relative to that election year. Otherwise, country-wide trends over time will distort comparison. For example, rental prices have increased over time, even after adjusting for inflation, so if rental prices are not standardized each year, then 2016 prices in a relatively cheap electorate will appear comparable with an expensive electorate by 2001 prices.
-
 
 ```{r pve-each, fig.cap = "Proportion of variance explained by each principal component, for each election year."}
 # PVE of separate PCA
@@ -58,9 +57,9 @@ vis_loadings %>%
   labs(x = "Socio-demographic variable", y = "Loading in first principal component (of respective election)")
 ```
 
-The principal components from this combined data set are then interpreted to extract information about which explanatory variables could be grouped together to create a *factor*. A factor is created if there exists is a set of variables that have large loadings in a particular component, and there is an intuitive reason as to why these could represent similar information.
+Using the first four principal components from this combined data set, we information about which explanatory variables could be grouped together to create a *factor*. A factor is created if there exists is a set of variables that have large loadings in a particular component, and there is an intuitive reason as to why these could represent similar information. We consider a loading greater than 0.15 to be large.
 
-There appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (see figure \@ref(fig:PVE-all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
+Four components are select because there appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (see figure \@ref(fig:PVE-all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
 
 ```{r PVE-all, fig.cap = "Cumulative proportion of variance explained by each principal component in the combined data set (across all elections)."}
 load("../Modelling-Elections/Clean-Data/pve_all.rda")
@@ -74,15 +73,20 @@ pve_all %>%
 ```
 
 The resultant factors are constructed as follows:
-- Educ = Bachelor + HighSchool + Postgraduate + Professional +  Finance - Laborer - Tradesperson - DipCert
-- FamHouseSize = FamilyRatio + AverageHouseholdSize + Couple_WChild_House - Couple_NoChild_House - SP_House + Age00_04 + Age05_14
-- PropertyMarr = Married + Owned + Mortgage - Renting - DiffAddress - PublicHousing - DeFacto
-- Incomes = MedianFamilyIncome + MedianHouseholdIncome + MedianPersonalIncome
-- RentLoan = MedianLoanPay + MedianRent
 
-Each factor is then standardized to have mean 0 and variance 1 within each election.
+- Education levels: Educ = Bachelor + HighSchool + Postgraduate + Professional + Finance - Laborer - Tradesperson - DipCert
 
-Consider the Incomes factor as an illustration. Independent of principal components, we may suspect that median personal income, median household income and median family income are providing similar information about how "well-off" an electorate is. When we look at the loadings in the first principal component (see figure \@ref(PC1)), we find that these three variables all have large loadings (> 0.15). This provides evidence that these variables could be combined in a factor, which we have called "Incomes".
+- Family and house size: FamHouseSize = FamilyRatio + AverageHouseholdSize + Couple_WChild_House - Couple_NoChild_House - SP_House + Age00_04 + Age05_14
+
+- Property ownership and marriage rates: PropertyMarr = Married + Owned + Mortgage - Renting - DiffAddress - PublicHousing - DeFacto
+
+- Income: Incomes = MedianFamilyIncome + MedianHouseholdIncome + MedianPersonalIncome
+
+- Rental and loan payments: RentLoan = MedianLoanPay + MedianRent
+
+After computing these sums, each factor is then standardized to have mean 0 and variance 1 within each election.
+
+Consider the Incomes factor as an illustration. Independent of principal components, we may suspect that median personal income, median household income and median family income are providing similar information about how "well-off" an electorate is. When we look at the loadings in the first principal component (see figure \@ref(PC1)), we find that these three variables all have large loadings. This provides evidence that these variables could be combined in a factor, which we have called "Incomes".
 
 ```{r PC1, fig.cap = "Large loadings in the first principal component, with Incomes factor colored red."}
 # Loadings of PC1 from combined PCA
@@ -101,13 +105,11 @@ pc_all_interpret %>%
   guides(col = FALSE)
 ```
 
-As a final step, we remove the age variables that are not contained in any of the factors (retaining median age) and any variables that are exact linear combinations of others (Christianity, Other_NonChrist and EnglishOnly). 
-
-The following approach to variable selection is applied on the resultant set of 30 socio-demographic variables.
+As a final step, we remove the age variables that are not contained in any of the factors (retaining median age) and any variables that are exact linear combinations of others (Christianity, Other_NonChrist and EnglishOnly). The resultant data set has $p=30$ socio-demographic predictors.
 
 ### Superset creation
 
-To estimate a *good* model, we use variable selection to further reduce our data to 10 variables, which capture the five *most important* variables in determining $TPP$ in each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance (@BurnhamAnderson2002).
+To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables in determining $TPP$ in each election. Five is chosen because we see significant drop-off in R^2 after 5 variables???. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance (@BurnhamAnderson2002).
 
 Fundamentally driven by Akaike's information criterion (AIC) (@Akaike73), which is a measure of expective information lost in estimating the true underlying data generating process (@BurnhamAnderson2002). Minimizing AIC is our in determining best fit - should we be comparing multiple models in a given set $M$.
 
