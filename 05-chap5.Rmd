@@ -160,8 +160,8 @@ We find that the young electorates with and above-average levels of education co
 Even though the population is ageing, and education levels have been improving all across Australia (as seen in section X), it appears that the young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
 
 ```{r raweduc, fig.cap="Scatterplot of education levels against two-party preferred vote."}
-## Voting against Educ
-data_mod %>% ggplot(aes(x = Educ, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education level", y = "Two-party preferred (%)")
+## Voting against Education
+data_mod %>% ggplot(aes(x = Education, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education level", y = "Two-party preferred (%)")
 ```
 
 
@@ -174,7 +174,7 @@ data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = E
 ```{r educage, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and median age."}
 educage_df <- data.frame(
   MedianAge = rep(seq(-4,4, by = 0.01), times = 801),
-  Educ = rep(seq(-4,4, by = 0.01), each = 801),
+  Education = rep(seq(-4,4, by = 0.01), each = 801),
   NoReligion = 0,
   CurrentlyStudying = 0,
   AdminJobs = 0,
@@ -192,66 +192,66 @@ educage_df$z07 = predict(fit_ss_07, educage_df) - fit_ss_07$coefficients[1]
 educage_df$z04 = predict(fit_ss_04, educage_df) - fit_ss_04$coefficients[1]
 educage_df$z01 = predict(fit_ss_01, educage_df) - fit_ss_01$coefficients[1]
 
-Educ_Age_16 <- educage_df %>% ggplot(aes(x=Educ, y=MedianAge)) +
+Educ_Age_16 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   geom_raster(aes(fill = z16)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2016") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=MedianAge), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z16)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.8/5.8)
 
-Educ_Age_13 <- educage_df %>% ggplot(aes(x=Educ, y=MedianAge)) +
+Educ_Age_13 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   geom_raster(aes(fill = z13)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2013") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=MedianAge), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z13)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.8/5.8)
 
-Educ_Age_10 <- educage_df %>% ggplot(aes(x=Educ, y=MedianAge)) +
+Educ_Age_10 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   geom_raster(aes(fill = z10)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2010") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=MedianAge), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z10)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.8/5.8)
 
-Educ_Age_07 <- educage_df %>% ggplot(aes(x=Educ, y=MedianAge)) +
+Educ_Age_07 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   geom_raster(aes(fill = z07)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=MedianAge), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z07)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.8/5.8)
 
-Educ_Age_04 <- educage_df %>% ggplot(aes(x=Educ, y=MedianAge)) +
+Educ_Age_04 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   geom_raster(aes(fill = z04)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2004") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=MedianAge), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z04)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.8/5.8)
 
-Educ_Age_01 <- educage_df %>% ggplot(aes(x=Educ, y=MedianAge)) +
+Educ_Age_01 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   geom_raster(aes(fill = z01)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2001") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=MedianAge), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z01)))) +  
@@ -284,7 +284,7 @@ Scatterplots indicate that a strong negative relationship between the proportion
 ```{r educOP, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and proportion of single parent households."}
 educOP_df <- data.frame(
   OneParentHouse = rep(seq(-4,4, by = 0.01), times = 801),
-  Educ = rep(seq(-4,4, by = 0.01), each = 801),
+  Education = rep(seq(-4,4, by = 0.01), each = 801),
   NoReligion = 0,
   CurrentlyStudying = 0,
   AdminJobs = 0,
@@ -302,66 +302,66 @@ educOP_df$z07 = predict(fit_ss_07, educOP_df) - fit_ss_07$coefficients[1]
 educOP_df$z04 = predict(fit_ss_04, educOP_df) - fit_ss_04$coefficients[1]
 educOP_df$z01 = predict(fit_ss_01, educOP_df) - fit_ss_01$coefficients[1]
 
-Educ_OP_16 <- educOP_df %>% ggplot(aes(x=Educ, y=OneParentHouse)) +
+Educ_OP_16 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z16)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2016") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=OneParentHouse), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z16)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 4.8/6.3)
 
-Educ_OP_13 <- educOP_df %>% ggplot(aes(x=Educ, y=OneParentHouse)) +
+Educ_OP_13 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z13)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2013") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=OneParentHouse), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z13)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 4.8/6.3)
 
-Educ_OP_10 <- educOP_df %>% ggplot(aes(x=Educ, y=OneParentHouse)) +
+Educ_OP_10 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z10)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2010") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=OneParentHouse), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z10)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 4.8/6.3)
 
-Educ_OP_07 <- educOP_df %>% ggplot(aes(x=Educ, y=OneParentHouse)) +
+Educ_OP_07 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z07)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=OneParentHouse), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z07)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 4.8/6.3)
 
-Educ_OP_04 <- educOP_df %>% ggplot(aes(x=Educ, y=OneParentHouse)) +
+Educ_OP_04 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z04)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2004") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=OneParentHouse), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z04)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 4.8/6.3)
 
-Educ_OP_01 <- educOP_df %>% ggplot(aes(x=Educ, y=OneParentHouse)) +
+Educ_OP_01 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z01)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2001") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=OneParentHouse), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z01)))) +  
@@ -409,7 +409,7 @@ jobs_df <- data.frame(
   OneParentHouse = 0,
   BornUK = 0,
   BornSEEurope = 0,
-  Educ = 0,
+  Education = 0,
   RentLoan = 0
 )
 
