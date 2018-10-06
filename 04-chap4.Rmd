@@ -165,6 +165,7 @@ After calculating Akaike weights $w_m$ and ranking variables by their relative v
 
 For a table of the sums of Akaike weights for variables in each year, see Appendix \@ref(fig:allSAW).
 
+
 ## Adding interactions
 
 Two-way variable interactions are then added to the model using an iterative procedure. First we fit a model using the superset of predictors as main effects only. Then, for each election, we compute the number of elections in which each possible two-way interaction significantly adds to the model fit, using a likelihood-ratio test (1% significance level). We then select the interaction that is significant in the most years and re-fit models by adding this interaction to the previous model specification. 
@@ -192,3 +193,10 @@ stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, header = FALSE, column.sep
 ```{r allmodels2, results = 'asis'}
 stargazer::stargazer(fit_ss_10, fit_ss_13, fit_ss_16, header = FALSE, column.sep.width = "1pt", title = "Models for 2010, 2013 and 2016 elections", dep.var.labels = "Two-party preferred vote in favor of the Liberal party", font.size = "scriptsize")
 ```
+
+
+## A note on omitted variables
+
+When doing any kind of variable selection, omitted variable bias is always going to be a problem. In our superset, some notable omissions include the incomes factor, unemployment rate and family size - it is foreseeable that one might suspect these to be influential in party preference.
+
+By regressing each omitted variable on the superset of variables, we find is that most of the information in the omitted variables is explained by variables in the superset. Particularly, almost 90% of the variation in incomes, and over 60% of the variation in unemployment, is explained by the included predictors. Almost all of the omitted variables have R-squared of at least 0.5 (see appendix H for all R-squared values). Therefore, we are confident that our model does not suffer greatly from omitted variable bias, and hence our conclusions are justified.
