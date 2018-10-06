@@ -547,3 +547,36 @@ tab_aw <- var_imp_all %>%
 print(tab_aw, comment = FALSE, include.rownames = FALSE)
 ```
 
+# Omitted variables
+
+We linearly regress each omitted variable against the superset of predictors, and record the R-squared values in each election.
+
+```{r ovb, fig.cap = "R-squared of each omitted variable when regressed on the superset each year."}
+OVB_fn <- function(Year) {
+  Year <- as.character(Year)
+  
+OVB_lm <- data.frame(varname = names(data_mod), r2 = 0, adj_r2 = 0) %>% 
+  filter(!varname %in% c("Election_Division", "Perc_LNP", "Swing", "year", superset$varname %>% unlist %>% as.character))
+
+for (i in 1:nrow(OVB_lm)) {
+  varname = OVB_lm$varname[i] %>% as.character()
+  data_ovb = data_mod %>% filter(year == Year, !is.na(Perc_LNP)) %>% select(c(superset$varname %>% as.character), varname)
+  formula_ovb = paste0(varname, " ~ .")
+  lmod = lm(formula = formula_ovb,
+            data = data_ovb)
+  OVB_lm$r2[i] = summary(lmod)$r.squared
+  OVB_lm$adj_r2[i] = summary(lmod)$adj.r.squared
+}
+
+OVB_lm <- OVB_lm %>% mutate(year = Year)
+
+return(OVB_lm)
+}
+
+OVB_all <- bind_rows(OVB_fn(2001), OVB_fn(2004), OVB_fn(2007), OVB_fn(2010), OVB_fn(2013), OVB_fn(2016)) %>% 
+  select(-adj_r2)
+
+OVB_all %>% ggplot(aes(x=r2, y = varname)) + 
+  geom_point(aes(col = year), size = 2) +
+  labs(x = "R-squared", y = "Omitted Variable") 
+```
