@@ -51,6 +51,10 @@ data_mod <- data_mod %>%
          BornMidEast = Born_MidEast,
          OneParentHouse = OneParent_House)
 
+superset <- superset %>% 
+  mutate(varname = gsub("_", "", varname),
+         varname = ifelse(varname == "ManagerAdminClericalSales", "AdminJobs", varname),
+         varname = ifelse(varname == "Extractive", "ExtractiveJobs", varname))
 
 #### MAPS ####
 
