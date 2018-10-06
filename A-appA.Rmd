@@ -506,3 +506,44 @@ grid.arrange(Educ_Admin_01, Educ_Admin_04, Educ_Admin_07, Educ_Admin_10, Educ_Ad
 TPP_scale <- readPNG("figures/TPP_scale.png")
  grid.raster(TPP_scale)
 ```
+
+# Why choose all five variable linear models?
+
+For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. *Five* variables models are a compromise between computational burden and capturing sufficient information in the model set. 
+
+Because we can't run linear models for all possible combinations of our predictors, we use an iterative procedure to fit 20 models for each number of predictors. This means 20 models with 2 variables, 20 models with 3 variables and so on. The process is as follows:
+
+1. Fit all possible 2 variable models.
+
+2. Retain the 10 models with highest R-squared, and another 10 models selected at random.
+
+3. Fit all possible three variable models to each of these 20 two-variable models, by adding one variable. This means for every retained model, there will be $30 - 2 = 28$ models fit.
+
+4. Repeat steps 2 and 3 for the 3 variable models, 4 variable models, and so on, until reaching a model with all 30 variables.
+
+Figure \@ref(fig:tradeoff2) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. We see that around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8%). We see that from variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
+
+All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and we still will capture models that have high R-squared.
+
+```{r tradeoff2, fig.cap = "Estimates of R-squared against number of variables included in a linear model."}
+ggplot(aes(x = num_vars, y = r2), data = step_all) + 
+  geom_point(alpha = 0.3) +
+  geom_line(data = step_all %>% filter(max_r2 == 1)) +
+  facet_wrap(~year) +
+  labs(x = "Number of variables", y = "R-squared")
+```
+
+## Resultant Akaike weights
+
+```{r allSAW, fig.cap = "Sum of Akaike weights for each variable, in each election.", results = 'asis'}
+load("../Modelling-Elections/Clean-Data/var_imp_all.rda")
+
+tab_aw <- var_imp_all %>% 
+  select(varname, year, sum_w) %>% 
+  spread("year", "sum_w") %>% 
+  rename(Variable = varname) %>% 
+  xtable::xtable(caption = "Sum of Akaike weights for each variable, in each election.")
+
+print(tab_aw, comment = FALSE, include.rownames = FALSE)
+```
+
