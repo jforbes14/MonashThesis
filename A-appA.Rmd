@@ -298,16 +298,16 @@ This section contains the scatterplots and model visualizations that were omitte
 
 Electorates with larger populations from the United Kingdom does not have a significant effect on two-party preference in any of the elections. From inspection of 
 
-We expect greater populations from the UK to have a weakly positive relationship with support for the Liberal party (see figure \@ref(fig:rawUK)). The modelled effect is  Our model confirms this. Born_UK is insignificant in every election. 
+We expect greater populations from the UK to have a weakly positive relationship with support for the Liberal party (see figure \@ref(fig:rawUK)). The modelled effect is  Our model confirms this. BornUK is insignificant in every election. 
 
 ```{r rawUK, fig.cap="Scatterplot of population born in the United Kingdom against two-party preferred vote."}
-## Voting against Born_UK
-data_mod %>% ggplot(aes(x = Born_UK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in the United Kingdom", y = "Two-party preferred (%)")
+## Voting against BornUK
+data_mod %>% ggplot(aes(x = BornUK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in the United Kingdom", y = "Two-party preferred (%)")
 ```
 
 ```{r UK1, fig.cap="Estimated coefficients for population born in the United Kingdom across years with 95% confidence bands."}
 # Coefficients
-all_coefs %>% filter(term == "Born_UK") %>% 
+all_coefs %>% filter(term == "BornUK") %>% 
   ggplot(aes(x=year, y=estimate)) +
   geom_point(size = 3) + geom_linerange(aes(ymin = lower95, ymax = upper95), size = 1.5) + 
   geom_hline(aes(yintercept = 0), alpha = 0.5, size = 2) + 
@@ -320,38 +320,38 @@ all_coefs %>% filter(term == "Born_UK") %>%
 ```
 
 ```{r UK2, out.width="100%"}
-Born_UK_01 <- visreg(fit_ss_01, "Born_UK", gg = T, print.cond = FALSE) + 
+BornUK_01 <- visreg(fit_ss_01, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
-Born_UK_04 <- visreg(fit_ss_04, "Born_UK", gg = T, print.cond = FALSE) + 
+BornUK_04 <- visreg(fit_ss_04, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-Born_UK_07 <- visreg(fit_ss_07, "Born_UK", gg = T, print.cond = FALSE) + 
+BornUK_07 <- visreg(fit_ss_07, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5))  +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
-Born_UK_10 <- visreg(fit_ss_10, "Born_UK", gg = T, print.cond = FALSE) + 
+BornUK_10 <- visreg(fit_ss_10, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-Born_UK_13 <- visreg(fit_ss_13, "Born_UK", gg = T, print.cond = FALSE) + 
+BornUK_13 <- visreg(fit_ss_13, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-Born_UK_16 <- visreg(fit_ss_16, "Born_UK", gg = T, print.cond = FALSE) + 
+BornUK_16 <- visreg(fit_ss_16, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
 
-grid.arrange(Born_UK_01, Born_UK_04, Born_UK_07, Born_UK_10, Born_UK_13, Born_UK_16, 
+grid.arrange(BornUK_01, BornUK_04, BornUK_07, BornUK_10, BornUK_13, BornUK_16, 
              nrow = 2, 
              #top = textGrob("South-Eastern European Influence", gp = gpar(cex = 0.8)), 
              left = textGrob("Two-party preferred vote (%)", gp = gpar(cex = 0.8), rot = 90), 
@@ -409,15 +409,15 @@ Over all years we see that for moderate-to-high proportions of workers in admini
 
 ```{r admineduc1, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and administrative related jobs."}
 admineduc_df <- data.frame(
-  ManagerAdminClericalSales = rep(seq(-4,4, by = 0.01), times = 801),
-  Educ = rep(seq(-4,4, by = 0.01), each = 801),
+  AdminJobs = rep(seq(-4,4, by = 0.01), times = 801),
+  Education = rep(seq(-4,4, by = 0.01), each = 801),
   NoReligion = 0,
   CurrentlyStudying = 0,
   MedianAge = 0,
-  OneParent_House = 0,
-  Born_UK = 0,
-  Born_SE_Europe = 0,
-  Extractive = 0,
+  OneParentHouse = 0,
+  BornUK = 0,
+  BornSEEurope = 0,
+  ExtractiveJobs = 0,
   RentLoan = 0
 )
 
@@ -428,66 +428,66 @@ admineduc_df$z07 = predict(fit_ss_07, admineduc_df) - fit_ss_07$coefficients[1]
 admineduc_df$z04 = predict(fit_ss_04, admineduc_df) - fit_ss_04$coefficients[1]
 admineduc_df$z01 = predict(fit_ss_01, admineduc_df) - fit_ss_01$coefficients[1]
 
-Educ_Admin_16 <- admineduc_df %>% ggplot(aes(x=Educ, y=ManagerAdminClericalSales)) +
+Educ_Admin_16 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z16)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2016") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=ManagerAdminClericalSales), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z16)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
 
-Educ_Admin_13 <- admineduc_df %>% ggplot(aes(x=Educ, y=ManagerAdminClericalSales)) +
+Educ_Admin_13 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z13)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2013") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=ManagerAdminClericalSales), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z13)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
 
-Educ_Admin_10 <- admineduc_df %>% ggplot(aes(x=Educ, y=ManagerAdminClericalSales)) +
+Educ_Admin_10 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z10)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2010") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=ManagerAdminClericalSales), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z10)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
 
-Educ_Admin_07 <- admineduc_df %>% ggplot(aes(x=Educ, y=ManagerAdminClericalSales)) +
+Educ_Admin_07 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z07)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=ManagerAdminClericalSales), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z07)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
 
-Educ_Admin_04 <- admineduc_df %>% ggplot(aes(x=Educ, y=ManagerAdminClericalSales)) +
+Educ_Admin_04 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z04)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2004") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=ManagerAdminClericalSales), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z04)))) +  
   guides(fill = FALSE) +
   lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
 
-Educ_Admin_01 <- admineduc_df %>% ggplot(aes(x=Educ, y=ManagerAdminClericalSales)) +
+Educ_Admin_01 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z01)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2001") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Educ,y=ManagerAdminClericalSales), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z01)))) +  
@@ -580,3 +580,5 @@ OVB_all %>% ggplot(aes(x=r2, y = varname)) +
   geom_point(aes(col = year), size = 2) +
   labs(x = "R-squared", y = "Omitted Variable") 
 ```
+
+
