@@ -109,11 +109,13 @@ As a final step, we remove the age variables that are not contained in any of th
 
 ### Superset creation
 
-To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables in determining $TPP$ in each election. Five is chosen because we see significant drop-off in R^2 after 5 variables???. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance (@BurnhamAnderson2002).
+To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables from each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance (@BurnhamAnderson2002).
 
-Fundamentally driven by Akaike's information criterion (AIC) (@Akaike73), which is a measure of expective information lost in estimating the true underlying data generating process (@BurnhamAnderson2002). Minimizing AIC is our in determining best fit - should we be comparing multiple models in a given set $M$.
+Akaike's information criterion (AIC) (@Akaike73) is a measure of the expected information lost in estimating the true underlying data generating process. When comparing models in a given set $M$, we aim to minimize AIC. Akaike weights is a method of scoring each model, relative to the rest of the models in the set.
 
-Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set $m = 1,2,...,M$. *Akaike weights* $w_m$ for each model $m$ are then calculated:
+Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set $m = 1,2,...,M$. 
+
+*Akaike weights* $w_m$ for each model $m$ are then calculated:
 
 $$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delta_r)}$$
 
@@ -121,20 +123,29 @@ The Akaike weight represents the posterior probability that model $m$ is the bes
 
 For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance (@BurnhamAnderson2002). Let $I$ denote the indicator function.
 
-$$s_j = \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m)$$
-and
-
-$$\sum_{j=1}^{J} \sum_{m=1}^{M} w_m \cdot I(j \text{ used in model } m) = 1$$
+$$s_j = \sum_{m=1}^{M} w_m \cdot \text{I}(j \text{ used in model } m)$$
 
 The ordering of variables by their Akaike weights is a rank of variable importance. The variable with largest $s_j, j \in J$ is deemed to be the most important in the set.
 
-Our approach is to select the five most important variables from each election, and construct a variable super-set by taking the union of these six subsets. By doing so, we are able to capture any variable that appears to be important in a particular year and unimportant in the others, whilst also capturing those that are important in most years. This super-set are the chosen predictors to be used in *all* of the final election models. 
+Our approach is to select the five most important variables from each election, and construct a variable superset by taking the union of these six subsets. By doing so, we are able to capture any variable that appears to be important in a particular year and unimportant in the others, whilst also capturing those that are important in many years. This superset are the chosen predictors to be used in *all* of the final election models. We need to ensure that this superset across elections is not too large, which is why we have elected to extract five variables from each election.
 
 #### Model sets for each election
 
-For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. There are $M = 142,506$ models for each election.
+For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. This involves fitting $M = {30 \choose 5} = 142,506$ models for each election. 
 
-The resultant superset is as follows, with the number of elections in which that variable was in the top five in parenthesis.
+We have chosen to *five* variable models as a compromise between computational burden and capturing sufficient information. As seen in figure \@ref(fig:tradeoff), around 70% of variation in two-party preference can be explained by a five variable model in each election, and incremental gains from increasing the number of predictors is decreasing (see appendix G for a full description of this process).
+
+```{r tradeoff, fig.cap = "Estimates of R-squared against number of variables included in a linear model."}
+load("../Modelling-Elections/Clean-Data/step_all.rda")
+
+ggplot(aes(x = num_vars, y = r2), data = step_all) + 
+  geom_point(alpha = 0.3) +
+  geom_line(data = step_all %>% filter(max_r2 == 1)) +
+  facet_wrap(~year) +
+  labs(x = "Number of variables", y = "R-squared")
+```
+
+After calculating Akaike weights $w_m$ and ranking variables by their relative variable importance $s_j$ for each election, we obtain the following superset (with the number of elections for which a variable is in the top five in parenthesis).
 
 - Birthplace: South-Eastern Europe [6] and United Kingdom [1]
 
@@ -152,21 +163,21 @@ The resultant superset is as follows, with the number of elections in which that
 
 - Student population [1]
 
-For a table of the sums of Akaike weights for variables in each year, see Appendix \@ref(fig:allSAW)
+For a table of the sums of Akaike weights for variables in each year, see Appendix \@ref(fig:allSAW).
 
 ## Adding interactions
 
-Two-way variable interactions are then added to the model using an iterative procedure. First we fit a model using the super-set of predictors as main effects only. Then, for each election, we compute the number of elections in which each possible two-way interaction significantly adds to the model fit, using a likelihood-ratio test (1% significance level). We then select the interaction that is significant in the most years and re-fit models by adding this interaction to the previous model specification. 
+Two-way variable interactions are then added to the model using an iterative procedure. First we fit a model using the superset of predictors as main effects only. Then, for each election, we compute the number of elections in which each possible two-way interaction significantly adds to the model fit, using a likelihood-ratio test (1% significance level). We then select the interaction that is significant in the most years and re-fit models by adding this interaction to the previous model specification. 
 
 This is repeated until four interactions have been included. We limit this to four so that the number of observations (150) to predictors (14) exceeds a ratio of 10 to 1 (*note that in 2001, $n = 141$*).
 
-Where $\varepsilon_i \sim N(0,\sigma^2)$.
-
 ## Models
 
-Final models are then fit using the super-set of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
+Final models are then fit using the superset of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
 
 $TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$
+
+Where $\varepsilon_i \sim N(0,\sigma^2)$.
 
 Tables 4.1 and 4.2 detail the resultant models.
 
