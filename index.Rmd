@@ -41,6 +41,16 @@ vis_df <- readRDS("data/vis_df.rds")
 vis_df$year <- as.factor(vis_df$year)
 levels(vis_df$year) <- c("2001", "2006", "2011", "2016")
 
+### RENAMING VARIABLES ###
+data_mod <- data_mod %>% 
+  rename(AdminJobs = ManagerAdminClericalSales,
+         ExtractiveJobs = Extractive,
+         BornUK = Born_UK,
+         BornAsia = Born_Asia,
+         BornSEEurope = Born_SE_Europe,
+         BornMidEast = Born_MidEast,
+         OneParentHouse = OneParent_House)
+
 
 #### MAPS ####
 

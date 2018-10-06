@@ -16,7 +16,7 @@ On this basis, modelling each election as a separate cross section using ordinar
 
 The two-party preferred vote is a measure of preference between only the two major parties (Labor and Liberal), which is orientied in favour of the Liberal party and sits in the interval $(0,1)$. For example, $TPP = 0.7$ represents a 70% preference for Liberal, 30% for Labor. Since the values that $TPP$ assumes are not close to 0 or 1 (minimum $0.24$ and maximum $0.75$), we do not need to worry about modelling the constraint of $TPP \in (0,1)$, instead we can model the response using linear regression.
 
-Therefore, for a given election year, we assume ${\bf TPP} \sim N({\bf X \beta}, \sigma^2 {\bf I})$, where $\bf TPP$ is an $n \times 1$ vector of two-party preferred vote, $\bf X$ is an ($n \times p$) matrix of socio-demographic predictors, $\bf \beta$ is a ($p \times 1$) vector of coefficients to be estimated, and errors are independent and identically distributed with mean $0$ and variance $\sigma^2$. We estimate $\bf \beta$ and $\sigma^2$ using ordinary least-squares regression, and conduct inference on the output. This estimation is done separately for each election.
+Therefore, for a given election year, we assume $TPP \sim N(X \beta, \sigma^2 I_n)$, where $TPP$ is an $n \times 1$ vector of two-party preferred vote, $X$ is an ($n \times p$) matrix of socio-demographic predictors, $\beta$ is a ($p \times 1$) vector of coefficients to be estimated, and errors are independent and identically distributed with mean $0$ and variance $\sigma^2$. We estimate $\beta$ and $\sigma^2$ using ordinary least-squares regression, and conduct inference on the output. This estimation is done separately for each election.
 
 ## Dimension reduction
 
@@ -24,7 +24,7 @@ We have $p = 63$ socio-demographic variables at our disposal for each election a
 
 Instead of throwing everything into a model and using some kind of procedure to reduce the dimension of the data (e.g. stepwise or LASSO regression), we decide to adopt a two-stage approach in obtaining a reduced predictor set, from which we will run our final election models. The first step is to identify variables that are similar, and group them together into *factors*. Principal component analysis (PCA) is used to identify variables that are correlated, and we combine variables into a factor if we can reasonably believe that they should be grouped. This reduces our predictor set from $p = 63$ to $p = 30$, from which we still need to do some kind of variable selection, so that we end up with a set of around $10$ variables from which we can model each election.
 
-The second step is an approach that will allow us to identify a handful of the *most important* variables from each election year. By taking the union of the most important variables from each of the six elections, a superset is created from which all election models will be re-fit. We therefore seek to estimate a good model that captures the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. Our chosen method for this step is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance (@BurnhamAnderson2002). 
+The second step is an approach that will allow us to identify a handful of the *most important* variables from each election year. By taking the union of the most important variables from each of the six elections, a superset is created from which all election models will be re-fit. We therefore seek to estimate a good model that captures the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. Our chosen method for this step is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance [@BurnhamAnderson2002]. 
 
 ### Factor creation
 
@@ -109,9 +109,9 @@ As a final step, we remove the age variables that are not contained in any of th
 
 ### Superset creation
 
-To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables from each election. Our approach is based off a technique common in ecological studies, using Akaike weights to measure relative variable importance (@BurnhamAnderson2002).
+To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables from each election. We adopt the approach by @BurnhamAnderson2002, using Akaike weights to measure relative variable importance. This is commonly used in ecological studies, and is fundamentally based on Akaike's information criterion (AIC) [@Akaike73]. 
 
-Akaike's information criterion (AIC) (@Akaike73) is a measure of the expected information lost in estimating the true underlying data generating process. When comparing models in a given set $M$, we aim to minimize AIC. Akaike weights is a method of scoring each model, relative to the rest of the models in the set.
+AIC is a measure of the expected information lost in estimating the true underlying data generating process, which is why we choose a model with minimum AIC when comparing models in a given set $M$. Akaike weights is a method of scoring each model, relative to the rest of the models in the set.
 
 Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set $m = 1,2,...,M$. 
 
@@ -121,7 +121,7 @@ $$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delt
 
 The Akaike weight represents the posterior probability that model $m$ is the best model in the set, without any beliefs a priori, as $w_m \in (0,1)$ and $w_m$ sum to 1.
 
-For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance (@BurnhamAnderson2002). Let $I$ denote the indicator function.
+For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance [@BurnhamAnderson2002]. Let $I$ denote the indicator function.
 
 $$s_j = \sum_{m=1}^{M} w_m \cdot \text{I}(j \text{ used in model } m)$$
 
@@ -175,7 +175,7 @@ This is repeated until four interactions have been included. We limit this to fo
 
 Final models are then fit using the superset of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
 
-$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*Extractive_i + \beta_4*OfficeJobs_i + \beta_5*RentLoan_i + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*Extractive_i*OfficeJobs_i + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*OfficeJobs_i*Education_i + \varepsilon_i$
+$TPP_i = \beta_0 + \beta_1*MedianAge_i + \beta_2*BornSEEurope_i + \beta_3*ExtractiveJobs_i + \beta_4*AdminJobs_i + \beta_5*RentLoan_i + \beta_6*NoReligion_i + \beta_7*OneParentHouse_i + \beta_8*BornUK_i + \beta_9*Education_i + \beta_{10}*CurrentlyStudying_i + \beta_{11}*MedianAge_i*Education_i + \beta_{12}*ExtractiveJobs_i*AdminJobs_i + \beta_{13}*OneParentHouse_i*Education_i + \beta_{14}*AdminJobs_i*Education_i + \varepsilon_i$
 
 Where $\varepsilon_i \sim N(0,\sigma^2)$.
 
