@@ -1,23 +1,33 @@
 # Data {#ch:Data}
 
-In order to model each election, we need to pair socio-demographic information from the Census with voting data for each election year. 
-
-The Census of Population and Housing provides information about characteristics of every household in Australia, and is conducted every five years by the Australian Bureau of Statistics (ABS). There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The information contained in these collections are used to build the socio-demographic profiles for each electorate, at election time.
+The Census provides information about characteristics of every household in Australia, and is conducted every five years by the Australian Bureau of Statistics (ABS). There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The information contained in these collections are used to build the socio-demographic profiles for each electorate, at election time.
 
 Federal elections typically occur every three years, and those of interest are the 2001, 2004, 2007, 2010, 2013 and 2016 elections. We source the two-party preferred vote from the Australian Electoral Commission (AEC), which is an independent federal agency in charge of organising, conducting and supervising federal elections.
 
 All information used in this study is publicly available.
 
+In order to model an election, we need to construct socio-demographic profiles for each electorate, so that it can be paired with the two-party preferred vote. Since the timing of Censuses and elections do not always align (figure \@ref(fig:timeline)), and electorate boundaries change over time, Census profiles for the 2004, 2007, 2010 and 2013 elections must be imputed accounting for both temporal and spatial elements.
+
+```{r timeline, fig.cap="Timeline of Australian elections and Censuses", out.height="30%", out.width = "90%", fig.align="center"}
+timeline <- data.frame(year = c(2001:2016)) %>%
+  mutate(election = ifelse(year %in% c(2001, 2004, 2007, 2010, 2013, 2016),1,0),
+         census = ifelse(year %in% c(2001, 2006, 2011, 2016), 1.4, 0)) %>%
+  gather(c(election,census), key = event, value = measure) %>%  filter(measure != 0) %>%
+  mutate(year_vis = ifelse(event == "census", year + 0.1, year))
+
+
+ggplot(timeline, aes(x=year_vis, y=measure)) + geom_point(aes(color=as.factor(event),shape=as.factor(event)),size = 4) + labs(color = "Event", shape = "Event") + geom_hline(yintercept=0, size =1, color = 'grey', show.legend = FALSE) + geom_segment(x=2001,xend=2001, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2004,xend=2004, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2007,xend=2007, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2010,xend=2010, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2013,xend=2013, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2016,xend=2016, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2001.1,xend=2001.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2006.1,xend=2006.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2011.1,xend=2011.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2016.1,xend=2016.1, y=1.4, yend=0, color = '#F8766D') + labs(x="Year") + theme(text=element_text(size=8), axis.text.x=element_text(size=6),axis.text.y=element_blank(), axis.title.y=element_blank(), plot.background=element_blank(), axis.ticks.y = element_blank(), panel.background = element_blank()) + scale_x_discrete(limits = c(2001:2016)) + coord_fixed(ratio = 2)
+```
+
 ## Electorates and their boundaries
 
 Australian Federal elections are determined by the number of seats won by each party in the House of Representatives. Australia is divided into 150 electorates, and each one corresponds with a single seat. The electorate boundaries are determined by population, and to ensure equal representation, the boundaries have to be redrawn regularly by the AEC. Each redistribution typically affects a handful of electorates, with most remaining the same as previously defined.
 
-Since changes are frequently made to electoral boundaries, when it is time for a Census to be conducted, the ABS constructs an approximation to each current electorate and aggregates data at this level. These are called Commonwealth electoral divisions, but will be referred to as *Census divisions* in this paper.
+Since changes are frequently made to electoral boundaries, when it is time for a Census to be conducted, the ABS constructs an approximation to each current electorate and aggregates data at this level. These are called Commonwealth electoral divisions, but will be referred to as *Census divisions*.
 
 What this means is that the electorate boundaries in the election prior to a Census may not match the Census division boundaries used in the Census, which may not match the boundaries in the following election and so on.
 
 This presents a challenge. How does one construct socio-demographic profiles at election time for each electorate, when we cannot directly match that election with a Census?
-
 
 ## Census data
 
@@ -48,58 +58,14 @@ All metrics are recorded as percentages, representing the percentage of people i
 
 A full description of socio-demographic variables in the electorate profiles can be found in the Appendix \@ref(ch:appendix).
 
-It is important to note here that Census divisions is *not* the only level of statistical aggregation available. We extract Census divisions, as they will match with elections in 2001 and 2016, and we also extract the same information in post code boundaries (postal areas). Both Census divisions and postal areas could be used in the imputation algorithm, however we find that Census divisions are sufficient for the purpose of this study. This is elaborated in later parts of this thesis.
+It is important to note here that Census divisions is *not* the only level of statistical aggregation available. Census divisions are chosen because they will match electorate boundaries in 2001 and 2016. 
 
-### Insights on the changing Australian demographic
-
-Comparing Census data across years reveals many insights into how Australian demographics have changed over the past 17 years. By examining visual distributions of metrics across Census years, trends can be identified for the entire country and for the spread amongst electorates.
-
-#### As Australians grow old, some stay young
-
-It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the age profile plots shown in Figure \@ref(fig:vis-age). Each of the selected plots displayed (called 'violin plots') show the shape of the distribution of the identified age category (age 15-19, 25-34, 55-65) or median electorate age, by Census year. These are effectively density plots reflected in the vertical axis.
-
-Figure \@ref(fig:vis-age) shows the distribution of median age of each electorate has spread upwards over time, with some electorates in 2016 reaching a median age of 50 years. At the same time, it appears that some electorates are not ageing, as the minimum median age remains at 30 years. This makes intuitive sense, because some areas may be more suitable for particular age brackets. This is exactly the effect we see in young adults. Those aged 25-34 are more likely to congregate in common electorates, and avoid other electorates than they were in 2001 - making up 35% of the population in some electorates.
-
-```{r vis-age, fig.asp = 0.2, fig.cap="Age profiles of Australian electorates, by Census year"}
-vis_age <- vis_df %>%
-  filter(measure %in% c("Age15_19", "Age25_34", "Age55_64", "MedianAge"))
-
-ggplot(vis_age, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8), axis.text.x=element_text(size=6), axis.text.y=element_text(size=8)) + guides(fill = FALSE)
-```
-
-#### Religion: a thing of the past?
-
-Socially "progressive" movements continue to gather momentum all over the world, and as a result, Australia is moving away from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown for various religions in Figure \@ref(fig:vis-relig). This effect has stretched across (what appears to be) every electorate, as seen in the fourth panel. Having any religious affiliation would make you a minority in some electorates! At the same time, particular electorates maintain relatively large representation of certain otherwise uncommon religious group, as seen by the thin upper tails of the Islam and Judaism metrics.
-
-```{r vis-relig, fig.asp = 0.2, fig.cap="Religion profiles of Australian electorates, by Census year"}
-vis_relig <- vis_df %>%
-  filter(measure %in% c("NoReligion", "Christianity", "Islam", "Judaism"))
-
-ggplot(vis_relig, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8), axis.text.x=element_text(size=6), axis.text.y=element_text(size=8))
-```
-
-#### Investing in education
-
-Australia has seen improvements in education outcomes across the board, experiencing continual increases in secondary and tertiary completion rates across the years (Figure \ref(fig:vis-educ)). It is encouraging to see that no electorates appear to be lagging behind, as the minimum values increase each year for all levels of education.
-
-```{r vis-educ, fig.asp = 0.2, fig.cap="Education profiles of Australian electorates, by Census year"}
-vis_educ <- vis_df %>%
-  filter(measure %in% c("HighSchool", "Bachelor", "Postgraduate", "CurrentlyStudying"))
-
-ggplot(vis_educ, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8),axis.text.x=element_text(size=6),axis.text.y=element_text(size=8))
-```
-
-
-Further violin plots for the complete set of variables in the electorate profiles can be found in the Appendix (see Figures \@ref(fig:vis-census1),\@ref(fig:vis-census2),\@ref(fig:vis-census3),\@ref(fig:vis-census4)).
+??In an attempt to improve imputation accuracy, we 
+and we also extract the same information in post code boundaries (postal areas). Both Census divisions and postal areas could be used in the imputation algorithm, however we find that Census divisions are sufficient for the purpose of this study. This is elaborated in later parts of this thesis.??
 
 ##### A note on Census non-response
 
-Like in any survey, non-response bias is a source of potential problems. ABS statements released with each Census assure a high quality of data collection, and this study assumes its reliability.
-
-Non-response for key variables is imputed by the ABS (age, sex, martial status and usual residence) for 2006, 2011 and 2016, although is not clear whether this has been done in 2001. Non imputed items are treated as "not stated" or "not applicable".
-
-No adjustments or imputations are made in this study to the values derived from each Census. However, the frequency of "not stated" responses will be recorded for particular questions, and are included with other Census-derived metrics in the electorate profiles.
-
+Like in any survey, non-response bias is a source of potential problems. ABS statements released with each Census assure a high quality of data collection, for all Censuses.
 
 ## Elections
 
@@ -109,58 +75,33 @@ The focus of this study is to differentiate support between the two major partyi
 
 ## Mapping socio-demographic profiles to election times
 
-The elections and Censuses have different frequencies, occuring every three and five years respectively. This naturally leads to a significant challenge, as socio-demographic information is needed for each electorate at election time, even when a Census does not occur in the same year. Additionally, electorate boundaries are changed over time. A timeline of elections and Censuses is shown in Figure \@ref(fig:timeline).
+When a Census is conducted in an election year, the AEC electorate boundaries match the ABS Census divisions, so the two data sources can be linked directly. This is done by for years 2001 and 2016. If the election does not fall on the year a Census is conducted, then socio-demographic information must be imputed for that election.
 
-There are two cases to consider in connecting socio-demographic information from a Census to an election:
-
-- Election falls on a Census year
-
-- Election does not fall on a Census year
-
-```{r timeline, fig.cap="Timeline of Australian elections and Censuses", out.height="30%", fig.align="center"}
-timeline <- data.frame(year = c(2001:2016)) %>%
-  mutate(election = ifelse(year %in% c(2001, 2004, 2007, 2010, 2013, 2016),1,0),
-         census = ifelse(year %in% c(2001, 2006, 2011, 2016), 1.4, 0)) %>%
-  gather(c(election,census), key = event, value = measure) %>%  filter(measure != 0) %>%
-  mutate(year_vis = ifelse(event == "census", year + 0.1, year))
-
-
-ggplot(timeline, aes(x=year_vis, y=measure)) + geom_point(aes(color=as.factor(event),shape=as.factor(event)),size = 4) + labs(color = "Event", shape = "Event") + geom_hline(yintercept=0, size =1, color = 'grey', show.legend = FALSE) + geom_segment(x=2001,xend=2001, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2004,xend=2004, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2007,xend=2007, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2010,xend=2010, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2013,xend=2013, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2016,xend=2016, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2001.1,xend=2001.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2006.1,xend=2006.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2011.1,xend=2011.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2016.1,xend=2016.1, y=1.4, yend=0, color = '#F8766D') + labs(x="Year") + theme(text=element_text(size=8), axis.text.x=element_text(size=6),axis.text.y=element_blank(), axis.title.y=element_blank(), plot.background=element_blank(), axis.ticks.y = element_blank(), panel.background = element_blank()) + scale_x_discrete(limits = c(2001:2016)) + coord_fixed(ratio = 2)
-```
-
-### Elections that fall on a Census year
-
-When a Census is conducted in an election year, the AEC electorate boundaries match the ABS Census divisions, so the two data sources can be linked directly. This is done by for years 2001 and 2016.
-
-### Elections that do not fall on a Census year
-
-If the election does not fall on the same year a Census is conducted, two problems arise:
+Any imputation method must account for the:
 
 - Spatial component: electorate boundaries may not match any of the neighbouring Censuses.
 
 - Temporal component: demographics in an area may have changed since the last Census was conducted.
 
-We propose an innovative spatial imputation algorithm using GIS maps to impute the demographic profiles for each election. The algorithm accounts for both temporal and spatial differences of the electorate, relative to the Census divisions in Censuses either side of the election. The use of GIS maps to overlay data from multiple sources is a dominant approach in spatial studies, which provides the foundation for our approach..
-
-It is worth noting that, on average, approximately 20% of division boundaries change by 25% or more between Census and election times, so directly allocating Census information from a Census electorate to an election electorate may ultimately lead to invalid results. This provides further motivation.
-
-## Spatial imputation
+A spatial imputation algorithm using GIS maps is formulated from the piecewise approximation method of areal imputation by @Chooldchild1993. 
 
 The essence of the algorithm is to estimate what a particular electorate would have been comprised of, had it been in place at the time of the nearest Census both before and after the election. This is done predominantly using tools from the `rgeos` package. 
 
+### Spatial imputation explained
+
 To illustrate this algorithm, we will make use of an example - the electorate of Hume (NSW) in the 2013 election. This area is shown in figure \@ref(fig:hume13), shaded in purple with (some of) the neighbouring electorates in New South Wales (NSW).
 
-We focus on estimating the profile at the time of the 2016 Census, and then following with that for the 2011 Census. This captures the spatial component, and we linearly interpolate over time to account for the temporal component. 
+First the profile at the time of the 2016 Census is estimated, and then that for the 2011 Census - this captures the spatial component. Linearly interpolation over time then accounts for the temporal component. 
 
 *Although here we are focusing on a single electorate, to obtain all electorate socio-demographic profiles for the 2013 election, one would repeat this same process for each electorate individually.*
 
-1. Select the Censuses that occur immediately before and after election time. 
+1. Select the Censuses that occur before and after election time. 
 
-We want to impute the 2013 electorate of Hume, so we would select the Censuses from 2011 and 2016.
+The Censuses from 2011 and 2016 surround the 2013 election.
 
 2. Pick a particular Census year to start with. 
 
-We will first estimate the electorate boundary had it been in place at the time of the 2016 Census.
+Begin with estimating the electorate boundary had it been in place at the time of the 2016 Census.
 
 3. Select an electorate.
 
@@ -170,7 +111,7 @@ For this example, we have chosen the electorate of Hume.
 
 Figure \@ref(fig:hume16) shows the 2016 Census division boundaries for the same region of NSW as shown in the 2013 electorate boundaries in figure \@ref(fig:hume13), with the 2013 electorate of Hume (purple) superimposed. The purple region is the area we are estimating.
 
-We then determine which Census divisions intersect with the electorate region, which are the divisions of Eden-Monaro, Riverina and Hume. 
+Determine the Census divisions intersect with the electorate region - the divisions of Eden-Monaro, Riverina and Hume. 
 
 *Note that there are also tiny intersecting areas with Fenner, Calare, Gilmore and Whitlam, but we will ignore them for the purpose of this illustration.*
 
@@ -207,8 +148,8 @@ ggplot(data=map_hume_impute %>%
   lims(x = c(146,152), y=c(-38,-32)) + 
   coord_equal() + 
   theme_bw() + 
-  theme(legend.position="bottom", plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
-        axis.title = element_text(size = 12), axis.text = element_text(size = 16)) + 
+  theme(legend.position="bottom", plot.title = element_text(face = "bold", size = 12, hjust = 0.5),
+        axis.title = element_text(size = 8), axis.text = element_text(size = 8)) + 
   #facet_wrap(~part) + 
   labs(x="Longitude", y="Latitude", title = "2016") 
 ```
@@ -229,14 +170,14 @@ ggplot(data=plot_map_hume_impute) +
                data = map_hume_impute %>% filter(year == "2013")) +
   geom_polygon(aes(x=long, y=lat, group=group), colour="black", fill = "white", size = 0.2, alpha = 1,
                data = plot_map_hume_impute %>% filter(Election_Division %in% c("CANBERRA", "FENNER"))) +
-  scale_fill_manual(values = c("white", "red", "yellow", "green", "purple")) +
+  scale_fill_manual(values = c("white", "red", "yellow", "green", "purple"), labels = c("Other", "Riverina", "Eden-Monaro", "Hume", "Area to be estimated")) +
   lims(x = c(146,152), y=c(-38,-32)) + 
   coord_equal() + 
   theme_bw() + 
-  theme(legend.position="bottom", plot.title = element_text(face = "bold", size = 18, hjust = 0.5),
-        axis.title = element_text(size = 12), axis.text = element_text(size = 16)) + 
+  theme(legend.position="right", plot.title = element_text(face = "bold", size = 12, hjust = 0.5),
+        axis.title = element_text(size = 8), axis.text = element_text(size = 8)) + 
   #facet_wrap(~part) + 
-  labs(x="Longitude", y="Latitude", title = "2016")
+  labs(x="Longitude", y="Latitude", title = "2016", fill = "Census divisions")
 ```
 
 
@@ -260,7 +201,8 @@ Mapping_aec13 %>%
               filter(Electorate %in% c("HUME", "RIVERINA", "EDEN-MONARO"), year == 2016) %>% 
               select(Population, Electorate) %>% 
               rename(Division = Electorate), by = "Division") %>% 
-  mutate(`Estimated Population` = (Population*Percent_Cens_Composition) %>% round(0)) %>% 
+  mutate(`Estimated Population` = (Population*Percent_Cens_Composition) %>% round(0) %>% as.character(),
+         Population = Population %>% as.character()) %>% 
   select(-Percent_Cens_Composition) %>% 
   xtable() %>% 
   print(comment=FALSE, digits=NULL)
@@ -291,25 +233,72 @@ Adding a subscript $k$ to $\lambda_{i}$ to denote year, $\lambda_{i,k}$.
 
 $$\hat{\lambda_{i,2013}} = \frac{3}{5} \cdot \hat{\lambda_{i,2011}} + \frac{2}{5} \cdot \hat{\lambda_{i,2016}}$$
 
-## A summary of the data
-
-Now that we have imputed socio-demographic profiles for the 2004, 2007, 2010 and 2013 elections, we have a complete collection of data for every electorate in every election. The full set of definitions for socio-demographic variable sare detailed in appendix A.
-
 ## Standardizing the variables
 
-For many of the socio-demographic variables, both mean and variance are changing over the years. Take median rental prices for example. In 2001, the mean electorate median rental price was $ \$ 161.83$, and standard deivation $ \$ 50.89$, whereas in 2016 the mean was $ \$231.49$ and the standard deviation was $ \$ 61.88$, after adjusting prices for inflation to a 2001 index. Since we are interested in modelling each election separately, and then comparing models across years, we need to center and standardize each variable (to have mean $0$ and variance $1$), within the election year, so that scales are consistent across years.
+For many of the socio-demographic variables, both mean and variance change over the years. Take median rental prices for example. In 2001, the mean electorate median rental price was $ \$ 161.83$, and standard deivation $ \$ 50.89$, whereas in 2016 the mean was $ \$231.49$ and the standard deviation was $ \$ 61.88$, after adjusting prices for inflation to a 2001 index. Since we are interested in modelling each election separately, and then comparing models across years, we need to center and standardize each variable (to have mean $0$ and variance $1$), within the election year, so that scales are consistent across years.
 
 As a result, we interpret the values for an electorate as a being relative to the other electorates in that election. For example, $AusCitizen_j = 1$ in 2013, means that electorate $j$ has a proportion of Australian citizens 1 standard deviation above the mean.
 
-Summary statistics for the combined data set for all elections is shown in \@ref(fig:summaryall). An individual summary for each election can be found in appendix E.
+## A summary of the data
 
-```{r rent-box, out.width="50%", fig.cap="Median rental prices across the years (inflation adjusted)"}
-abs_all %>% 
-  ggplot(aes(x = year, y = MedianRent)) + 
-  geom_boxplot() +
-  labs(x = "Census Year", y= "Median Rent (dollars, inflation adjusted)")
+Now that socio-demographic profiles have been imputed for the 2004, 2007, 2010 and 2013 elections, a complete collection of data has been obtained every electorate in every election. The violin plots in figure \@ref(fig:violinunscaled) summarise the socio-demographics that are included in the final models (see the Modelling section for how these variables were constructed and chosen).
+
+```{r violinunscaled}
+# Unscaled violin plots go here
+# Need to join the unscales data
 ```
 
-```{r summaryall, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(!is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, across all elections.", header = FALSE)
+```{r violinscaled}
+# Standardized violin plots go here
+data_mod %>% 
+  select(c(superset$varname %>% unlist), Perc_LNP, year) %>% 
+  filter(!is.na(Perc_LNP)) %>% 
+  gather(key = "metric", value = "value", -year) %>% 
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free")
 ```
+
+Summary plots of the excluded variables can be found in appendix X. [[violins of the scaled/unscaled omitted variables]]
+
+### Insights on the changing Australian demographic
+
+-- Edit writing from here: need to adjust everything below to reference the summary graphs above.
+
+Comparing distributions across elections reveals many insights into how the Australian demographic has changed over the 17 year period. Trends can be identified for the entire country and for the spread amongst electorates.
+
+#### As Australians grow old, some stay young
+
+It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the age profile plots shown in Figure \@ref(fig:vis-age). Each of the selected plots displayed (called 'violin plots') show the shape of the distribution of the identified age category (age 15-19, 25-34, 55-65) or median electorate age, by Census year. These are effectively density plots reflected in the vertical axis.
+
+Figure \@ref(fig:vis-age) shows the distribution of median age of each electorate has spread upwards over time, with some electorates in 2016 reaching a median age of 50 years. At the same time, the minimum median age remains at 30 years.
+
+```{r vis-age, fig.asp = 0.2, fig.cap="Age profiles of Australian electorates, by Census year"}
+vis_age <- vis_df %>%
+  filter(measure %in% c("Age15_19", "Age25_34", "Age55_64", "MedianAge"))
+
+ggplot(vis_age, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=12), axis.text.x=element_text(size=8), axis.text.y=element_text(size=8)) + guides(fill = FALSE)
+```
+
+#### Religion: a thing of the past?
+
+Socially "progressive" movements continue to gather momentum all over the world, and as a result, Australia is moving away from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown for various religions in figure \@ref(fig:vis-relig). This effect has stretched across (what appears to be) every electorate, as seen in the fourth panel. Having any religious affiliation would make you a minority in some electorates! At the same time, particular electorates maintain relatively large representation of certain otherwise uncommon religious group, as seen by the thin upper tails of the Islam and Judaism metrics.
+
+```{r vis-relig, fig.asp = 0.2, fig.cap="Religion profiles of Australian electorates, by Census year"}
+vis_relig <- vis_df %>%
+  filter(measure %in% c("NoReligion", "Christianity", "Islam", "Judaism"))
+
+ggplot(vis_relig, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8), axis.text.x=element_text(size=6), axis.text.y=element_text(size=8))
+```
+
+#### Investing in education
+
+Australia has seen improvements in education outcomes across the board, experiencing continual increases in secondary and tertiary completion rates across the years (Figure \ref(fig:vis-educ)). It is encouraging to see that no electorates appear to be lagging behind, as the minimum values increase each year for all levels of education.
+
+```{r vis-educ, fig.asp = 0.2, fig.cap="Education profiles of Australian electorates, by Census year"}
+vis_educ <- vis_df %>%
+  filter(measure %in% c("HighSchool", "Bachelor", "Postgraduate", "CurrentlyStudying"))
+
+ggplot(vis_educ, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8),axis.text.x=element_text(size=6),axis.text.y=element_text(size=8))
+```
+
