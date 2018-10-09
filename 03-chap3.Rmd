@@ -245,7 +245,26 @@ Now that socio-demographic profiles have been imputed for the 2004, 2007, 2010 a
 
 ```{r violinunscaled}
 # Unscaled violin plots go here
-# Need to join the unscales data
+load("../Data/Clean/profiles.rda")
+profiles <- profiles %>% 
+  rename(AdminJobs = ManagerAdminClericalSales,
+         ExtractiveJobs = Extractive,
+         BornUK = Born_UK,
+         BornAsia = Born_Asia,
+         BornSEEurope = Born_SE_Europe,
+         BornMidEast = Born_MidEast,
+         OneParentHouse = OneParent_House)
+
+profiles %>% 
+  select(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Perc_LNP, year) %>% 
+  filter(!is.na(Perc_LNP)) %>%
+  select(-Perc_LNP) %>% 
+  gather(key = "metric", value = "value", -year) %>%
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free_y", ncol = 4) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 0.5, size = 8)) +
+  guides(fill = FALSE)
 ```
 
 ```{r violinscaled}
@@ -256,7 +275,9 @@ data_mod %>%
   gather(key = "metric", value = "value", -year) %>% 
   ggplot(aes(x=year, y=value)) +
   geom_violin(aes(fill = year)) + 
-  facet_wrap(~metric, scales = "free")
+  facet_wrap(~metric, scales = "free", ncol = 4) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 0.5, size = 8)) +
+  guides(fill = FALSE)
 ```
 
 Summary plots of the excluded variables can be found in appendix X. [[violins of the scaled/unscaled omitted variables]]
