@@ -184,9 +184,11 @@ Table 4.1 details the resultant models.
 
 ## A note on omitted variables
 
-When doing any kind of variable selection, omitted variable bias is always going to be a problem. In our superset, some notable omissions include the incomes factor, unemployment rate and family size - it is foreseeable that one might suspect these to be influential in party preference.
+When doing any kind of variable selection, omitted variable bias is common concern. By construction, we have not omitted any of the key variables in each election, meaning that any left out predictors should have little or no effect on the two-party preferred vote, over and above what is included in the model. 
 
-By regressing each omitted variable on the superset of variables, we find is that most of the information in the omitted variables is explained by variables in the superset. Particularly, almost 90% of the variation in incomes, and over 60% of the variation in unemployment, is explained by the included predictors. Almost all of the omitted variables have R-squared of at least 0.5 (see appendix H for all R-squared values). Therefore, we are confident that our model does not suffer greatly from omitted variable bias, and hence our conclusions are justified.
+On the surface, it may seem that variables like incomes and labor force participation should be relevant and included in the model. However, we find over 85% of variation in incomes and over 75% of variation in labor force participation is explained by the superset of variables. This is obtained by regressing each omitted variable on the superset of variables (see appendix H). 
+
+Therefore, we are confident that our model specification is not strongly affected by omitted variable bias.
 
 \newpage
 
