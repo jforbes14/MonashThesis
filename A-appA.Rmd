@@ -576,7 +576,8 @@ return(OVB_lm)
 OVB_all <- bind_rows(OVB_fn(2001), OVB_fn(2004), OVB_fn(2007), OVB_fn(2010), OVB_fn(2013), OVB_fn(2016)) %>% 
   select(-adj_r2)
 
-OVB_all %>% ggplot(aes(x=r2, y = varname)) + 
+OVB_all %>% 
+  ggplot(aes(x=r2, y = reorder(varname, r2))) + 
   geom_point(aes(col = year), size = 2) +
   labs(x = "R-squared", y = "Omitted Variable") 
 

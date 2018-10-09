@@ -184,11 +184,9 @@ Table 4.1 details the resultant models.
 
 ## A note on omitted variables
 
-When doing any kind of variable selection, omitted variable bias is common concern. By construction, we have not omitted any of the key variables in each election, meaning that any left out predictors should have little or no effect on the two-party preferred vote, over and above what is included in the model. 
+When doing any kind of variable selection, omitted variable bias is a concern. By constructing the superset, we have not omitted any of the key variables in each election. Therefore any left out predictors should have little or no effect on the two-party preferred vote, over and above what is included in the model. 
 
-On the surface, it may seem that variables like incomes and labor force participation should be relevant and included in the model. However, we find over 85% of variation in incomes and over 75% of variation in labor force participation is explained by the superset of variables. This is obtained by regressing each omitted variable on the superset of variables (see appendix H). 
-
-Therefore, we are confident that our model specification is not strongly affected by omitted variable bias.
+On the surface, variables like incomes and labor force participation might seen relevant and useful inclusions in the model. However, over 85% of variation in incomes and over 75% of variation in labor force participation is explained by the superset of variables. This is obtained by regressing each omitted variable on the superset of variables (see appendix H). Other variables, Judiasm for example, is not well explained by the superset, and is not influential in determining two-party preference.
 
 \newpage
 
