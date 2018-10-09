@@ -94,9 +94,9 @@ Dimension reduction
   
   + Results
   
-  + We capture the most important! Omitted variable bias ** 
+  + We capture the most important! 
   
-  + Discussion of omitted variables, and that most of their information is included
+  + Discussion of omitted variables, and that most of their information is included. By construction, we have captured the most important predictors in each election, so any omitted variable bias will be negligible. Most of the omitted variables are mostly explained by those contained in the regression (R-squared). Look at top 3 examples. Those with low R-squared are not well explained by the predictors, but also do not have an impact on two-party preferred vote.** 
 
   
 Interactions
