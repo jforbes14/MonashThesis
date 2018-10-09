@@ -241,7 +241,7 @@ As a result, we interpret the values for an electorate as a being relative to th
 
 ## A summary of the data
 
-Now that socio-demographic profiles have been imputed for the 2004, 2007, 2010 and 2013 elections, a complete collection of data has been obtained every electorate in every election. The violin plots in figure \@ref(fig:violinunscaled) summarise the socio-demographics that are included in the final models (see the Modelling section for how these variables were constructed and chosen).
+Now that socio-demographic profiles have been imputed for the 2004, 2007, 2010 and 2013 elections, a complete collection of data has been obtained every electorate in every election. The violin plots in figure \@ref(fig:violinunscaled) summarise the socio-demographics that are included in the final models (see the Modelling section for how these variables were constructed and chosen). Each violin depicts the distribution as a density plot reflected in the vertical axis.
 
 ```{r violinunscaled}
 # Unscaled violin plots go here
@@ -282,44 +282,22 @@ data_mod %>%
 
 Summary plots of the excluded variables can be found in appendix X. [[violins of the scaled/unscaled omitted variables]]
 
-### Insights on the changing Australian demographic
+### How has Australia changed?
 
--- Edit writing from here: need to adjust everything below to reference the summary graphs above.
+Many insights into the changing Australian demographic can be drawn from the variable distributions in figure \@ref(fig:violinunscaled). Trends can be identified for the entire country and for the spread amongst electorates, over this 17 year period.
 
-Comparing distributions across elections reveals many insights into how the Australian demographic has changed over the 17 year period. Trends can be identified for the entire country and for the spread amongst electorates.
+#### The population is ageing
 
-#### As Australians grow old, some stay young
+It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the plots of median age. The maximum median age amongst electorates increases across elections, from 41 years in 2001 to 50 years old in 2016. Interestingly, the electorate of Lyne (coastal NSW) has the highest median age in every year. Conversely, the median age has barely changed, and electorates like Melbourne (VIC) have barely aged, with median age hovering around 31 years. Other electorates like Mayo (SA) have changed from having an average age profile (36 years in 2001), to being one of the older areas (46 years in 2016).
 
-It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the age profile plots shown in Figure \@ref(fig:vis-age). Each of the selected plots displayed (called 'violin plots') show the shape of the distribution of the identified age category (age 15-19, 25-34, 55-65) or median electorate age, by Census year. These are effectively density plots reflected in the vertical axis.
-
-Figure \@ref(fig:vis-age) shows the distribution of median age of each electorate has spread upwards over time, with some electorates in 2016 reaching a median age of 50 years. At the same time, the minimum median age remains at 30 years.
-
-```{r vis-age, fig.asp = 0.2, fig.cap="Age profiles of Australian electorates, by Census year"}
-vis_age <- vis_df %>%
-  filter(measure %in% c("Age15_19", "Age25_34", "Age55_64", "MedianAge"))
-
-ggplot(vis_age, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=12), axis.text.x=element_text(size=8), axis.text.y=element_text(size=8)) + guides(fill = FALSE)
+```{r, include = FALSE}
+#profiles %>% filter(year %in% c("2001","2016")) %>% select(MedianAge, Election_Division, year) %>% spread(year, MedianAge) %>% mutate(change = `2016` - `2001`)
 ```
 
 #### Religion: a thing of the past?
 
-Socially "progressive" movements continue to gather momentum all over the world, and as a result, Australia is moving away from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown for various religions in figure \@ref(fig:vis-relig). This effect has stretched across (what appears to be) every electorate, as seen in the fourth panel. Having any religious affiliation would make you a minority in some electorates! At the same time, particular electorates maintain relatively large representation of certain otherwise uncommon religious group, as seen by the thin upper tails of the Islam and Judaism metrics.
-
-```{r vis-relig, fig.asp = 0.2, fig.cap="Religion profiles of Australian electorates, by Census year"}
-vis_relig <- vis_df %>%
-  filter(measure %in% c("NoReligion", "Christianity", "Islam", "Judaism"))
-
-ggplot(vis_relig, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8), axis.text.x=element_text(size=6), axis.text.y=element_text(size=8))
-```
+Socially "progressive" movements continue to gather momentum all over the world, and as a result, Australia is moving away from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown in the plot for `NoReligion` in figure \@ref(fig:violinunscaled). This effect has stretched across (what appears to be) every electorate, as the minimum value has increased. Having any religious affiliation would make you a minority in some electorates! 
 
 #### Investing in education
 
-Australia has seen improvements in education outcomes across the board, experiencing continual increases in secondary and tertiary completion rates across the years (Figure \ref(fig:vis-educ)). It is encouraging to see that no electorates appear to be lagging behind, as the minimum values increase each year for all levels of education.
-
-```{r vis-educ, fig.asp = 0.2, fig.cap="Education profiles of Australian electorates, by Census year"}
-vis_educ <- vis_df %>%
-  filter(measure %in% c("HighSchool", "Bachelor", "Postgraduate", "CurrentlyStudying"))
-
-ggplot(vis_educ, aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y", nrow = 1) + labs(x = "Census year", y = "% of electorate") + theme(text=element_text(size=8),axis.text.x=element_text(size=6),axis.text.y=element_text(size=8))
-```
-
+Australia has seen improvements in education outcomes across the board. High school completion rates, bachelor's degrees and postgraduate degrees increase for all electorates. It is also apparent that the distributions are becoming flatter - as the lower tails reduce in size relate to the rest of the distribution. An encouraging sign!
