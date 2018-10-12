@@ -1,5 +1,30 @@
 # Data {#ch:Data}
 
+Each of the six federal elections are modelled with a cross-sectional data set containing information about each electorate in that election. This consists of the two-party preferred vote, which is the response variable, and socio-demographic variables which are explanatory variables that characterise each electorate. 
+
+In this section, we explain where the two-party preferred vote and socio-demographic variables are sourced, and preliminary preparations of the raw data. This is followed by a description of why imputation is required to obtain the desired cross-sections for each election, and how this is done.
+
+## Preliminary
+
+The voting outcome of interest is the two-party preferred vote for each electorate, which is provided by the Australian Electoral Commission (AEC) for the 2001, 2004, 2007, 2010, 2013 and 2016 elections. The AEC divide Australia into 150 regions called electorates, with each corresponding to a single seat in the House of Representatives. Voting is compulsory in Australia, and each voter assigns a numbered preference to each available candidate in their electorate. The two-party preferred vote is determined by a tally of preferences where, by convention, only the ranks of the Labor and Liberal candidates are considered. This is recorded as a percentage preference in favour of the Liberal party, and let it be denoted $TPP$. 
+
+For each election the two-party preferred vote is obtained for all 150 electorates, with the exception of 2001. The electoral two-party preferred vote is not published for the 2001 election. Instead, we calculate it for the 141 electorates that had Labor and Liberal as the two most popular parties, leaving 9 electorates without a two-party preferred vote recorded. These 9 electorates are omitted from the subsequent analysis.
+
+The Census of Population and Housing is a survey of every household in Australia, recording socio-demographic information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census, and publishes aggregated information with quality assurance [@footnote]. We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in appendix \@ref(ch:Appendix). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
+
+At this stage, we have obtained the electoral two-party preferred votes for the six elections, and socio-demographic variables for Census divisions in the four Censuses. In order to model each election, the socio-demographic variables need to be linked with the electorates in each election. These are not contemporaneous, nor are the boundaries of electorates in an election guaranteed to align with a set of Census divisions - as the AEC redistributes electoral boundaries.
+
+The next step is to determine how these two differ in both temporal and spatial dimensions, and devise a method of imputation to obtain socio-demographic variables for each of the six elections.
+
+- Timeline?
+
+## Understanding the difference
+
+This section details how the data is asynchronous and how electorate boundaries change, with an illustration.
+
+------------------------------------------------------------------------------------------
+
+
 The Census provides information about characteristics of every household in Australia, and is conducted every five years by the Australian Bureau of Statistics (ABS). There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016, and these are used to build electorate socio-demographic profiles for each election.
 
 Federal elections typically occur every three years, and those of interest are the 2001, 2004, 2007, 2010, 2013 and 2016 elections. The outcome of interest is the two-party preferred vote for each electorate, which is sourced from the from the Australian Electoral Commission (AEC).
@@ -262,17 +287,6 @@ Now that socio-demographic profiles have been imputed for the 2004, 2007, 2010 a
 
 ```{r violinunscaled, fig.cap = "Distributions of unscaled socio-demographic variables included in the models, across elections."}
 # Unscaled violin plots go here
-load("../Data/Clean/profiles.rda")
-profiles <- profiles %>% 
-  rename(AdminJobs = ManagerAdminClericalSales,
-         ExtractiveJobs = Extractive,
-         BornUK = Born_UK,
-         BornAsia = Born_Asia,
-         BornSEEurope = Born_SE_Europe,
-         BornMidEast = Born_MidEast,
-         OneParentHouse = OneParent_House) %>% 
-  select(-ends_with("NS"))
-
 profiles %>% 
   select(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Perc_LNP, year) %>% 
   filter(!is.na(Perc_LNP)) %>% 
