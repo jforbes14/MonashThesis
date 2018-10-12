@@ -29,6 +29,7 @@ load("../Data/Clean/abs_all.rda")
 load("../Modelling-Elections/Clean-Data/data_mod.rda")
 load("../Modelling-Elections/Clean-Data/superset.rda")
 load("../Modelling-Elections/Clean-Data/all_coefs.rda")
+load("../Data/Clean/profiles.rda")
 
 ## New maps
 load("../Data/Clean/Maps/Mapping_aec13.rda")
@@ -63,6 +64,16 @@ all_coefs <- all_coefs %>%
          term = ifelse(term == "ManagerAdminClericalSales", "AdminJobs", term),
          term = ifelse(term == "Extractive", "ExtractiveJobs", term),
          term = ifelse(term == "Educ", "Education", term))
+
+profiles <- profiles %>% 
+  rename(AdminJobs = ManagerAdminClericalSales,
+         ExtractiveJobs = Extractive,
+         BornUK = Born_UK,
+         BornAsia = Born_Asia,
+         BornSEEurope = Born_SE_Europe,
+         BornMidEast = Born_MidEast,
+         OneParentHouse = OneParent_House) %>% 
+  select(-c(ends_with("NS"), EnglishOnly, EmuneratedElsewhere, InternetAccess, InternetUse, EnglishOnly, Christianity, Other_NonChrist, Volunteer))
 
 #### MAPS ####
 
