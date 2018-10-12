@@ -58,6 +58,12 @@ superset <- superset %>%
          varname = ifelse(varname == "Extractive", "ExtractiveJobs", varname),
          varname = ifelse(varname == "Educ", "Education", varname))
 
+all_coefs <- all_coefs %>% 
+  mutate(term = gsub("_", "", term),
+         term = ifelse(term == "ManagerAdminClericalSales", "AdminJobs", term),
+         term = ifelse(term == "Extractive", "ExtractiveJobs", term),
+         term = ifelse(term == "Educ", "Education", term))
+
 #### MAPS ####
 
 # Join data

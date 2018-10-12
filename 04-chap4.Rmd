@@ -14,15 +14,17 @@ On this basis, modelling each election as a separate cross section using ordinar
 
 ### Response variable - two-party preferred vote
 
-The two-party preferred vote is a measure of preference between only the two major parties (Labor and Liberal), which is orientied in favour of the Liberal party and sits in the interval $(0,1)$. For example, $TPP = 0.7$ represents a 70% preference for Liberal, 30% for Labor. Since the values that $TPP$ assumes are not close to 0 or 1 (minimum $0.24$ and maximum $0.75$), we do not need to worry about modelling the constraint of $TPP \in (0,1)$, instead we can model the response using linear regression.
+The two-party preferred vote is a measure of preference between only the two major parties (Labor and Liberal), which is orientied in favour of the Liberal party and sits in the interval $(0,100)$. For example, $TPP = 0.7$ represents a 70% preference for Liberal, 30% for Labor. Since the values that $TPP$ assumes are not close to 0 or 100 (minimum $24.05 \%$ and maximum $74.90 \%$), we do not need to worry about modelling the constraint of $TPP \in (0,100)$, instead we can model the response using linear regression.
 
-Therefore, for a given election year, we assume $TPP \sim N(X \beta, \sigma^2 I_n)$, where $TPP$ is an $n \times 1$ vector of two-party preferred vote, $X$ is an ($n \times p$) matrix of socio-demographic predictors, $\beta$ is a ($p \times 1$) vector of coefficients to be estimated, and errors are independent and identically distributed with mean $0$ and variance $\sigma^2$. We estimate $\beta$ and $\sigma^2$ using ordinary least-squares regression, and conduct inference on the output. This estimation is done separately for each election.
+Therefore, for a given election year, we assume $TPP \sim N(X \beta, \sigma^2)$, where $TPP$ is an $n \times 1$ vector of two-party preferred vote, $X$ is an ($n \times p$) matrix of socio-demographic predictors, $\beta$ is a ($p \times 1$) vector of coefficients to be estimated, and errors are independent and identically distributed with mean $0$ and variance $\sigma^2$. We estimate $\beta$ and $\sigma^2$ using ordinary least-squares regression, and conduct inference on the output. This estimation is done separately for each election.
 
 ## Dimension reduction
 
 We have $p = 63$ socio-demographic variables at our disposal for each election and only $n = 150$ electorates. If we tried to fit a model for a single election using all 63 varibles, we face problems with multi-collinearity and over-fitting, and would lead to erroneous conclusions of variable significance - the typical problem associated with having small $n$ and relatively large $p$. Therefore a form of dimension reduction is needed to build adequate models. 
 
-Instead of throwing everything into a model and using some kind of procedure to reduce the dimension of the data (e.g. stepwise or LASSO regression), we decide to adopt a two-stage approach in obtaining a reduced predictor set, from which we will run our final election models. The first step is to identify variables that are similar, and group them together into *factors*. Principal component analysis (PCA) is used to identify variables that are correlated, and we combine variables into a factor if we can reasonably believe that they should be grouped. This reduces our predictor set from $p = 63$ to $p = 30$, from which we still need to do some kind of variable selection, so that we end up with a set of around $10$ variables from which we can model each election.
+Instead of throwing everything into a model and using some kind of procedure to reduce the dimension of the data (e.g. stepwise or LASSO regression), we decide to adopt a two-stage approach in obtaining a reduced predictor set, from which we will run our final election models. 
+
+The first step is to use principal component analysis (PCA) to identify variables that are correlated, and group them together into *factors*. Variable groupings must have a reasonable interpretation in order to be combined into a factor. This reduces our predictor set from $p = 63$ to $p = 30$, from which we still need to do some kind of variable selection, so that we end up with a set of around $10$ variables from which we can model each election.
 
 The second step is an approach that will allow us to identify a handful of the *most important* variables from each election year. By taking the union of the most important variables from each of the six elections, a superset is created from which all election models will be re-fit. We therefore seek to estimate a good model that captures the more prominent relationships that exist between socio-demographics and electorate voting behaviour, based on the empirical data in hand. Our chosen method for this step is an information-theoretic approach, which uses *Akaike weights* to measure relative variable importance [@BurnhamAnderson2002]. 
 
@@ -30,7 +32,7 @@ The second step is an approach that will allow us to identify a handful of the *
 
 Principal component analysis produces a low-dimensional representation of the socio-demographic data set, by finding a sequence of linear combinations that have maximal variance, and are mutually uncorrelated. The components are ordered by their proportion of variance explained, and the loadings in a component represent the correlation of each variable with that component. We can infer which variables are correlated with each other based on the magnitude of their loadings in a given component.
 
-The principal components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve-each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see Appendix \@ref(fig:loadings-234)). 
+The principal components for each election year are computed separately and then compared. We find that the proportion of variance explained by each component is similar across elections (see figure \@ref(fig:pve-each)). Furthermore, the variable loadings in the first component are relatively common across years, shown in figure \@ref(fig:loadings-1). The same is true for the second component, and to a lesser extent the third and four components (see figures \@ref(fig:loadings2), \@ref(fig:loadings3) and \@ref(fig:loadings4) in Appendix). 
 
 Due to the similarity of variation within socio-demographic variables across elections, we combine the information from all years into a single cross-sectional data set ($n = 900$), and re-compute principal components. 
 
@@ -54,12 +56,12 @@ vis_loadings %>%
   ggplot(aes(x=reorder(metric,-PC1), y=PC1)) + geom_line(col = "orange", size = 2, alpha = 0.7) +
   geom_point(size = 1, alpha = 1) + 
   theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
-  labs(x = "Socio-demographic variable", y = "Loading in first principal component (of respective election)")
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
 ```
 
-Using the first four principal components from this combined data set, we information about which explanatory variables could be grouped together to create a *factor*. A factor is created if there exists is a set of variables that have large loadings in a particular component, and there is an intuitive reason as to why these could represent similar information. We consider a loading greater than 0.15 to be large.
+Principal components are re-computed for this combined data set, and we now use the information to create factors. A factor is created if there exists is a set of variables that have large loadings in a particular component, and there is an intuitive reason as to why these could represent similar information. We consider a loading greater than 0.15 to be large.
 
-Four components are select because there appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (see figure \@ref(fig:PVE-all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
+Only the first four components are considered because there appears to be a structural break after the fourth component, as the fifth component explains less than half of the variation as in the fourth (figure \@ref(fig:PVE-all)). The first four PCs explain 72.31% of the total variation and we inspect only these four components to determine factors.
 
 ```{r PVE-all, fig.cap = "Cumulative proportion of variance explained by each principal component in the combined data set (across all elections)."}
 load("../Modelling-Elections/Clean-Data/pve_all.rda")
@@ -74,19 +76,19 @@ pve_all %>%
 
 The resultant factors are constructed as follows:
 
-- Education levels: Education = Bachelor + HighSchool + Postgraduate + Professional + Finance - Laborer - Tradesperson - DipCert
+- Education levels: $ \text{Education = Bachelor + HighSchool + Postgraduate + Professional + Finance - Laborer - Tradesperson - DipCert} $
 
-- Family and house size: FamHouseSize = FamilyRatio + AverageHouseholdSize + Couple_WChild_House - Couple_NoChild_House - SP_House + Age00_04 + Age05_14
+- Family and house size: $ \text{FamHouseSize = FamilyRatio + AverageHouseholdSize + Couple-WChild-House - Couple-NoChild-House - SP-House + Age00-04 + Age05-14 } $
 
-- Property ownership and marriage rates: PropertyMarr = Married + Owned + Mortgage - Renting - DiffAddress - PublicHousing - DeFacto
+- Property ownership and marriage rates: $\text{PropertyMarr = Married + Owned + Mortgage - Renting - DiffAddress - PublicHousing - DeFacto}$
 
-- Income: Incomes = MedianFamilyIncome + MedianHouseholdIncome + MedianPersonalIncome
+- Income: $\text{Incomes = MedianFamilyIncome + MedianHouseholdIncome + MedianPersonalIncome}$
 
-- Rental and loan payments: RentLoan = MedianLoanPay + MedianRent
+- Rental and loan payments: $\text{RentLoan = MedianLoanPay + MedianRent}$
 
-After computing these sums, each factor is then standardized to have mean 0 and variance 1 within each election.
+After computing these sums, each factor is again standardized to have mean 0 and variance 1 within each election.
 
-Consider the Incomes factor as an illustration. Independent of principal components, we may suspect that median personal income, median household income and median family income are providing similar information about how "well-off" an electorate is. When we look at the loadings in the first principal component (see figure \@ref(PC1)), we find that these three variables all have large loadings. This provides evidence that these variables could be combined in a factor, which we have called "Incomes".
+Consider the `Incomes` factor as an illustration. Independent of principal components, we may suspect that median personal income, median household income and median family income are providing similar information about how "well-off" an electorate is. When we look at the loadings in the first principal component (see figure \@ref(fig:PC1)), we find that these three variables all have large loadings. This provides evidence that these variables could be combined in a factor, which we have called `Incomes`.
 
 ```{r PC1, fig.cap = "Large loadings in the first principal component, with Incomes factor colored red."}
 # Loadings of PC1 from combined PCA
@@ -105,27 +107,27 @@ pc_all_interpret %>%
   guides(col = FALSE)
 ```
 
-As a final step, we remove the age variables that are not contained in any of the factors (retaining median age) and any variables that are exact linear combinations of others (Christianity, Other_NonChrist and EnglishOnly). The resultant data set has $p=30$ socio-demographic predictors.
+As a final step, we remove the age variables that are not contained in any of the factors (retaining median age) and any variables that are exact linear combinations of others (`Christianity`, `Other_NonChrist` and `EnglishOnly`). The resultant data set has $p=30$ socio-demographic predictors.
 
 ### Superset creation
 
-To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables from each election. We adopt the approach by @BurnhamAnderson2002, using Akaike weights to measure relative variable importance. This is commonly used in ecological studies, and is fundamentally based on Akaike's information criterion (AIC) [@Akaike73]. 
+To estimate a *good* model, we aim to produce a superset that captures the five *most important* variables from each election. We adopt the approach by @BurnhamAnderson2002, using Akaike weights to measure relative variable importance. This is fundamentally based on Akaike's information criterion (AIC) [@Akaike73] and is common in ecological studies. 
 
-AIC is a measure of the expected information lost in estimating the true underlying data generating process, which is why we choose a model with minimum AIC when comparing models in a given set $M$. Akaike weights is a method of scoring each model, relative to the rest of the models in the set.
+AIC is a measure of the expected information lost in estimating the true underlying data generating process, which is why we choose a model with minimum AIC when comparing models in a given set $M$. Akaike weights are a way of scoring each model relative to the rest of the models in the set.
 
 Let $\Delta_m = AIC_m - AIC_{min}$, which is the difference in AIC between model $m$ and the minimum AIC in the model set $m = 1,2,...,M$. 
 
 *Akaike weights* $w_m$ for each model $m$ are then calculated:
 
-$$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^R \exp(-\frac{1}{2}\Delta_r)}$$
+$$w_m = \frac {\exp(-\frac{1}{2}\Delta_m)} {\sum_{r=1} ^M \exp(-\frac{1}{2}\Delta_r)}$$
 
 The Akaike weight represents the posterior probability that model $m$ is the best model in the set, without any beliefs a priori, as $w_m \in (0,1)$ and $w_m$ sum to 1.
 
-For each variable $j$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance [@BurnhamAnderson2002]. Let $I$ denote the indicator function.
+For each variable $j \in 1, ..., J$, we compute the sum of Akaike weights ($s_j$) over models that include that variable, and use these as a measure of variable importance [@BurnhamAnderson2002]. Let $I$ denote the indicator function.
 
-$$s_j = \sum_{m=1}^{M} w_m \cdot \text{I}(j \text{ used in model } m)$$
+$$s_j = \sum_{m=1}^{M} w_m \cdot \text{I}(\text{variable } j \text{ used in model } m)$$
 
-The ordering of variables by their Akaike weights is a rank of variable importance. The variable with largest $s_j, j \in J$ is deemed to be the most important in the set.
+The ordering of variables by their Akaike weights is a rank of variable importance. The variable with largest $s_jJ$ is deemed to be the most important in the set.
 
 Our approach is to select the five most important variables from each election, and construct a variable superset by taking the union of these six subsets. By doing so, we are able to capture any variable that appears to be important in a particular year and unimportant in the others, whilst also capturing those that are important in many years. This superset are the chosen predictors to be used in *all* of the final election models. We need to ensure that this superset across elections is not too large, which is why we have elected to extract five variables from each election.
 
@@ -133,19 +135,9 @@ Our approach is to select the five most important variables from each election, 
 
 For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. This involves fitting $M = {30 \choose 5} = 142,506$ models for each election. 
 
-We have chosen to *five* variable models as a compromise between computational burden and capturing sufficient information. As seen in figure \@ref(fig:tradeoff), around 70% of variation in two-party preference can be explained by a five variable model in each election, and incremental gains from increasing the number of predictors is decreasing (see appendix G for a full description of this process).
+We have chosen to five variable *models* as a compromise between computational burden and capturing sufficient information. Five variables can capture around 70% of the variation in two-party preferred vote, and incremental gains of increasing the number of predictors begin to plateau around five variables (see appendix G for a full description). Furthermore, the number of models to fit becomes relatively infeasible quickly after five variables. 
 
-```{r tradeoff, fig.cap = "Estimates of R-squared against number of variables included in a linear model."}
-load("../Modelling-Elections/Clean-Data/step_all.rda")
-
-ggplot(aes(x = num_vars, y = r2), data = step_all) + 
-  geom_point(alpha = 0.3) +
-  geom_line(data = step_all %>% filter(max_r2 == 1)) +
-  facet_wrap(~year) +
-  labs(x = "Number of variables", y = "R-squared")
-```
-
-After calculating Akaike weights $w_m$ and ranking variables by their relative variable importance $s_j$ for each election, we obtain the following superset (with the number of elections for which a variable is in the top five in parenthesis).
+Akaike weights $w_m$ are calculated and variables ranked by their relative variable importance $s_j$ for each election. Taking the top five variables from each election, the following superset is obtained (with the number of elections for which a variable is in the top five in parenthesis).
 
 - Birthplace: South-Eastern Europe [6] and United Kingdom [1]
 
@@ -168,7 +160,7 @@ For a table of the sums of Akaike weights for variables in each year, see Append
 
 ## Adding interactions
 
-Two-way variable interactions are then added to the model using an iterative procedure. First we fit a model using the superset of predictors as main effects only. Then, for each election, we compute the number of elections in which each possible two-way interaction significantly adds to the model fit, using a likelihood-ratio test (1% significance level). We then select the interaction that is significant in the most years and re-fit models by adding this interaction to the previous model specification. 
+Two-way variable interactions are then added to the model using an iterative procedure. First we fit a model using the superset of predictors as main effects only. Then we compute the number of elections in which each possible two-way interaction significantly adds to the model fit, using a likelihood-ratio test (1% significance level). We then select the interaction that is significant in the most elections and re-fit models by adding this interaction to the previous model specification. 
 
 This is repeated until four interactions have been included. We limit this to four so that the number of observations (150) to predictors (14) exceeds a ratio of 10 to 1 (*note that in 2001, $n = 141$*).
 
@@ -184,9 +176,9 @@ Table 4.1 details the resultant models.
 
 ## A note on omitted variables
 
-When doing any kind of variable selection, omitted variable bias is a concern. By constructing the superset, we have not omitted any of the key variables in each election. Therefore any left out predictors should have little or no effect on the two-party preferred vote, over and above what is included in the model. 
+When doing any kind of variable selection, omitted variable bias is a concern. By constructing the superset, we have not omitted any of the key variables from each election. Therefore any left out predictors should have little or no effect on the two-party preferred vote, over and above what is included in the model. 
 
-On the surface, variables like incomes and labor force participation might seen relevant and useful inclusions in the model. However, over 85% of variation in incomes and over 75% of variation in labor force participation is explained by the superset of variables. This is obtained by regressing each omitted variable on the superset of variables (see appendix H). Other variables, Judiasm for example, is not well explained by the superset, and is not influential in determining two-party preference.
+On the surface, variables like incomes and labor force participation might seen relevant and useful inclusions in the model. However, over 85% of variation in incomes and over 75% of variation in labor force participation is explained by the superset of variables. This is obtained by regressing each omitted variable on the superset of variables (see appendix H). Other variables, Judiasm for example, are not well explained by the superset, but are also not influential in determining two-party preference.
 
 \newpage
 

@@ -218,30 +218,6 @@ InternetUse
 InternetAccess_NS
 : Rate of nonrespondence for questions relating to internet use [2001 only]
 
-# Metric distributions across Census years
-
-The figure below shows violin plots for four variables across Census years, providing a snapshot of the variables recorded for each year.
-
-```{r vis-census1, fig.cap="Census derived metrics"}
-ggplot(filter(vis_df, measure %in% c(levels(as.factor(vis_df$measure))[c(1:11,13:21)])),
-       aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y") + theme(text=element_text(size=7), axis.text.x=element_text(size=6), axis.text.y=element_text(size=6)) + labs(x = "Year", y = "Metric (%)")
-```
-
-```{r vis-census2, fig.cap="Census derived metrics"}
-ggplot(filter(vis_df, measure %in% c(levels(as.factor(vis_df$measure))[c(14:33)])),
-       aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y") + theme(text=element_text(size=7), axis.text.x=element_text(size=6), axis.text.y=element_text(size=6)) + labs(x = "Year", y = "Metric (%)")
-```
-
-```{r vis-census3, fig.cap="Census derived metrics"}
-ggplot(filter(vis_df, measure %in% c(levels(as.factor(vis_df$measure))[c(34:39,46:58)])),
-       aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y") + theme(text=element_text(size=7), axis.text.x=element_text(size=6), axis.text.y=element_text(size=6)) + labs(x = "Year", y = "Metric (%)")
-```
-
-```{r vis-census4, fig.cap="Census derived metrics"}
-ggplot(filter(vis_df, measure %in% c(levels(as.factor(vis_df$measure))[c(40:45)])),
-       aes(x=year, y=value, fill=year)) + geom_violin() + facet_wrap(~measure, scales = "free_y") + theme(text=element_text(size=7), axis.text.x=element_text(size=6), axis.text.y=element_text(size=6)) + labs(x = "Year", y = "Metric (%)")
-```
-
 # Model diagnostics
 
 ## Non-linearities: Residuals against predictors
@@ -271,23 +247,47 @@ No obvious patterns in the residuals vs omitted variables.
 
 # Summary of variables in each election
 
-```{r summary2001, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2001 election.", header = FALSE)
+As in section \@ref(ch:Data), the violin plots in figures \@ref(fig:unex1) and \@ref(fig:unex2) summarise the non-standardized socio-demographics that are *not* included the final models, and figure \@ref(fig:scex) summarises the standardized. Each violin depicts the distribution as a density plot reflected in the vertical axis.
+
+```{r unex1, fig.cap = "Part 1: Distribution of unscaled variables excluded from the models."}
+# Unscaled violin plots go here
+ profiles %>% 
+  select(-c(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Election_Division, Swing, Perc_LNP, PartyAb)) %>%
+  select(starts_with("Age"), Anglican, Area, AusCitizen, AverageHouseholdSize, BornAsia, BornElsewhere, BornMidEast, Buddhism, Catholic, Christianity, Couple_NoChild_House, Couple_WChild_House, DeFacto, DiffAddress, DipCert, Distributive, year) %>% 
+  gather(key = "metric", value = "value", -year) %>%
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free_y", ncol = 6) +
+  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
 ```
-```{r summary2004, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(year == "2004", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2004 election.", header = FALSE)
+
+```{r unex2, fig.cap = "Part 2: Distribution of unscaled variables excluded from the models."}
+# Unscaled violin plots go here
+ profiles %>% 
+  select(-c(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Election_Division, Swing, Perc_LNP, PartyAb)) %>%
+  select(-c(starts_with("Age"), Anglican, Area, AusCitizen, AverageHouseholdSize, BornAsia, BornElsewhere, BornMidEast, Buddhism, Catholic, Christianity, Couple_NoChild_House, Couple_WChild_House, DeFacto, DiffAddress, DipCert, Distributive)) %>% 
+  gather(key = "metric", value = "value", -year) %>%
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free_y", ncol = 6) +
+  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
 ```
-```{r summary2007, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(year == "2007", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2007 election.", header = FALSE)
-```
-```{r summary2010, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(year == "2010", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2010 election.", header = FALSE)
-```
-```{r summary2013, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(year == "2013", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2013 election.", header = FALSE)
-```
-```{r summary2016, results = 'asis'}
-stargazer::stargazer(data_mod %>% filter(year == "2016", !is.na(Perc_LNP)), title = "Summary statistics for each socio-demographic variable, and the response, for the 2016 election.", header = FALSE)
+
+```{r scex, fig.cap = "Distribution of unscaled variables (including factors) excluded from the models."}
+# Standardized violin plots go here
+data_mod %>% 
+  select(-c((superset$varname %>% unlist), Election_Division, Swing, Perc_LNP)) %>% 
+  gather(key = "metric", value = "value", -year) %>% 
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free", ncol = 6) +
+  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
 ```
 
 # Interpretation of more socio-demographics
@@ -501,7 +501,7 @@ grid.arrange(Educ_Admin_01, Educ_Admin_04, Educ_Admin_07, Educ_Admin_10, Educ_Ad
 
 ```
 
-```{r admineduc_scale, out.width="50%"}
+```{r admineducscale, out.width="50%"}
 ## TPP scale
 TPP_scale <- readPNG("figures/TPP_scale.png")
  grid.raster(TPP_scale)
@@ -521,17 +521,21 @@ Because we can't run linear models for all possible combinations of our predicto
 
 4. Repeat steps 2 and 3 for the 3 variable models, 4 variable models, and so on, until reaching a model with all 30 variables.
 
-Figure \@ref(fig:tradeoff2) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. We see that around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8%). We see that from variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
+Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. We see that around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8%). We see that from variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
 
 All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and we still will capture models that have high R-squared.
 
-```{r tradeoff2, fig.cap = "Estimates of R-squared against number of variables included in a linear model."}
+```{r tradeoff, fig.cap = "Estimates of R-squared against number of variables included in a linear model."}
+load("../Modelling-Elections/Clean-Data/step_all.rda")
+
 ggplot(aes(x = num_vars, y = r2), data = step_all) + 
   geom_point(alpha = 0.3) +
   geom_line(data = step_all %>% filter(max_r2 == 1)) +
   facet_wrap(~year) +
   labs(x = "Number of variables", y = "R-squared")
 ```
+
+As seen in figure \@ref(fig:tradeoff), around 70% of variation in two-party preference can be explained by a five variable model in each election, and incremental gains from increasing the number of predictors is decreasing (see appendix G for a full description of this process).
 
 ## Resultant Akaike weights
 
@@ -588,5 +592,35 @@ OVB_all %>%
 # Argue - avoided OVB by construction
 # Then discuss why some variables are omitted
 ```
+
+# Principal components
+
+Loadings in the 2nd, 3rd and 4th principal components for each election.
+
+```{r loadings2, fig.cap = "Loadings of each variable in the second principal of each election year (points), with a line showing the range across years."}
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC2), y=PC2)) + geom_line(col = "orange", size = 2, alpha = 0.7) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
+
+```
+
+```{r loadings3, fig.cap = "Loadings of each variable in the third principal of each election year (points), with a line showing the range across years."}
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC3), y=PC3)) + geom_line(col = "purple", size = 2, alpha = 0.4) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
+```
+
+```{r loadings4, fig.cap = "Loadings of each variable in the fourth principal of each election year (points), with a line showing the range across years."}
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC4), y=PC4)) + geom_line(col = "dark green", size = 2, alpha = 0.5) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
+```
+
 
 

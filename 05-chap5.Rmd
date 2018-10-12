@@ -1,12 +1,12 @@
 # Insights {#ch:Insights}
 
-As socio-demographic variables are standardized within each election year, and model specification is consistent across elections, we can directly compare the estimated effects of covariates across elections and obtain rich insights into how the two-party preferred vote has been affected by socio-demographics. In the following section, we outline our expectations based on the raw data, and extract findings from the estimated models. 
+As socio-demographic variables are standardized within each election year, and model specification is consistent across elections, we can directly compare the estimated effects of covariates across elections and obtain rich insights into the two-party preferred vote. In the following section, we outline our expectations based on the raw data, and extract findings from the estimated models. 
 
-In our final model, five of the ten variables in the model are not included in an interaction, so we can interpret their marginal effects directly. To illustrate these effects, we plot partial residuals against the predictor with a prediction line and 95% confidence band, using tools from the `visreg` package. This reveals the direction and significance of the effect, and the slope matches the estimated coefficient. Plots of the estimated coefficients with 95% confidence bands are also included. 
+In the final model, five of the ten variables are not included in an interaction, so marginal effects can be interpreted directly. To illustrate these effects, we plot partial residuals against the predictor with a prediction line and 95% confidence band, using tools from the `visreg` package. This reveals the direction and significance of the effect, and the slope matches the estimated coefficient. Plots of the estimated coefficients with 95% confidence bands are also included. 
 
 Raster plots are constructed for each of the two-way interactions, which illustrate the predicted effect of each combination of the interacted (continuous) variables, using colour. White regions represent a combination that does not have an affiliation with either party, whereas strong red regions identify with Labor, and blue support Liberal. The main effect of a variable in an interaction can also be directly interpreted when its counterpart is fixed at zero - which is the mean in this case, as variables have been standardized.
 
-Note that partial residuals for a variable $j$ are given by: ${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$, where -j subscript indicates the removal of the jth column/element [@Faraway16]. These are equivalent $y$ adjusted for all variables other than $x_j$. In a partial residual plot, if we can draw a horizontal line all the way through the 95% confidence band, then the effect is not significant.
+Note that partial residuals for a variable $j$ are given by: ${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$, where -j subscript indicates the removal of the jth column/element [@Faraway]. These are equivalent $y$ adjusted for all variables other than $x_j$. In a partial residual plot, if we can draw a horizontal line all the way through the 95% confidence band, then the effect is not significant.
 
 ## Main effects
 
@@ -25,7 +25,7 @@ data_mod %>% ggplot(aes(x = BornSEEurope, y = Perc_LNP)) + geom_point() + geom_s
 
 ```{r SE1, fig.cap="Estimated coefficients for population born in South-Eastern Europe across years with 95\\% confidence bands."}
 # Coefficients
-all_coefs %>% filter(term == "BornSEEurope") %>% 
+all_coefs %>% filter(term == "BornSEEurope") %>%
   ggplot(aes(x=year, y=estimate)) +
   geom_point(size = 3) + geom_linerange(aes(ymin = lower95, ymax = upper95), size = 1.5) + 
   geom_hline(aes(yintercept = 0), alpha = 0.5, size = 2) + 
@@ -79,7 +79,7 @@ grid.arrange(Born_SE_01, Born_SE_04, Born_SE_07, Born_SE_10, Born_SE_13, Born_SE
 
 ### No Religion
 
-In section X we found that the proportion of people that do not identify with a religion has been increasing over time, and yet the raw data scatterplots (figure \@ref(fig:rawNoRelig)) do not indicate an effect two-party preference. In the elections up to 2007, proportions of areligiousity did not have a significant effect. What we find from 2010 onwards, is quite revealing - less religious electorates are more supporting of the Labor party. The significantly negative slopes do not appear to change much over these last three elections, indicating a lasting shift stemming from the 2010 election (figures \@ref(fig:norelig1) and \@ref(fig:norelig2)).
+In section \@ref(ch:Data) we found that the proportion of people that do not identify with a religion has been increasing over time, and raw data scatterplots (figure \@ref(fig:rawNoRelig)) do not indicate an effect two-party preference. In the elections up to 2007, proportions of areligiousity did not have a significant effect. What we find from 2010 onwards, is quite revealing - less religious electorates are more supporting of the Labor party. The significantly negative slopes do not appear to change much over these last three elections, indicating a lasting shift stemming from the 2010 election (figures \@ref(fig:norelig1) and \@ref(fig:norelig2)).
 
 ```{r rawNoRelig, fig.cap="Scatterplot of population not identifying with a religion against two-party preferred vote."}
 ## Voting against NoReligion
@@ -155,9 +155,9 @@ There is no reason to expect rental prices and mortgage loan repayments to have 
 
 In a similar way that we expected Labor's favourable education policies to influence student populations' voter preference, we might expect education levels to behave in the same way - although the scatterplots do not indicate much of a relationship. On the contrary, older age profiles (higher median age) appear to have a strong relationship with Liberal support.
 
-We find that the young electorates with and above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each plot in \@ref(fig:educage). The older electorates with lowest levels of education did not appear to have affiliation with either party in the first three elections. From 2010 onwards, this same region (top left) is blue, indicating that older, low education electorates now support the Liberal party.
+We find that the young electorates with and above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each plot in \@ref(fig:educage). The older electorates with lowest levels of education did not appear to have affiliation with either party in the first three elections. From 2010 onwards, this same region (top left) is blue, indicating that older, low education electorates have shift to supporting the Liberal party.
 
-Even though the population is ageing, and education levels have been improving all across Australia (as seen in section X), it appears that the young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
+Even though the population is ageing, and education levels have been improving all across Australia (as seen in section \@ref(ch:Data)), it appears that the young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
 
 ```{r raweduc, fig.cap="Scatterplot of education levels against two-party preferred vote."}
 ## Voting against Education
@@ -169,7 +169,6 @@ data_mod %>% ggplot(aes(x = Education, y = Perc_LNP)) + geom_point(aes(label = E
 ## Voting against MedianAge
 data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Median age", y = "Two-party preferred (%)")
 ```
-
 
 ```{r educage, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and median age."}
 educage_df <- data.frame(
@@ -260,13 +259,11 @@ Educ_Age_01 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
 
 grid.arrange(Educ_Age_01, Educ_Age_04, Educ_Age_07, Educ_Age_10, Educ_Age_13, Educ_Age_16, 
              nrow = 2, 
-             #top = textGrob("South-Eastern European Influence", gp = gpar(cex = 0.8)), 
              bottom = textGrob("Education levels", gp = gpar(cex = 0.8)), 
              left = textGrob("Median age", gp = gpar(cex = 0.8), rot = 90))
-
 ```
 
-```{r educage_scale, out.width = "50%"}
+```{r educagescale, out.width = "50%"}
 ## TPP scale
 TPP_scale <- readPNG("figures/TPP_scale.png")
  grid.raster(TPP_scale)
@@ -376,7 +373,7 @@ grid.arrange(Educ_OP_01, Educ_OP_04, Educ_OP_07, Educ_OP_10, Educ_OP_13, Educ_OP
 
 ```
 
-```{r educOP_scale, out.width = "50%"}
+```{r educOPscale, out.width = "50%"}
 ## TPP scale
 TPP_scale <- readPNG("figures/TPP_scale.png")
  grid.raster(TPP_scale)
@@ -493,7 +490,7 @@ grid.arrange(ExtractiveJobs_Office_01, ExtractiveJobs_Office_04, ExtractiveJobs_
 
 ```
 
-```{r jobs_scale, out.width="50%"}
+```{r jobsscale, out.width="50%"}
 ## TPP scale
 TPP_scale <- readPNG("figures/TPP_scale.png")
  grid.raster(TPP_scale)
