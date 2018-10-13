@@ -230,11 +230,77 @@ Now that electoral socio-demographics are imputed for each election, we consider
 
 ## Standardizing the explanatory variables
 
-For many of the socio-demographic variables, both the sample mean and variance each change over the years. Consider median rental price in each electorate, for example. In 2001, the median rental price amongst electorates had mean $161.83$ and standard deviation $50.89$, whereas in 2016 the mean was $231.49$ and the corresponding standard deviation being $61.88$. These figures were adjusted for inflation using a 2001 index. Since each election is to be modelled separately and then compared, each variable is centered to have mean $0$, and standardized to have variance $1$, within each election year, so that the data scales are consistent across years.
+For many of the socio-demographic variables, both the sample mean and variance change over the years. Consider median rental price in each electorate, for example. In 2001, the median rental price amongst electorates had mean \$161.83 and standard deviation \$50.89, whereas in 2016 the mean was \$231.49 and a corresponding standard deviation of \$61.88. These figures have been adjusted for inflation using a 2001 index. This means that a \$200 dollar rental price in 2001 was expensive, whereas it was cheap in 2016. Therefore, to make comparisons regarding the effect of rental prices on the two-party preferred vote across 2001 and 2016 elections, rental prices should be centered to have mean 0, and standardized to have variance 1. This is done for all socio-demographic variables within the election year, so that data scales are consistent across years.
 
-The values for an electorate can therefore be interpreted as a score relative to the other electorates in that election. For example, a value of $AusCitizen = 1$ corresponds with an electorate having a proportion of Australian citizens that is one standard deviation above the average in that election.
+The values for an electorate can therefore be interpreted as a score relative to the other electorates in that election. For example, a value of $\text{AusCitizen} = 1$ corresponds with an electorate having a proportion of Australian citizens that is one standard deviation above the average in that election.
+
+## Changing socio-demographic of Australia
+
+Once a complete collection of socio-demographic variables are available for each electorate in all six elections, violin plots can be used to analyse how electoral socio-demographic characteristics have changed over time. Violin plots depict the distribution as a density plot reflected in the vertical axis. Trends can be identified over this 17 year period. Changes in age, religion and education are explored in the sections below. 
+
+```{r violinunscaled, fig.cap = "Distributions of unscaled socio-demographic variables included in the models, across elections."}
+# Unscaled violin plots go here
+profiles %>% 
+  select(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Perc_LNP, year) %>% 
+  filter(!is.na(Perc_LNP)) %>% 
+  mutate(Perc_LNP = as.numeric(Perc_LNP)) %>% 
+  rename(`Two-party preferred` = Perc_LNP) %>% 
+  gather(key = "metric", value = "value", -year) %>% 
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free_y", ncol = 4) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 0.5, size = 8)) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
+```
+
+#### The population is ageing
+
+It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the plots of median age (Figure \@ref(fig:vis-age)). The maximum median age amongst electorates increases across elections, from 41 years in 2001 to 50 years old in 2016. Interestingly, the electorate of Lyne (coastal NSW) has the highest median age in every year. Conversely, the minimum median age has barely changed, with electorates like Melbourne (VIC) having a median age hovering around 31 years. Some electorates have moved in the rank of median age over the years, with electorates like Mayo (SA) moving from having an typical age profile (36 years in 2001), to being one of the older areas (46 years in 2016).
+
+```{r vis-age, fig.height="20%", fig.cap="Distribution of median age across Australian electorates, by election year"}
+profiles %>% 
+  ggplot(aes(x=year, y=MedianAge, fill=year)) + 
+  geom_violin() + 
+  labs(x = "Election year", y = "Median age of electorate") +
+  guides(fill = F)
+```
 
 
+```{r, include = FALSE}
+#profiles %>% filter(year %in% c("2001","2016")) %>% select(MedianAge, Election_Division, year) %>% spread(year, MedianAge) %>% mutate(change = `2016` - `2001`)
+```
+
+#### Religion: a thing of the past?
+
+Socially "progressive" movements continue to gather momentum all over the world, and Australia is no different, with many people dissociating from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown in Figure \@ref(fig:vis-relig). This trend is observed across all electorates, as the minimum value has increased. In 2016, having any religious affiliation would make you a minority in some electorates! 
+
+```{r vis-relig, fig.height="20%", fig.cap="Distribution of no religion across Australian electorates, by election year"}
+profiles %>% 
+  ggplot(aes(x=year, y=NoReligion, fill=year)) + 
+  geom_violin() + 
+  labs(x = "Election year", y = "Percentage of electorate not identifying with a religion (%)") +
+  guides(fill = F)
+```
+
+#### Investing in education
+
+Australia has seen improvements in educational outcomes across the board. Completion rates for high school, Bachelor's degrees and postgraduate degrees have increased for all electorates (see Figure \@ref(fig:vis-educ)). In 2001, all three measures appear positively skewed, and over the years this skewness reduces and the distributions flatten. This indicates that some areas with lower levels of education have progressed at a faster rate than the rest of the country.
+
+```{r vis-educ, fig.height="20%", fig.cap="Distribution of across Australian electorates, by election year"}
+profiles %>% 
+  select(year, Bachelor, HighSchool, Postgraduate) %>% 
+  gather("metric", "value", -year) %>% 
+  ggplot(aes(x=year, y=value, fill=year)) + 
+  geom_violin() + 
+  facet_wrap(~metric, scales = "free_y") +
+  labs(x = "Election year", y = "Percentage of electorate population with qualification (%)") +
+  guides(fill = F)
+```
+
+Illustrating the changes in these three areas demonstrate that socio-demographic characteristics of electorates have evolved over the years, along with national preference between the Labor and Liberal parties.
+
+In this section we have detailed the steps of data collection, preliminary transformations and imputation that result in a cross-sectional data set of electoral socio-demographics and two-party preferred vote for each of the six elections. Socio-demographic (explanatory) variables are standardized so that the data scales are consistent across years, which allows for comparison of effects across elections. The next steps are to determine what econometric model to pursue, and how to deal with the problem of having a small number of observations each election ($n=150$), relative to the number of available predictors ($p=63$). This is explored in section \@ref(ch:Modelling).
 
 
 
