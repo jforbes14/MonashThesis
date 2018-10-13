@@ -2,36 +2,29 @@
 
 Each of the six federal elections are modelled with a cross-sectional data set containing information about each electorate in that election. This consists of the two-party preferred vote, which is the response variable, and socio-demographic variables which are explanatory variables that characterise each electorate. 
 
-In this section, we explain where the two-party preferred vote and socio-demographic variables are sourced, and preliminary preparations of the raw data. This is followed by a description of why imputation is required to obtain the desired cross-sections for each election, and how this is done.
+In this section, we specify the sources for the two-party preferred vote and socio-demographic variables, detail the preliminary preparations of the raw data, discuss why imputation is required to obtain the desired cross-sections for each election, and illustrate our chosen imputation algorithm. Additionally, we explain why standardizing the explanatory variables is important in order to compare models across elections.
 
 ## Preliminary
 
-The voting outcome of interest is the two-party preferred vote for each electorate, which is provided by the Australian Electoral Commission (AEC) for the 2001, 2004, 2007, 2010, 2013 and 2016 elections. The AEC divide Australia into 150 regions called electorates, with each corresponding to a single seat in the House of Representatives. Voting is compulsory in Australia, and each voter assigns a numbered preference to each available candidate in their electorate. The two-party preferred vote is determined by a tally of preferences where, by convention, only the ranks of the Labor and Liberal candidates are considered. This is recorded as a percentage preference in favour of the Liberal party, and let it be denoted $TPP$. 
+The voting outcome of interest is the electoral two-party preferred vote, which is provided by the Australian Electoral Commission (AEC) for the 2001, 2004, 2007, 2010, 2013 and 2016 elections. The AEC divide Australia into 150 regions called electorates, with each corresponding to a single seat in the House of Representatives. Voting is compulsory in Australia, and each voter assigns a numbered preference to each available candidate in their electorate. The two-party preferred vote is determined by a tally of these preferences where, by convention, only the ranks of the Labor and Liberal candidates are considered. This is recorded as a percentage preference in favour of the Liberal party.
 
-For each election the two-party preferred vote is obtained for all 150 electorates, with the exception of 2001. The electoral two-party preferred vote is not published for the 2001 election. Instead, we calculate it for the 141 electorates that had Labor and Liberal as the two most popular parties, leaving 9 electorates without a two-party preferred vote recorded. These 9 electorates are omitted from the subsequent analysis.
+A map of electoral boundaries in each election is also provided by the AEC in geographical information system (GIS) format.
 
-The Census of Population and Housing is a survey of every household in Australia, recording socio-demographic information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census, and publishes aggregated information with quality assurance [@footnote]. We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in appendix \@ref(ch:Appendix). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
+For each election the two-party preferred vote is obtained for all 150 electorates, with the exception of 2001. The electoral two-party preferred vote is not published for the 2001 election. Instead, we calculate it from the two-candidate preferred vote for the 141 electorates that had Labor and Liberal as the two most popular candidates, leaving 9 electorates without a two-party preferred vote recorded. These 9 electorates are omitted from the subsequent analysis.
 
-At this stage, we have obtained the electoral two-party preferred votes for the six elections, and socio-demographic variables for Census divisions in the four Censuses. In order to model each election, the socio-demographic variables need to be linked with the electorates in each election. These are not contemporaneous, nor are the boundaries of electorates in an election guaranteed to align with a set of Census divisions - as the AEC redistributes electoral boundaries.
+Socio-demographic variables are derived from the Census of Population and Housing (Census), which is a survey of every household in Australia, recording information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census, and publishes aggregated information (including GIS maps of the aggregated regions). We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in appendix \@ref(ch:Appendix). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
 
-The next step is to determine how these two differ in both temporal and spatial dimensions, and devise a method of imputation to obtain socio-demographic variables for each of the six elections.
+At this stage, we have obtained the electoral two-party preferred votes for the six elections, and socio-demographic variables for Census divisions in the four Censuses. In order to model each election, the socio-demographic variables need to be linked with the electorates in each election. Elections and Censuses are not contemporaneous, nor are the boundaries of electorates guaranteed to align with a set of Census divisions - as the AEC redistributes electoral boundaries. Therefore, a method of imputation is required to obtain the desired cross-sections for each election.
+
+The next step is to determine how the Census and election information differ in both temporal and spatial dimensions, and devise an imputation procedure.
 
 - Timeline?
 
+- Quality assurance from ABS?
+
 ## Understanding the difference
 
-This section details how the data is asynchronous and how electorate boundaries change, with an illustration.
-
-------------------------------------------------------------------------------------------
-
-
-The Census provides information about characteristics of every household in Australia, and is conducted every five years by the Australian Bureau of Statistics (ABS). There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016, and these are used to build electorate socio-demographic profiles for each election.
-
-Federal elections typically occur every three years, and those of interest are the 2001, 2004, 2007, 2010, 2013 and 2016 elections. The outcome of interest is the two-party preferred vote for each electorate, which is sourced from the from the Australian Electoral Commission (AEC).
-
-All information used in this study is publicly available.
-
-In order to model an election, each socio-demographic profiles must be joined with the two-party preferred vote. Since the timing of Censuses and elections do not always align (figure \@ref(fig:timeline)), and electorate boundaries change over time, Census profiles for the 2004, 2007, 2010 and 2013 elections are not directly available. Therefore, they must be imputed in a way that accounts for both temporal and spatial elements.
+First, consider the temporal difference between election data (two-party preferred vote) and Census data. Six elections and four Censuses were conducted from 2001 to 2016, but only in 2001 and 2016 did both events occur (see Figure \@ref(fig:timeline)). In order to obtain socio-demographic information for other four elections, we need to interpolate between Censuses in some way. 
 
 ```{r timeline, fig.cap="Timeline of Australian elections and Censuses", out.width = "90%", fig.align="center"}
 timeline <- data.frame(year = c(2001:2016)) %>%
@@ -44,62 +37,56 @@ timeline <- data.frame(year = c(2001:2016)) %>%
 ggplot(timeline, aes(x=year_vis, y=measure)) + geom_point(aes(color=as.factor(event),shape=as.factor(event)),size = 4) + labs(color = "Event", shape = "Event") + geom_hline(yintercept=0, size =1, color = 'grey', show.legend = FALSE) + geom_segment(x=2001,xend=2001, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2004,xend=2004, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2007,xend=2007, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2010,xend=2010, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2013,xend=2013, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2016,xend=2016, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2001.1,xend=2001.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2006.1,xend=2006.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2011.1,xend=2011.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2016.1,xend=2016.1, y=1.4, yend=0, color = '#F8766D') + labs(x="Year") + theme(text=element_text(size=8), axis.text.x=element_text(size=6),axis.text.y=element_blank(), axis.title.y=element_blank(), plot.background=element_blank(), axis.ticks.y = element_blank(), panel.background = element_blank()) + scale_x_discrete(limits = c(2001:2016)) + coord_fixed(ratio = 2)
 ```
 
-## Electorates and their boundaries
+Recall that the Census is aggregated by Census division, and the two-party preferred vote is aggregated at electorate level. Electorate boundaries are redrawn regularly by the AEC, and Census divisions match the electorate boundaries at the time of the Census. When a Census is conducted in an election year (2001 and 2016), the electoral boundaries match the Census divisions. However, for elections in between (2004, 2007, 2010 and 2013), there is no Census that matches electoral boundaries. Therefore, to impute socio-demographic variables for each electorate in these elections, the spatial differences in Census and election data must also be taken into account.
 
-Australia is divided into 150 electorates, and each corresponds with a single seat in the House of Representatives. Electorate boundaries are determined by population, and to ensure equal representation, boundaries are redrawn regularly by the AEC. Each redistribution typically affects a handful of electorates, with most remaining the same as previously defined.
+## Spatio-temporal imputation
 
-When it is time for a Census to be conducted, the ABS aggregates data in accordance with the most recent boundary distribution. These regions are called Commonwealth electoral divisions, which will be referred to as *Census divisions*. What this means is that the electorate boundaries in the election prior to a Census may not match the Census division boundaries used in the Census, which may not match the boundaries in the following election and so on.
+Now that the spatial and temporal differences between election and Census data have been addressed, we outline the chosen method of spatio-temporal imputation. This procedure estimates electoral socio-demographic variables for an election.
 
-## Census data
+The essence of the algorithm is to estimate the socio-demographic composition of electorates had their boundary been in place at the time of the nearest Censuses, and then linearly interpolating between these time points. For example, the 2013 electoral boundaries are estimated at the time of the 2011 and 2016 Censuses. This algorithm predominantly uses tools from the `sp`, `rgeos` and `dplyr` packages, and is formulated from the piecewise approximation method of areal imputation in @Goodchild1993. 
 
-Census data is downloaded from the ABS website as a collection of Microsoft Excel spreadsheets, with each corresponding to a particular Census division, or a particular question. A series of `R` scripts and `Rmarkdown` files were developed to convert the information into `R` data frame objects.
+We now detail the steps of the algorithm, followed by an example.
 
-There was no way to automate this process, and the formats of each Census collection change slightly each year. As such, it has taken a significant amount of time and effort to scrape the information from online, and wrangle the data into the desired metrics and format. A snippet of the raw data can be found in the Appendix \@ref(fig:excel-demo).
+**Algorithm: Spatial imputation**
 
-The resultant data frames contain information for each division on:
+What is needed: 
 
-- State
-- Population
-- Age
-- Education
-- Employment
-- Religious and cultural identity
-- Incomes
-- Industry of work
-- Rental and loan payments
-- Citizenship and birthplace
-- Language at home
-- Relationship status
+- GIS maps of electoral boundaries and Census division boundaries for the nearest Census before and after the election. 
+- Socio-demographic variables for the Census divisions in these two Censuses.
 
-All metrics are recorded as percentages, representing the percentage of people in that electorate who satisfy the category in question. For example, $AusCitizen$ is the percentage of people in the electorate who are Australian citizens. The exceptions are population and area of each electorate, which are in units of individuals and square kilometers.
+**1**. Select the Census after the election. 
 
-A full description of socio-demographic variables in the electorate profiles can be found in the Appendix \@ref(ch:appendix).
+**2**. Select an electorate.
 
-*Like in any survey, non-response bias is a source of potential problems. ABS statements released with each Census assuring a high quality of data collection, for all Censuses.*
+**3**. Determine which Census division intersect with the electorate. This can be done by applying `gIntersects` between the GIS polygon representing the electorate and each of the Census division polygons.
 
-## Elections
+**4**. For the intersecting Census divisions, compute the area of overlap with the electorate, and compute the proportion of the Census division that is consumed by this overlap. `gIntersection` determines the area of intersection between two polygons, and `gArea` computes the area of a given polygon.
 
-Candidates from many political parties run compete to represent an electorate, in an election. Voting is compulsory in Australia, and the winning candidate is determined by preferential counts. This means that each person assigns a numbered preference to each candidate, and the winner is determined by receiving a majority of preference votes. The two-party preferred vote is the distribution of preferences where, by convention, comparisons are made only between Labor and Liberal/National candidates. This is the response variable in our models. The results for each of the six elections are downloaded directly from the AEC website, and formatted into data frames.
+Let $\alpha_{e,c} \in [0,1]$ be the proportion of Census division $c$ that is contained in the overlapping region with electorate $e$.
 
-For the 2001 election, 9 electorates do not have a two-party preferred vote recorded. Therefore in 2001 there are $n=141$ electorates, whereas all others have $n=150$.
+**5**. Estimate the population in each overlapping area by assuming populations of Census divisions are uniformly distributed.
 
-## Mapping socio-demographic profiles to election times
+Let $\theta_{c}$ be the total population in Census division $c$, and $p_{e,c}$ denote the estimated overlap population size between electorate $e$ and Census division $c$.
 
-When a Census is conducted in an election year, the AEC electorate boundaries match the ABS Census divisions, so the two data sources can be joined directly. This is done by for years 2001 and 2016. If the election does not fall on the year a Census is conducted, then it cannot be directly matched with a Census, and hence socio-demographic information must be imputed for that election.
+$$p_{e,c} = \alpha_{e,c} \cdot \theta_{c}$$
+**6**. Compute a weighted average of socio-demographics from the intersecting divisions, using the estimated populations as proportionate weights. This is the estimate the electorate's socio-demographics at the time of the Census.
 
-Any imputation method must account for the:
+Let $\lambda_{e,t}$ be the value of a given socio-demographic variable for electorate $e$ in year $t$, and $\delta_{c,t}$ be the value of the same variable for Census division $c$. Add a subscript $t$ to estimated overlap population $p_{e,c,t}$ between electorate $e$ and Census division $c$. 
 
-- Spatial component: electorate boundaries may not match any of the neighbouring Censuses.
+$$\hat{\lambda}_{e,t} = \frac{\sum_{c=1}^{150}  p_{e,c,t}*\delta_{c,t}}{\sum_{c=1}^{150}  p_{e,c,t}}$$
+**7**. Repeat steps 3-6 for all of the 150 electorates, using the same Census year.
 
-- Temporal component: demographics in an area may have changed since the last Census was conducted.
+**8**. Repeat steps 3-7 using the other Census year. After this step, socio-demographic variables for the electoral boundaries have been estimated for both Censuses.
 
-A spatial imputation algorithm using GIS maps is formulated from the piecewise approximation method of areal imputation in @Goodchild1993. 
+**9**. Linearly interpolate between consecutive Census years for each electorate to impute the socio-demographic profile for the election year.
 
-The essence of the algorithm is to interpolate between estimates of what a particular electorate would have been comprised of, had it been in place at the time of the nearest Census both before and after the election. This is done predominantly using tools from the `rgeos` package. 
+Let $t_1$ be the year of the Census prior to the election, $t_k$ be the year of the election, and $t_2$ be the year of the Census after the election.
 
-### Spatial imputation
+$$\hat{\lambda}_{e,t_k} = \frac{t_k-t_1}{t_2-t_1} \cdot \hat{\lambda}_{e,t_1} + \frac{t_2-t_k}{t_2-t_1} \cdot \hat{\lambda}_{e,t_2}$$
 
-To illustrate this algorithm, we will make use of an example - the electorate of Hume (NSW) in the 2013 election. This area is shown in figure \@ref(fig:hume13), shaded in purple with (some of) the neighbouring electorates in New South Wales (NSW). To obtain all electorate socio-demographic profiles for the 2013 election, one would repeat this same process for each electorate individually.
+**Example: electorate of Hume in the 2013 election.**
+
+To demonstrate how the algorithm functions, consider the example of imputing the socio-demographic variables for the electorate of Hume in New South Wales (NSW), at the time of the 2013 federal election. Figure \@ref(fig:hume13) shows this region amongst other NSW electorates.
 
 ```{r hume13, fig.cap = "Electorate boundaries for 2013, with the electorate boundary for Hume (purple) shown."}
 # 2013
@@ -133,29 +120,9 @@ ggplot() +
   labs(x="Longitude", y="Latitude", title = "2013")
 ```
 
-First the profile at the time of the 2016 Census is estimated, and then that for the 2011 Census - this captures the spatial component. Linear interpolation over time then accounts for the temporal component. 
+The Censuses neighbouring the 2013 election are those in 2011 and 2016. Let's start with estimating the boundary for Hume had it been in place at the time of the 2016 Census. The boundary we are estimating is shown in Figure \@ref(fig:hume16), which depicts the same region of NSW as shown in the 2013 electorate boundaries in figure \@ref(fig:hume13), with the 2013 electorate of Hume shaded in purple. This purple region is the area we are estimating.
 
-**Algorithm: Spatial imputation**
-
-**1**. Select the Censuses that occur before and after election time. 
-
-The Censuses from 2011 and 2016 surround the 2013 election.
-
-**2**. Pick a particular Census year to start with. 
-
-Begin with estimating the electorate boundary had it been in place at the time of the 2016 Census.
-
-**3**. Select an electorate.
-
-For this example, we have chosen the electorate of Hume.
-
-**4**. Determine which Census divisions intersect with the electorate of interest.
-
-Figure \@ref(fig:hume16) shows the 2016 Census division boundaries for the same region of NSW as shown in the 2013 electorate boundaries in figure \@ref(fig:hume13), with the 2013 electorate of Hume (purple) superimposed. The purple region is the area we are estimating.
-
-Determine the Census divisions intersect with the electorate region - the divisions of Eden-Monaro, Riverina and Hume. 
-
-*Note that there are also tiny intersecting areas with Fenner, Calare, Gilmore and Whitlam, but we will ignore them for the purpose of this illustration.*
+There are many Census divisions that intersect with the Hume (purple) region, these include the Census divisions of Eden-Monaro, Riverina and Hume. There are also tiny intersecting areas with Fenner, Calare, Gilmore and Whitlam, but we will ignore these intersections for the purpose of this illustration. Figure \@ref(fig:hume16int) shows these three intersecting Census divisions in colour.
 
 ```{r hume16, fig.cap = "Census division boundaries for 2016, with the 2013 electorate boundary for Hume (purple) shown."}
 # Surrounding electorates 2011 and 2016
@@ -222,14 +189,7 @@ ggplot(data=plot_map_hume_impute) +
   labs(x="Longitude", y="Latitude", title = "2016", fill = "Census divisions")
 ```
 
-
-**5**. Compute the percentage of each Census division that contains in the intersecting region.
-
-The shaded electorate boundary covers $90.58 \%$ of Hume (2016), $24.89 \%$ of Riverina (2016) and $9.96 \%$ of Eden-Monaro (2016). *For the purpose of illustration, smaller intersections are ignored*.
-
-**6**. Assuming uniformly distributed populations through the divisions, estimate the population in each of these intersecting regions.
-
-The population of Riverina (2016) is $155,793$, therefore $38,780$ people are estimated to be in the intersecting region of this division. 
+The shaded (purple) Hume boundary consumes $90.58 \%$ of Hume, $24.89 \%$ of Riverina and $9.96 \%$ of Eden-Monaro. We now estimate the population in these intersections via the assumption of uniformly distributed populations. For example, the population of Riverina (2016) is $155,793$, therefore $38,780$ people are estimated to be in the intersecting region of this division. 
 
 ```{r, results = 'asis'}
 ## Table
@@ -243,98 +203,38 @@ Mapping_aec13 %>%
               filter(Electorate %in% c("HUME", "RIVERINA", "EDEN-MONARO"), year == 2016) %>% 
               select(Population, Electorate) %>% 
               rename(Division = Electorate), by = "Division") %>% 
-  mutate(`Estimated Population` = (Population*Percent_Cens_Composition) %>% round(0) %>% as.character(),
+  mutate(`Estimated Population Allocated to Hume` = (Population*Percent_Cens_Composition) %>% round(0) %>% as.character(),
          Population = Population %>% as.character()) %>% 
   select(-Percent_Cens_Composition) %>% 
+  rename(`Population in Division` = Population) %>% 
   xtable() %>% 
-  print(comment=FALSE, digits=NULL)
+  print(comment=FALSE, digits=NULL, size = "\\small")
 ```
 
-**7**. Compute a weighted average of socio-demographics from the intersecting divisions, using estimated populations as weights.
+Now we compute a weighted average of each socio-demographic from the intersecting divisions, using estimated populations as weights. $\delta$ represents any socio-demographic variable.
 
-Let $\lambda_{i}$ is the value of a given socio-demographic for electorate $i$, and $\delta_{j}$ be the value of the same socio-demographic for Census division $j$. Let $p_{j}$ denote the estimated intersection population with Census division $j$.
+$$\hat{\lambda}_{Hume, 2016} = \frac{136,458 \cdot \delta_{Hume, 2016} +  38,780 \cdot \delta_{Riverina, 2016} +  14,691 \cdot \delta_{Eden-Monaro, 2016}}{136,458 + 38,780 + 14,691}$$
+Consider $\delta =\text{AusCitizen}$, which is the percentage of the population who are Australian citizens: $\delta_{Hume, 2016} = 90.0 \%$, $\delta_{Eden-Monaro, 2016} = 88.0 \%$ and $\delta_{Riverina, 2016} = 89.1 \%$.
 
-$$\hat{\lambda}_{i} = \frac{\sum p_j*\delta_j}{\sum  p_j}$$
-Here we have $i = Hume$ and $j = {\text{Hume, Riverina, Eden-Monaro}}$, so:
+$$\hat{\lambda}_{Hume, 2016} = \frac{136,458 \cdot 90.0 \% +  38,780 \cdot 89.1 \% +  14,691 \cdot 88.0 \%}{136,458 + 38,780 + 14,691} = 89.66 \%$$
 
-$$\hat{\lambda}_{Hume} = \frac{136,458 \cdot \delta_{Hume} +  38,780 \cdot \delta_{Riverina} +  14,691 \cdot \delta_{Eden-Monaro}}{136,458 + 38,780 + 14,691}$$
-
-*At this point, we have an estimated 2016 Census profile for the 2013 electorate boundary of Hume*.
-
-**8**. Repeat steps 3-7 for all of the 150 electorates, using the same Census year.
-
-**9**. Repeat steps 2-8 using the other Census year.
-
-Having already computed estimated for 2016, we would now estimate the electorate profiles for the 2011 Census. 
-
-**10**. Linearly interpolate between the Census years to impute the socio-demographic division profile for the given election year.
+This weighted average calculation is repeated for all 63 socio-demographic variables. Then, the entire estimation is repeated using the 2011 Census. Let's again consider $\delta =\text{AusCitizen}$, for which we find $\hat{\lambda}_{Hume, 2011} = 89.58 \%$
 
 The 2013 election sits two years after the 2011 Census, and three years before the 2016 Census. Take a weighted average of each demographic with respect to time for each division.
 
-Adding a subscript $k$ to $\lambda_{i}$ to denote year, $\lambda_{i,k}$.
+$$\hat{\lambda_{i,2013}} = \frac{3}{5} \cdot \hat{\lambda_{i,2011}} + \frac{2}{5} \cdot \hat{\lambda_{i,2016}} \\ = \frac{3}{5} \cdot 89.58 + \frac{2}{5} \cdot 89.66 \% \\ = 89.61 \%$$
 
-$$\hat{\lambda_{i,2013}} = \frac{3}{5} \cdot \hat{\lambda_{i,2011}} + \frac{2}{5} \cdot \hat{\lambda_{i,2016}}$$
+Therefore, the estimated percentage of Australian citizens in Hume at the time of the 2013 election is 89.61%. This same estimation is done for each of the 63 socio-demographic variables.
 
-## Standardizing the variables
+Now that electoral socio-demographics are imputed for each election, we consider why standardizing these explanatory variables is an important transformation before modelling each election.
 
-For many of the socio-demographic variables, both mean and variance change over the years. Take median rental prices for example. In 2001, the mean electorate median rental price was $ \$ 161.83$, and standard deivation $ \$ 50.89$, whereas in 2016 the mean was $ \$231.49$ and the standard deviation was $ \$ 61.88$, after adjusting prices for inflation to a 2001 index. Since each election is to be modelled separately and then compared, we need to center and standardize each variable (to have mean $0$ and variance $1$) within the election year, so that scales are consistent across years.
+## Standardizing the explanatory variables
 
-As a result, we interpret the values for an electorate as a being relative to the other electorates in that election. For example, $AusCitizen_j = 1$ in 2013, means that electorate $j$ has a proportion of Australian citizens 1 standard deviation above the mean.
+For many of the socio-demographic variables, both the sample mean and variance each change over the years. Consider median rental price in each electorate, for example. In 2001, the median rental price amongst electorates had mean $161.83$ and standard deviation $50.89$, whereas in 2016 the mean was $231.49$ and the corresponding standard deviation being $61.88$. These figures were adjusted for inflation using a 2001 index. Since each election is to be modelled separately and then compared, each variable is centered to have mean $0$, and standardized to have variance $1$, within each election year, so that the data scales are consistent across years.
 
-## A summary of the data
+The values for an electorate can therefore be interpreted as a score relative to the other electorates in that election. For example, a value of $AusCitizen = 1$ corresponds with an electorate having a proportion of Australian citizens that is one standard deviation above the average in that election.
 
-Now that socio-demographic profiles have been imputed for the 2004, 2007, 2010 and 2013 elections, a complete collection of data has been obtained for every electorate in every election. The violin plots in figure \@ref(fig:violinunscaled) summarise the non-standardized socio-demographics that appear in the final models (although some are appear through factors). Each violin depicts the distribution as a density plot reflected in the vertical axis. Figure \@ref(fig:violinscaled) is the same, although displaying the summarised and grouped socio-demographics, as they appear in the final models. See section \@ref(ch:Modelling) for how these variables were constructed and chosen. 
 
-```{r violinunscaled, fig.cap = "Distributions of unscaled socio-demographic variables included in the models, across elections."}
-# Unscaled violin plots go here
-profiles %>% 
-  select(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Perc_LNP, year) %>% 
-  filter(!is.na(Perc_LNP)) %>% 
-  mutate(Perc_LNP = as.numeric(Perc_LNP)) %>% 
-  rename(`Two-party preferred` = Perc_LNP) %>% 
-  gather(key = "metric", value = "value", -year) %>% 
-  ggplot(aes(x=year, y=value)) +
-  geom_violin(aes(fill = year)) + 
-  facet_wrap(~metric, scales = "free_y", ncol = 4) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 0.5, size = 8)) +
-  guides(fill = FALSE) +
-  labs(x = "", y = "")
-```
 
-```{r violinscaled, fig.cap = "Distributions of scaled socio-demographic variables included in the models, across elections. The variables Education and RentLoan are factors."}
-# Standardized violin plots go here
-data_mod %>% 
-  select(c(superset$varname %>% unlist), Perc_LNP, year) %>% 
-  filter(!is.na(Perc_LNP)) %>% 
-  mutate(Perc_LNP = as.numeric(Perc_LNP)) %>% 
-  rename(`Two-party preferred` = Perc_LNP) %>% 
-  gather(key = "metric", value = "value", -year) %>% 
-  ggplot(aes(x=year, y=value)) +
-  geom_violin(aes(fill = year)) + 
-  facet_wrap(~metric, scales = "free", ncol = 4) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 0.5, size = 8)) +
-  guides(fill = FALSE) +
-  labs(x = "", y = "")
-```
 
-Summary plots of the excluded variables can be found in appendix X.
 
-### How has Australia changed?
-
-Many insights into the changing Australian demographic can be drawn from the variable distributions in figure \@ref(fig:violinunscaled). Trends can be identified for the entire country and for the spread amongst electorates, over this 17 year period.
-
-#### The population is ageing
-
-It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the plots of median age. The maximum median age amongst electorates increases across elections, from 41 years in 2001 to 50 years old in 2016. Interestingly, the electorate of Lyne (coastal NSW) has the highest median age in every year. Conversely, the minimum median age has barely changed, with electorates like Melbourne (VIC) having a median age hovering around 31 years. There also has been mobility within rank of median age over the years, with electorates like Mayo (SA) moving from having an average age profile (36 years in 2001), to being one of the older areas (46 years in 2016).
-
-```{r, include = FALSE}
-#profiles %>% filter(year %in% c("2001","2016")) %>% select(MedianAge, Election_Division, year) %>% spread(year, MedianAge) %>% mutate(change = `2016` - `2001`)
-```
-
-#### Religion: a thing of the past?
-
-Socially "progressive" movements continue to gather momentum all over the world, and as a result, Australia is moving away from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown in the plot for `NoReligion` in figure \@ref(fig:violinunscaled). This effect has stretched across (what appears to be) every electorate, as the minimum value has increased. Having any religious affiliation would make you a minority in some electorates! 
-
-#### Investing in education
-
-Australia has seen improvements in education outcomes across the board. High school completion rates, bachelor's degrees and postgraduate degrees increase for all electorates. It is also apparent that the distributions are becoming flatter, as the lower tails reduce in size relate to the rest of the distribution.
