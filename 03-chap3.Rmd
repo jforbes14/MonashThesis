@@ -12,7 +12,7 @@ A map of electoral boundaries in each election is also provided by the AEC in ge
 
 For each election the two-party preferred vote is obtained for all 150 electorates, with the exception of 2001. The electoral two-party preferred vote is not published for the 2001 election. Instead, we calculate it from the two-candidate preferred vote for the 141 electorates that had Labor and Liberal as the two most popular candidates, leaving 9 electorates without a two-party preferred vote recorded. These 9 electorates are omitted from the subsequent analysis.
 
-Socio-demographic variables are derived from the Census of Population and Housing (Census), which is a survey of every household in Australia, recording information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census, and publishes aggregated information (including GIS maps of the aggregated regions). We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in Appendix \@ref(ch:Appendix). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
+Socio-demographic variables are derived from the Census of Population and Housing (Census), which is a survey of every household in Australia, recording information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census, and publishes aggregated information (including GIS maps of the aggregated regions). We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in Appendix \@ref(a:describeSD). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
 
 At this stage, we have obtained the electoral two-party preferred votes for the six elections, and socio-demographic variables for Census divisions in the four Censuses. In order to model each election, the socio-demographic variables need to be linked with the electorates in each election. Elections and Censuses are not contemporaneous, nor are the boundaries of electorates guaranteed to align with a set of Census divisions - as the AEC redistributes electoral boundaries. Therefore, a method of imputation is required to obtain the desired cross-sections for each election.
 
@@ -239,24 +239,26 @@ Now that electoral socio-demographics are imputed for each election, we consider
 
 ## Standardizing the explanatory variables
 
-For many of the socio-demographic variables, both the sample mean and variance change over the years. Consider median rental price in each electorate, for example. In 2001, the median rental price amongst electorates had mean \$161.83 and standard deviation \$50.89, whereas in 2016 the mean was \$231.49 and a corresponding standard deviation of \$61.88. These figures have been adjusted for inflation using a 2001 index. This means that a \$200 dollar rental price in 2001 was expensive, whereas it was cheap in 2016. Therefore, to make comparisons regarding the effect of rental prices on the two-party preferred vote across 2001 and 2016 elections, rental prices should be centered to have mean 0, and standardized to have variance 1. This is done for all socio-demographic variables within the election year, so that data scales are consistent across years.
+For many of the socio-demographic variables, both the sample mean and variance change over the years. Consider median rental price in each electorate, for example. In 2001, the median rental price amongst electorates had a mean of \$161.83 and a standard deviation of \$50.89, whereas in 2016 the mean was \$231.49 and the corresponding standard deviation was \$61.88. These figures have been adjusted for inflation using a 2001 index. This means that a \$200 dollar rental price in 2001 was expensive, whereas it was cheap in 2016. Therefore, to make comparisons regarding the effect of rental prices on the two-party preferred vote across 2001 and 2016 elections, rental prices are centered to have mean 0, and standardized to have variance 1. This is done for all socio-demographic variables within each election year, so that data scales are consistent across years.
 
 The values for an electorate can therefore be interpreted as a score relative to the other electorates in that election. For example, a value of $\text{AusCitizen} = 1$ corresponds with an electorate having a proportion of Australian citizens that is one standard deviation above the average in that election.
 
 ## Changing socio-demographic of Australia
 
-Once a complete collection of socio-demographic variables are available for each electorate in all six elections, violin plots can be used to analyse how electoral socio-demographic characteristics have changed over time. Violin plots depict the distribution as a density plot reflected in the vertical axis. Trends can be identified over this 17 year period. Changes in age, religion and education are explored in the sections below. 
+Once a complete collection of socio-demographic variables is available for each electorate in all six elections, violin plots can be used to analyse how electoral socio-demographic characteristics have changed over time. Violin plots depict the distribution as a density plot reflected in the vertical axis. Trends can be identified over this 17 year period by placing plots from censecutive elections together in the same frame. Changes in age, religion and education are explored in the sections below. 
 
 #### The population is ageing
 
-It is well documented that Australia has an ageing population [@Rich08], and this is reflected in the plots of median age (Figure \@ref(fig:vis-age)). The maximum median age amongst electorates increases across elections, from 41 years in 2001 to 50 years old in 2016. Interestingly, the electorate of Lyne (coastal NSW) has the highest median age in every year. Conversely, the minimum median age has barely changed, with electorates like Melbourne (VIC) having a median age hovering around 31 years. Some electorates have moved in the rank of median age over the years, with electorates like Mayo (SA) moving from having an typical age profile (36 years in 2001), to being one of the older areas (46 years in 2016).
+It is well documented that Australia's population is ageing [@Rich08], and this is reflected in the plots of median age (Figure \@ref(fig:vis-age)). The maximum median age amongst electorates increases across elections, from 41 years in 2001 to 50 years old in 2016. Interestingly, the electorate of Lyne (coastal NSW) has the highest median age in every year. Conversely, the minimum median age has barely changed, with electorates like Melbourne (VIC) having a median age hovering around 31 years. Some electorates have moved in the rank of median age over the years, with electorates like Mayo (SA) moving from having an typical age profile (36 years in 2001), to being one of the older areas (46 years in 2016).
 
-```{r vis-age, fig.cap="Distribution of median age across Australian electorates, by election year"}
+```{r vis-age, out.height='25%', fig.cap="Distribution of median age across Australian electorates, by election year."}
 profiles %>% 
   ggplot(aes(x=year, y=MedianAge, fill=year)) + 
   geom_violin() + 
-  labs(x = "Election year", y = "Median age of electorate") +
-  guides(fill = F)
+  labs(x = "Election year", y = "Median age of electorate (years)") +
+  guides(fill = F) +
+  theme(axis.text.x = element_text(size = 12, angle = 60, vjust = 0.5), axis.text.y = element_text(size = 12),
+        axis.title = element_text(size = 12), aspect.ratio = 0.5)
 ```
 
 
@@ -268,32 +270,33 @@ profiles %>%
 
 Socially "progressive" movements continue to gather momentum all over the world, and Australia is no different, with many people dissociating from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown in Figure \@ref(fig:vis-relig). This trend is observed across all electorates, as the minimum value has increased. In 2016, having any religious affiliation would make you a minority in some electorates! 
 
-```{r visrg, fig.cap="Distribution of no religion across Australian electorates, by election year"}
+```{r vis-relig, out.height='25%', fig.cap="Distribution of no religion across Australian electorates, by election year"}
 profiles %>% 
   ggplot(aes(x=year, y=NoReligion, fill=year)) + 
   geom_violin() + 
-  labs(x = "Election year", y = "Percentage of electorate not identifying with a religion (%)") +
-  guides(fill = F)
+  labs(x = "Election year", y = "Percentage of electorate not identifying \nwith a religion (%)") +
+  guides(fill = F) +
+  theme(axis.text.x = element_text(size = 12, angle = 60, vjust = 0.5), axis.text.y = element_text(size = 12),
+        axis.title = element_text(size = 12), aspect.ratio = 0.5)
 ```
 
 #### Investing in education
 
-Australia has seen improvements in educational outcomes across the board. Completion rates for high school, Bachelor's degrees and postgraduate degrees have increased for all electorates (see Figure \@ref(fig:vis-educ)). In 2001, all three measures appear positively skewed, and over the years this skewness reduces and the distributions flatten. This indicates that some areas with lower levels of education have progressed at a faster rate than the rest of the country.
+Improvement in educational outcomes are evident across all of Australia. Completion rates for high school, Bachelor's degrees and postgraduate degrees have increased for all electorates (see Figure \@ref(fig:vis-educ)). In 2001, all three measures appear positively skewed, and over the years this skewness has reduced and the distributions have flattened. This indicates that some areas with lower levels of education have progressed at a faster rate than the rest of the country.
 
-```{r vis-educ, fig.cap="Distribution of across Australian electorates, by election year"}
+```{r vis-educ, out.width='100%', fig.cap="Distribution of educational qualification across Australian electorates, by election year."}
 profiles %>% 
   select(year, Bachelor, HighSchool, Postgraduate) %>% 
   gather("metric", "value", -year) %>% 
   ggplot(aes(x=year, y=value, fill=year)) + 
   geom_violin() + 
   facet_wrap(~metric, scales = "free_y") +
-  labs(x = "Election year", y = "Percentage of electorate population with qualification (%)") +
-  guides(fill = F)
+  labs(x = "Election year", y = "Percentage of electorate population \nwith qualification (%)") +
+  guides(fill = F) +
+  theme(axis.text.x = element_text(size = 8, angle = 60, vjust = 0.5), axis.text.y = element_text(size = 8), axis.title = element_text(size = 8), aspect.ratio = 0.75)
 ```
 
-Illustrating the changes in these three areas demonstrate that socio-demographic characteristics of electorates have evolved over the years, along with national preference between the Labor and Liberal parties.
+Illustrating the changes in these three areas demonstrates that socio-demographic characteristics of electorates have evolved over the years.
 
-In this section we have detailed the steps of data collection, preliminary transformations and imputation that result in a cross-sectional data set of electoral socio-demographics and two-party preferred vote for each of the six elections. Socio-demographic (explanatory) variables are standardized so that the data scales are consistent across years, which allows for comparison of effects across elections. The next steps are to determine what econometric model to pursue, and how to deal with the problem of having a small number of observations each election ($n=150$), relative to the number of available predictors ($p=63$). This is explored in section \@ref(ch:Modelling).
-
-
+In this section we have detailed the steps of data collection, preliminary transformations and imputation that result in a cross-sectional data set of electoral socio-demographics and two-party preferred vote for each of the six elections. Violin plots summarising the full set of socio-demographic variables can be found in Appendix \@ref(a:summary). Socio-demographic (explanatory) variables are standardized so that the data scales are consistent across years, which allows for comparison of effects across elections. The next steps are to determine what econometric model to pursue, and how to deal with the problem of having a small number of observations each election ($n=150$), relative to the number of available predictors ($p=63$). This is explored in Section \@ref(ch:Modelling).
 
