@@ -1,224 +1,218 @@
 \appendix
 
-# Raw ABS Census data snapshot
+# Socio-demographic metrics for each electorate {#a:describeSD}
 
-```{r excel-demo, fig.align="left", fig.cap="Screenshot of excel document containing responses to a question from the 2004 Census", out.width="80%"}
-knitr::include_graphics("figures/excel-screenshot.png")
+ID: Commonwealth Electoral Divison (Census division) number
+
+Electorate: Name of Commonwealth Electoral Division
+
+State: State of Census division
+
+Population: Count of persons in Census division
+
+### Age
+
+Age00_04: Percentage of population aged 0-4 years
+
+Age05_14: Percentage of population aged 5-14 years
+
+Age15_19: Percentage of population aged 15-19 years
+
+Age20_24: Percentage of population aged 20-24 years
+
+Age25_34: Percentage of population aged 25-34 years
+
+Age35_44: Percentage of population aged 35-44 years
+
+Age45_54: Percentage of population aged 45-54 years
+
+Age55_64: Percentage of population aged 55-64 years
+
+Age65_74: Percentage of population aged 65-74 years
+
+Age75_84: Percentage of population aged 75-84 years
+
+Age85plus: Percentage of population aged 85+ years
+
+### Median Statistics
+
+MedianPersonalIncome: Median weekly personal income
+
+MedianHouseholdIncome: Median weekly household income
+
+MedianFamilyIncome: Median weekly family income
+
+MedianAge: Median age
+
+MedianRent: Median weekly rental payment amount (of those who rent)
+
+MedianLoanPay: Median mortgage loan repayment amount (of mortgage payments)
+
+### Religion
+
+Christianity: Percentage of respondents that identified as Chrisitan (excluding overseas visitors)
+
+Anglican: Percentage of respondents that identified as Anglican (excluding overseas visitors)
+
+Catholic: Percentage of respondents that identified as Catholic (excluding overseas visitors)
+
+Buddhism: Percentage of respondents that identified as Buddist (excluding overseas visitors)
+
+Islam: Percentage of respondents that identified as Muslim (excluding overseas visitors)
+
+Judaism: Percentage of respondents that identified as Jewish (excluding overseas visitors)
+
+NoReligion: Percentage of respondents that identified as "no religion", "athiest" etc. (excluding overseas visitors)
+
+OtherChrist: Percentage of respondents that identified as Christian, but not Anglican or Catholic (excluding overseas visitors)
+
+### Language, Heritage, Birthplace and Citizenship
+Indigenous: Percentage of population that identify as Indigenous or Torres Strait Islander
+
+AusCitizen: Percentage of population who are Australian Citizens
+
+Born_Asia: Percentage of respondents born in Asia (includes: Bangladesh, Cambodia, China, Hong Kong, Indonesia, Japan, South Korea, Malaysia, Nepal, Pakistan, Phillipines, Singapore, Sri Lanka, Thailand, Taiwan, Vietnam)
+
+Born_MidEast: Percentage of respondents born in Middle East (includes: Afghanistan, Egypt, Iran, Lebanon, Turkey)
+
+Born_SE_Europe: Percentage of respondents born in South-East Europe (includes: Bosnia and Herzegovina, Croatia, Greece, Macedonia, other South-East Europe)
+
+Born_UK: Percentage of respondents born in the United Kingdom (includes: England, Wales, Scotland, Northern Ireland)
+
+BornElsewhere: Percentage of respondents born overseas in regions over Asia, Middle East, South-East Europe and UK  (includes overseas visitors)
+
+OtherLanguageHome: Percentage of respondents that speak other languages other than English at home
+
+### Education
+
+CurrentlyStudying: Percentage of population that are currently studying
+
+HighSchool: Percentage of respondents (15 years and over) that have finished High School
+
+Bachelor: Percentage of respondents (15 years and over) that have completed a Bachelors degree
+
+Postgraduate: Percentage of respondents (15 years and over) that have completed a Postgraduate degree
+
+DipCert: Percentage of respondents (15 years and over) that have completed a diploma or certificate
+
+Note: respondents is calculated by taking population 15 years and over, less question non-responses
+
+### Employment
+
+Unemployed: Unemployment rate (percentage)
+
+LFParticipation: Labour force participation rate (percentage)
+
+Volunteer: Percentage of respondents (15 years and over) that do volunteer work [2006, 2011, 2016]
+
+### Industry of Employment
+
+ExtractiveJobs: Percentage of employed persons (respondents) who work in agriculture, mining, electricity, gas, water or waste
+
+Transformative: Percentage of employed persons (respondents) who work in construction or manufacturing
+
+Distributive: Percentage of employed persons (respondents) who work in wholesale trade, retail trade, transport, post or warehousing
+
+Finance: Percentage of employed persons (respondents) who work in finance or insurance
+
+SocialServ: Percentage of employed persons (respondents) who work in education and training, healthcare, wocial work, community, arts and recreation
+
+### Occupation Groups
+
+AdminJobs: Percentage of employed persons (respondents) who work in management, administration, clerical Duties and sales
+
+Professional: Percentage of employed persons (respondents) who work as a professional
+
+Tradesperson: Percentage of employed persons (respondents) who specialise in a trade
+
+Laborer: Percentage of employed persons (respondents) who work as a laborer
+
+### Family and Relationship
+
+Married: Percentage of people that are married (excluding overseas visitors, including not stated)
+
+DeFacto: Percentage of people that are in a De Facto relationship (excluding overseas visitors, including not stated)
+
+FamilyRatio: Ratio of people in families to the number of total families (ie. average number of people per family)
+
+Couple_NoChild_House: Percentage of households that are made up of an adult couple with no children
+
+Couple_WChild_House: Percentage of households that are made up of an adult couple with children
+
+OneParent_House: Percentage of households that are made up of a single parent with children
+
+SP_House: Percentage of households that are made up of a single person
+
+### Dwelling
+
+Owned: Percentage of dwellings that are owned outright (of respondents)
+
+Mortgage: Percentage of dwellings that are on a mortgage (of respondents)
+
+Renting: Percentage of dwellings that are being rented (of respondents)
+
+PublicHousing: Percentage of dwellings that are owned by the government, and rented out to tenants (of respondents)
+
+NotOwned: Percentage of dwellings (respondents only) that are not owned outright or on a mortgage
+
+DiffAddress: Percentage of respondents who live at a different address to what they did 5 years prior
+
+
+
+# Summary of variables in each election {#a:summary}
+
+As seen in section \@ref(ch:Data), violin plots are used to depict the distributions of socio-demographic variables across years. Violin plots depict the distribution as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
+
+```{r violinall1, fig.height=10, fig.cap = "Distribution of each socio-demographic variable across elections (part 1)."}
+# Unscaled violin plots go here
+ violins <- profiles %>% 
+  select(-c(Election_Division, Swing, Perc_LNP, PartyAb))
+
+violins %>% 
+  select(unlist((violins %>% names)[order(violins %>% names)][1:36]), year) %>%
+  gather(key = "metric", value = "value", -year) %>%
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free_y", ncol = 4) +
+  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), 
+        strip.text = element_text(size=6), aspect.ratio = 0.5) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
 ```
 
-# Socio-demographic metrics for each electorate
-
-Derived from ABS Census data, spanning years 2001--2016.
-
-ID
-
-: Commonwealth Electoral Divison (CED) number
-
-Electorate
-
-: Name of Commonwealth Electoral Division
-
-State
-
-: State of CED
-
-Population
-
-: Count of persons in CED
-
-### Age {-}
-
-Age00_04
-
-: Percentage of population aged 0-4 years
-
-Age05_14
-
-: Percentage of population aged 5-14 years
-
-Age15_19
-
-: Percentage of population aged 15-19 years
-
-Age20_24
-
-: Percentage of population aged 20-24 years
-
-Age25_34
-
-: Percentage of population aged 25-34 years
-
-Age35_44
-
-: Percentage of population aged 35-44 years
-
-Age45_54
-
-: Percentage of population aged 45-54 years
-
-Age55_64
-
-: Percentage of population aged 55-64 years
-
-Age65_74
-
-: Percentage of population aged 65-74 years
-
-Age75_84
-
-: Percentage of population aged 75-84 years
-
-Age85plus
-
-: Percentage of population aged 85+ years
-
-### Median Statistics  {-}
-
-MedianPersonalIncome
-: Median weekly personal income
-
-MedianHouseholdIncome
-: Median weekly household income
-
-MedianFamilyIncome
-: Median weekly family income
-
-MedianAge
-: Median age
-
-MedianRent
-: Median weekly rental payment amount (of those who rent)
-
-MedianLoanPay
-: Median mortgage loan repayment amount (of mortgage payments)
-
-PersonalIncome_NS
-: Rate of nonrespondence for questions relating to personal income, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-FamilyIncome_NS
-: Rate of nonrespondence for questions relating to family income, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-HouseholdlIncome_NS
-: Rate of nonrespondence for questions relating to household income, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-### Religion {-}
-
-Christianity
-: Percentage of respondents that identified as Chrisitan
-
-Catholic
-: Percentage of respondents that identified as Catholic
-
-Buddhism
-: Percentage of respondents that identified as Buddist
-
-Islam
-: Percentage of respondents that identified as Muslim
-
-Judaism
-: Percentage of respondents that identified as Jewish
-
-NoReligion
-: Percentage of respondents that identified as "no religion", "athiest" etc.
-
-Religion_NS
-: Rate of nonrespondence for questions relating to household income, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-### Language, Heritage, Birthplace and Citizenship {-}
-
-Indigenous
-: Percentage of population that identify as Indigenous or Torres Strait Islander
-
-AusCitizen
-: Percentage of population who are Australian Citizens
-
-BornOverseas
-: Percentage of respondents born overseas
-
-BornOverseas_NS
-: Rate of nonrespondence for questions relating to country of birth, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-EnglishOnly
-: Percentage of respondents that speak English only at home
-
-EnglishOnly_NS
-: Rate of nonrespondence for questions relating to language spoken at home, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-OtherLanguageHome
-: Percentage of respondents that speak other languages at home (note: this is 100% - EnglishOnly)
-
-### Employment and Study {-}
-
-Unemployed
-: Unemployment rate (percentage)
-
-LFParticipation
-: Labour force participation rate (percentage)
-
-CurrentlyStudying
-: Percentage of population that are currently studying (Note that 'not stated' has not been taken into account as this is not available for 2016)
-
-HighSchool
-: Percentage of respondents (15 years and over) that have finished High School
-
-HighSchool_NS
-: Rate of nonrespondence for questions relating to High School completion
-
-Bachelor
-: Percentage of respondents (15 years and over) that have completed a Bachelors degree
-
-Postgraduate
-: Percentage of respondents (15 years and over) that have completed a Postgraduate degree
-
-University_NS
-: Rate of nonrespondence for questions relating to higher education
-
-Volunteer
-: Percentage of respondents (15 years and over) that do volunteer work [2006, 2011, 2016]
-
-Volunteer_NS
-: Rate of nonrespondence for questions relating to volunteer work [2006, 2011, 2016]
-
-EmuneratedElsewhere
-: Percentage of people who receive emuneration outside of Australia, out of the total population plus overseas visitors [2001 only]
-
-### Family and Relationship {-}
-
-Married
-: Percentage of respondents that are married
-
-DeFacto
-: Percentage of respondents that are in a De Facto relationship
-
-Relationship_NS
-: Rate of nonrespondence for questions relating to relationship, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-FamilyRatio
-: Ratio of people in families to the number of total families (ie. average number of people per family)
-
-### Dwelling {-}
-
-NotOwned
-: Percentage of dwellings (respondents only) that are owned outright or on a mortgage
-Tenure_NS
-
-: Rate of nonrespondence for questions relating to tenure, ie. percentage of people who did not answer the question (recorded as "not stated" or "inadequately stated")
-
-InternetAccess
-: Percentage of dwellings with internet access (of respondents) [2006, 2011, 2016]
-
-InternetAccess_NS
-: Rate of nonrespondence for questions relating to internet access at home [2006, 2011, 2016]
-
-### Other {-}
-
-InternetUse
-: Percentage of people who used interent in the last week (of respondents) [2001 only]
-
-InternetAccess_NS
-: Rate of nonrespondence for questions relating to internet use [2001 only]
-
-# Model diagnostics
+```{r violinall2, fig.height=10, fig.cap = "Distribution of each socio-demographic variable across elections (part 2)."}
+# Unscaled violin 2 plots go here
+violins %>% 
+  select(unlist((violins %>% names)[order(violins %>% names)][37:64])) %>%
+  gather(key = "metric", value = "value", -year) %>%
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free_y", ncol = 4) +
+  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), 
+        strip.text = element_text(size=6), aspect.ratio = 0.5) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
+```
+
+
+
+
+```{r scex, fig.cap = "Distribution of unscaled variables (including factors) excluded from the models.", include = FALSE}
+# Standardized violin plots go here
+data_mod %>% 
+  select(-c((superset$varname %>% unlist), Election_Division, Swing, Perc_LNP)) %>% 
+  gather(key = "metric", value = "value", -year) %>% 
+  ggplot(aes(x=year, y=value)) +
+  geom_violin(aes(fill = year)) + 
+  facet_wrap(~metric, scales = "free", ncol = 6) +
+  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
+  guides(fill = FALSE) +
+  labs(x = "", y = "")
+```
+
+
+
+# Model diagnostics {#diagnostics}
 
 ## Non-linearities: Residuals against predictors
 ```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
@@ -245,50 +239,6 @@ aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>%
 
 No obvious patterns in the residuals vs omitted variables.
 
-# Summary of variables in each election
-
-As in section \@ref(ch:Data), the violin plots in figures \@ref(fig:unex1) and \@ref(fig:unex2) summarise the non-standardized socio-demographics that are *not* included the final models, and figure \@ref(fig:scex) summarises the standardized. Each violin depicts the distribution as a density plot reflected in the vertical axis.
-
-```{r unex1, fig.cap = "Part 1: Distribution of unscaled variables excluded from the models."}
-# Unscaled violin plots go here
- profiles %>% 
-  select(-c(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Election_Division, Swing, Perc_LNP, PartyAb)) %>%
-  select(starts_with("Age"), Anglican, Area, AusCitizen, AverageHouseholdSize, BornAsia, BornElsewhere, BornMidEast, Buddhism, Catholic, Christianity, Couple_NoChild_House, Couple_WChild_House, DeFacto, DiffAddress, DipCert, Distributive, year) %>% 
-  gather(key = "metric", value = "value", -year) %>%
-  ggplot(aes(x=year, y=value)) +
-  geom_violin(aes(fill = year)) + 
-  facet_wrap(~metric, scales = "free_y", ncol = 6) +
-  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
-  guides(fill = FALSE) +
-  labs(x = "", y = "")
-```
-
-```{r unex2, fig.cap = "Part 2: Distribution of unscaled variables excluded from the models."}
-# Unscaled violin plots go here
- profiles %>% 
-  select(-c(NoReligion, CurrentlyStudying, MedianAge, OneParentHouse, BornUK, BornSEEurope, ExtractiveJobs, AdminJobs, HighSchool, Bachelor, Postgraduate, MedianRent, MedianLoanPay, Election_Division, Swing, Perc_LNP, PartyAb)) %>%
-  select(-c(starts_with("Age"), Anglican, Area, AusCitizen, AverageHouseholdSize, BornAsia, BornElsewhere, BornMidEast, Buddhism, Catholic, Christianity, Couple_NoChild_House, Couple_WChild_House, DeFacto, DiffAddress, DipCert, Distributive)) %>% 
-  gather(key = "metric", value = "value", -year) %>%
-  ggplot(aes(x=year, y=value)) +
-  geom_violin(aes(fill = year)) + 
-  facet_wrap(~metric, scales = "free_y", ncol = 6) +
-  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
-  guides(fill = FALSE) +
-  labs(x = "", y = "")
-```
-
-```{r scex, fig.cap = "Distribution of unscaled variables (including factors) excluded from the models."}
-# Standardized violin plots go here
-data_mod %>% 
-  select(-c((superset$varname %>% unlist), Election_Division, Swing, Perc_LNP)) %>% 
-  gather(key = "metric", value = "value", -year) %>% 
-  ggplot(aes(x=year, y=value)) +
-  geom_violin(aes(fill = year)) + 
-  facet_wrap(~metric, scales = "free", ncol = 6) +
-  theme(axis.text.y = element_text(size = 6), axis.text.x = element_text(angle = 90, hjust = 0.5, size = 6), axis.title = element_text(size = 6), strip.text = element_text(size=5)) +
-  guides(fill = FALSE) +
-  labs(x = "", y = "")
-```
 
 # Interpretation of more socio-demographics
 
