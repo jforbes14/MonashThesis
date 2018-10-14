@@ -10,7 +10,7 @@ State: State of Census division
 
 Population: Count of persons in Census division
 
-### Age
+**Age**
 
 Age00_04: Percentage of population aged 0-4 years
 
@@ -34,7 +34,7 @@ Age75_84: Percentage of population aged 75-84 years
 
 Age85plus: Percentage of population aged 85+ years
 
-### Median Statistics
+**Median Statistics**
 
 MedianPersonalIncome: Median weekly personal income
 
@@ -48,7 +48,7 @@ MedianRent: Median weekly rental payment amount (of those who rent)
 
 MedianLoanPay: Median mortgage loan repayment amount (of mortgage payments)
 
-### Religion
+**Religion**
 
 Christianity: Percentage of respondents that identified as Chrisitan (excluding overseas visitors)
 
@@ -66,7 +66,8 @@ NoReligion: Percentage of respondents that identified as "no religion", "athiest
 
 OtherChrist: Percentage of respondents that identified as Christian, but not Anglican or Catholic (excluding overseas visitors)
 
-### Language, Heritage, Birthplace and Citizenship
+**Language, Heritage, Birthplace and Citizenship**
+
 Indigenous: Percentage of population that identify as Indigenous or Torres Strait Islander
 
 AusCitizen: Percentage of population who are Australian Citizens
@@ -83,7 +84,7 @@ BornElsewhere: Percentage of respondents born overseas in regions over Asia, Mid
 
 OtherLanguageHome: Percentage of respondents that speak other languages other than English at home
 
-### Education
+**Education**
 
 CurrentlyStudying: Percentage of population that are currently studying
 
@@ -97,7 +98,7 @@ DipCert: Percentage of respondents (15 years and over) that have completed a dip
 
 Note: respondents is calculated by taking population 15 years and over, less question non-responses
 
-### Employment
+**Employment**
 
 Unemployed: Unemployment rate (percentage)
 
@@ -105,7 +106,7 @@ LFParticipation: Labour force participation rate (percentage)
 
 Volunteer: Percentage of respondents (15 years and over) that do volunteer work [2006, 2011, 2016]
 
-### Industry of Employment
+**Industry of Employment**
 
 ExtractiveJobs: Percentage of employed persons (respondents) who work in agriculture, mining, electricity, gas, water or waste
 
@@ -117,7 +118,7 @@ Finance: Percentage of employed persons (respondents) who work in finance or ins
 
 SocialServ: Percentage of employed persons (respondents) who work in education and training, healthcare, wocial work, community, arts and recreation
 
-### Occupation Groups
+**Occupation Groups**
 
 AdminJobs: Percentage of employed persons (respondents) who work in management, administration, clerical Duties and sales
 
@@ -127,7 +128,7 @@ Tradesperson: Percentage of employed persons (respondents) who specialise in a t
 
 Laborer: Percentage of employed persons (respondents) who work as a laborer
 
-### Family and Relationship
+**Family and Relationship**
 
 Married: Percentage of people that are married (excluding overseas visitors, including not stated)
 
@@ -143,7 +144,7 @@ OneParent_House: Percentage of households that are made up of a single parent wi
 
 SP_House: Percentage of households that are made up of a single person
 
-### Dwelling
+**Dwelling**
 
 Owned: Percentage of dwellings that are owned outright (of respondents)
 
