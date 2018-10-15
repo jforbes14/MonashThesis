@@ -122,32 +122,32 @@ map_hume_surrounds_13 <- map13 %>%
          !Election_Division %in% c("PARKES", "FARRER"))
 
 #### MODELS ####
-fit_ss_16 <- lm(Perc_LNP ~ . + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
+fit_ss_16 <- lm(Perc_LNP ~ BornSEEurope + AdminJobs + ExtractiveJobs + RentLoan + OneParentHouse + MedianAge + NoReligion + Education + BornUK + CurrentlyStudying + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
                 data = data_mod %>% 
                   filter(year == "2016") %>% 
                   select(Perc_LNP,  (superset$varname %>% as.character)))
 
-fit_ss_13 <- lm(Perc_LNP ~ . + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
+fit_ss_13 <- lm(Perc_LNP ~ BornSEEurope + AdminJobs + ExtractiveJobs + RentLoan + OneParentHouse + MedianAge + NoReligion + Education + BornUK + CurrentlyStudying + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
                 data = data_mod %>% 
                   filter(year == "2013") %>% 
                   select(Perc_LNP,  (superset$varname %>% as.character)))
 
-fit_ss_10 <- lm(Perc_LNP ~ . + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
+fit_ss_10 <- lm(Perc_LNP ~ BornSEEurope + AdminJobs + ExtractiveJobs + RentLoan + OneParentHouse + MedianAge + NoReligion + Education + BornUK + CurrentlyStudying + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
                 data = data_mod %>% 
                   filter(year == "2010") %>% 
                   select(Perc_LNP,  (superset$varname %>% as.character)))
 
-fit_ss_07 <- lm(Perc_LNP ~ . + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
+fit_ss_07 <- lm(Perc_LNP ~ BornSEEurope + AdminJobs + ExtractiveJobs + RentLoan + OneParentHouse + MedianAge + NoReligion + Education + BornUK + CurrentlyStudying + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
                 data = data_mod %>% 
                   filter(year == "2007") %>% 
                   select(Perc_LNP,  (superset$varname %>% as.character)))
 
-fit_ss_04 <- lm(Perc_LNP ~ . + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
+fit_ss_04 <- lm(Perc_LNP ~ BornSEEurope + AdminJobs + ExtractiveJobs + RentLoan + OneParentHouse + MedianAge + NoReligion + Education + BornUK + CurrentlyStudying + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
                 data = data_mod %>% 
                   filter(year == "2004") %>% 
                   select(Perc_LNP,  (superset$varname %>% as.character)))
 
-fit_ss_01 <- lm(Perc_LNP ~ . + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
+fit_ss_01 <- lm(Perc_LNP ~ BornSEEurope + AdminJobs + ExtractiveJobs + RentLoan + OneParentHouse + MedianAge + NoReligion + Education + BornUK + CurrentlyStudying + Education:MedianAge + ExtractiveJobs:AdminJobs + Education:OneParentHouse + Education:AdminJobs, 
                 data = data_mod %>% 
                   filter(year == "2001") %>% 
                   select(Perc_LNP, (superset$varname %>% as.character)))
