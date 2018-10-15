@@ -12,25 +12,25 @@ Population: Count of persons in Census division
 
 **Age**
 
-Age00_04: Percentage of population aged 0-4 years
+Age0004: Percentage of population aged 0-4 years
 
-Age05_14: Percentage of population aged 5-14 years
+Age0514: Percentage of population aged 5-14 years
 
-Age15_19: Percentage of population aged 15-19 years
+Age1519: Percentage of population aged 15-19 years
 
-Age20_24: Percentage of population aged 20-24 years
+Age2024: Percentage of population aged 20-24 years
 
-Age25_34: Percentage of population aged 25-34 years
+Age2534: Percentage of population aged 25-34 years
 
-Age35_44: Percentage of population aged 35-44 years
+Age3544: Percentage of population aged 35-44 years
 
-Age45_54: Percentage of population aged 45-54 years
+Age4554: Percentage of population aged 45-54 years
 
-Age55_64: Percentage of population aged 55-64 years
+Age5564: Percentage of population aged 55-64 years
 
-Age65_74: Percentage of population aged 65-74 years
+Age6574: Percentage of population aged 65-74 years
 
-Age75_84: Percentage of population aged 75-84 years
+Age7584: Percentage of population aged 75-84 years
 
 Age85plus: Percentage of population aged 85+ years
 
@@ -72,13 +72,13 @@ Indigenous: Percentage of population that identify as Indigenous or Torres Strai
 
 AusCitizen: Percentage of population who are Australian Citizens
 
-Born_Asia: Percentage of respondents born in Asia (includes: Bangladesh, Cambodia, China, Hong Kong, Indonesia, Japan, South Korea, Malaysia, Nepal, Pakistan, Phillipines, Singapore, Sri Lanka, Thailand, Taiwan, Vietnam)
+BornAsia: Percentage of respondents born in Asia (includes: Bangladesh, Cambodia, China, Hong Kong, Indonesia, Japan, South Korea, Malaysia, Nepal, Pakistan, Phillipines, Singapore, Sri Lanka, Thailand, Taiwan, Vietnam)
 
-Born_MidEast: Percentage of respondents born in Middle East (includes: Afghanistan, Egypt, Iran, Lebanon, Turkey)
+BornMidEast: Percentage of respondents born in Middle East (includes: Afghanistan, Egypt, Iran, Lebanon, Turkey)
 
-Born_SE_Europe: Percentage of respondents born in South-East Europe (includes: Bosnia and Herzegovina, Croatia, Greece, Macedonia, other South-East Europe)
+BornSEEurope: Percentage of respondents born in South-East Europe (includes: Bosnia and Herzegovina, Croatia, Greece, Macedonia, other South-East Europe)
 
-Born_UK: Percentage of respondents born in the United Kingdom (includes: England, Wales, Scotland, Northern Ireland)
+BornUK: Percentage of respondents born in the United Kingdom (includes: England, Wales, Scotland, Northern Ireland)
 
 BornElsewhere: Percentage of respondents born overseas in regions over Asia, Middle East, South-East Europe and UK  (includes overseas visitors)
 
@@ -120,7 +120,7 @@ SocialServ: Percentage of employed persons (respondents) who work in education a
 
 **Occupation Groups**
 
-AdminJobs: Percentage of employed persons (respondents) who work in management, administration, clerical Duties and sales
+AdminJobs: Percentage of employed persons (respondents) who work in management, administration, clerical duties and sales
 
 Professional: Percentage of employed persons (respondents) who work as a professional
 
@@ -136,13 +136,13 @@ DeFacto: Percentage of people that are in a De Facto relationship (excluding ove
 
 FamilyRatio: Ratio of people in families to the number of total families (ie. average number of people per family)
 
-Couple_NoChild_House: Percentage of households that are made up of an adult couple with no children
+CoupleNoChildHouse: Percentage of households that are made up of an adult couple with no children
 
-Couple_WChild_House: Percentage of households that are made up of an adult couple with children
+CoupleWChildHouse: Percentage of households that are made up of an adult couple with children
 
-OneParent_House: Percentage of households that are made up of a single parent with children
+OneParentHouse: Percentage of households that are made up of a single parent with children
 
-SP_House: Percentage of households that are made up of a single person
+SPHouse: Percentage of households that are made up of a single person
 
 **Dwelling**
 
@@ -157,6 +157,7 @@ PublicHousing: Percentage of dwellings that are owned by the government, and ren
 NotOwned: Percentage of dwellings (respondents only) that are not owned outright or on a mortgage
 
 DiffAddress: Percentage of respondents who live at a different address to what they did 5 years prior
+
 
 
 
@@ -213,35 +214,129 @@ data_mod %>%
 
 
 
-# Model diagnostics {#diagnostics}
 
-## Non-linearities: Residuals against predictors
-```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
-aug_all %>%
-  filter(year == "2016") %>% 
-  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
-  ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x")
+# Principal components {#a:PCloadings}
+
+Loadings in the 2nd, 3rd and 4th principal components for each election.
+
+```{r loadings2, fig.cap = "Loadings of each variable in the second principal of each election year (points), with a line showing the range across years."}
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC2), y=PC2)) + geom_line(col = "orange", size = 2, alpha = 0.7) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
+
 ```
 
-No obvious non-linearities in 2001, 2004, 2007, 2010, 2013, 2016.
-
-## Residuals vs Predictors not in model
-```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No clear ."}
-vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
-
-aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
-  filter(year == "2013") %>% 
-  select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
-  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
-  ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free")
+```{r loadings3, fig.cap = "Loadings of each variable in the third principal of each election year (points), with a line showing the range across years."}
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC3), y=PC3)) + geom_line(col = "purple", size = 2, alpha = 0.4) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
 ```
 
-No obvious patterns in the residuals vs omitted variables.
+```{r loadings4, fig.cap = "Loadings of each variable in the fourth principal of each election year (points), with a line showing the range across years."}
+vis_loadings %>% 
+  ggplot(aes(x=reorder(metric,-PC4), y=PC4)) + geom_line(col = "dark green", size = 2, alpha = 0.5) +
+  geom_point(size = 1, alpha = 1) + 
+  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
+  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
+```
 
 
-# Interpretation of more socio-demographics
+
+
+
+# Why choose all five variable linear models? {#a:fivevar}
+
+For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. *Five* variable models are a compromise between computational burden and capturing sufficient information in the model set. 
+
+It is too burdensome to run linear models for all possible combinations of our predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where how the incremental gain in R-squared from adding a variable reduces as the number of predictors increases. This is done by fitting 20 models for each number of predictors. This means 20 models with 2 variables, 20 models with 3 variables and so on. The process is as follows:
+
+1. Fit all possible 2 variable models.
+
+2. Retain the 10 models with highest R-squared, and another 10 models selected at random.
+
+3. Fit all possible three variable models that nest these 20 two-variable models, by adding one variable. This means for every retained model, there will be $30 - 2 = 28$ models fit.
+
+4. Repeat steps 2 and 3 for the 3 variable models, 4 variable models, and so on, until reaching a model with all 30 variables.
+
+Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. We see that around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
+
+All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and as demonstrated, it can still includes models that have large R-squared.
+
+```{r tradeoff, fig.cap = "R-squared for each model, with the number of variables included on the x-axis."}
+load("../Modelling-Elections/Clean-Data/step_all.rda")
+
+ggplot(aes(x = num_vars, y = r2), data = step_all) + 
+  geom_point(alpha = 0.3) +
+  geom_line(data = step_all %>% filter(max_r2 == 1)) +
+  facet_wrap(~year) +
+  labs(x = "Number of variables", y = "R-squared")
+```
+
+# Resultant Akaike weights {#a:allSAW}
+
+The sum of Akaike weights $s_j$ for each variable $j$ in each of the elections is shown in the table \@ref(fig:allSAW) below.
+
+```{r allSAW, fig.cap = "Sum of Akaike weights for each variable, in each election.", results = 'asis'}
+load("../Modelling-Elections/Clean-Data/var_imp_all.rda")
+
+tab_aw <- var_imp_all %>% 
+  select(varname, year, sum_w) %>% 
+  spread("year", "sum_w") %>% 
+  rename(Variable = varname) %>% 
+  xtable::xtable(caption = "Sum of Akaike weights for each variable, in each election.")
+
+print(tab_aw, comment = FALSE, include.rownames = FALSE)
+```
+
+
+# Omitted variables {#a:omittedvar}
+
+We linearly regress each omitted variable against the superset of predictors, and record the R-squared values in each election.
+
+```{r ovb, fig.cap = "R-squared of each omitted variable when regressed on the superset each year."}
+OVB_fn <- function(Year) {
+  Year <- as.character(Year)
+  
+OVB_lm <- data.frame(varname = names(data_mod), r2 = 0, adj_r2 = 0) %>% 
+  filter(!varname %in% c("Election_Division", "Perc_LNP", "Swing", "year", superset$varname %>% unlist %>% as.character))
+
+for (i in 1:nrow(OVB_lm)) {
+  varname = OVB_lm$varname[i] %>% as.character()
+  data_ovb = data_mod %>% filter(year == Year, !is.na(Perc_LNP)) %>% select(c(superset$varname %>% as.character), varname)
+  formula_ovb = paste0(varname, " ~ .")
+  lmod = lm(formula = formula_ovb,
+            data = data_ovb)
+  OVB_lm$r2[i] = summary(lmod)$r.squared
+  OVB_lm$adj_r2[i] = summary(lmod)$adj.r.squared
+}
+
+OVB_lm <- OVB_lm %>% mutate(year = Year)
+
+return(OVB_lm)
+}
+
+OVB_all <- bind_rows(OVB_fn(2001), OVB_fn(2004), OVB_fn(2007), OVB_fn(2010), OVB_fn(2013), OVB_fn(2016)) %>% 
+  select(-adj_r2)
+
+OVB_all %>% 
+  ggplot(aes(x=r2, y = reorder(varname, r2))) + 
+  geom_point(aes(col = year), size = 2) +
+  labs(x = "R-squared", y = "Omitted Variable") 
+
+# Order by average in each row
+# Discuss those above 75%
+# Others:
+
+# Argue - avoided OVB by construction
+# Then discuss why some variables are omitted
+```
+
+
+# Interpretation of more socio-demographics {#a:extrainsight}
 
 This section contains the scatterplots and model visualizations that were omitted from the Insights section.
 
@@ -458,120 +553,31 @@ TPP_scale <- readPNG("figures/TPP_scale.png")
  grid.raster(TPP_scale)
 ```
 
-# Why choose all five variable linear models?
 
-For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. *Five* variables models are a compromise between computational burden and capturing sufficient information in the model set. 
+# Model diagnostics {#diagnostics}
 
-Because we can't run linear models for all possible combinations of our predictors, we use an iterative procedure to fit 20 models for each number of predictors. This means 20 models with 2 variables, 20 models with 3 variables and so on. The process is as follows:
-
-1. Fit all possible 2 variable models.
-
-2. Retain the 10 models with highest R-squared, and another 10 models selected at random.
-
-3. Fit all possible three variable models to each of these 20 two-variable models, by adding one variable. This means for every retained model, there will be $30 - 2 = 28$ models fit.
-
-4. Repeat steps 2 and 3 for the 3 variable models, 4 variable models, and so on, until reaching a model with all 30 variables.
-
-Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. We see that around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8%). We see that from variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
-
-All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and we still will capture models that have high R-squared.
-
-```{r tradeoff, fig.cap = "Estimates of R-squared against number of variables included in a linear model."}
-load("../Modelling-Elections/Clean-Data/step_all.rda")
-
-ggplot(aes(x = num_vars, y = r2), data = step_all) + 
-  geom_point(alpha = 0.3) +
-  geom_line(data = step_all %>% filter(max_r2 == 1)) +
-  facet_wrap(~year) +
-  labs(x = "Number of variables", y = "R-squared")
+## Non-linearities: Residuals against predictors
+```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
+aug_all %>%
+  filter(year == "2016") %>% 
+  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
+  ggplot(aes(x = value, y = .resid)) +
+  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x")
 ```
 
-As seen in figure \@ref(fig:tradeoff), around 70% of variation in two-party preference can be explained by a five variable model in each election, and incremental gains from increasing the number of predictors is decreasing (see appendix G for a full description of this process).
+No obvious non-linearities in 2001, 2004, 2007, 2010, 2013, 2016.
 
-## Resultant Akaike weights
+## Residuals vs Predictors not in model
+```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No clear ."}
+vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
 
-```{r allSAW, fig.cap = "Sum of Akaike weights for each variable, in each election.", results = 'asis'}
-load("../Modelling-Elections/Clean-Data/var_imp_all.rda")
-
-tab_aw <- var_imp_all %>% 
-  select(varname, year, sum_w) %>% 
-  spread("year", "sum_w") %>% 
-  rename(Variable = varname) %>% 
-  xtable::xtable(caption = "Sum of Akaike weights for each variable, in each election.")
-
-print(tab_aw, comment = FALSE, include.rownames = FALSE)
+aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
+  filter(year == "2013") %>% 
+  select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
+  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
+  ggplot(aes(x = value, y = .resid)) +
+  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free")
 ```
 
-# Omitted variables
-
-We linearly regress each omitted variable against the superset of predictors, and record the R-squared values in each election.
-
-```{r ovb, fig.cap = "R-squared of each omitted variable when regressed on the superset each year."}
-OVB_fn <- function(Year) {
-  Year <- as.character(Year)
-  
-OVB_lm <- data.frame(varname = names(data_mod), r2 = 0, adj_r2 = 0) %>% 
-  filter(!varname %in% c("Election_Division", "Perc_LNP", "Swing", "year", superset$varname %>% unlist %>% as.character))
-
-for (i in 1:nrow(OVB_lm)) {
-  varname = OVB_lm$varname[i] %>% as.character()
-  data_ovb = data_mod %>% filter(year == Year, !is.na(Perc_LNP)) %>% select(c(superset$varname %>% as.character), varname)
-  formula_ovb = paste0(varname, " ~ .")
-  lmod = lm(formula = formula_ovb,
-            data = data_ovb)
-  OVB_lm$r2[i] = summary(lmod)$r.squared
-  OVB_lm$adj_r2[i] = summary(lmod)$adj.r.squared
-}
-
-OVB_lm <- OVB_lm %>% mutate(year = Year)
-
-return(OVB_lm)
-}
-
-OVB_all <- bind_rows(OVB_fn(2001), OVB_fn(2004), OVB_fn(2007), OVB_fn(2010), OVB_fn(2013), OVB_fn(2016)) %>% 
-  select(-adj_r2)
-
-OVB_all %>% 
-  ggplot(aes(x=r2, y = reorder(varname, r2))) + 
-  geom_point(aes(col = year), size = 2) +
-  labs(x = "R-squared", y = "Omitted Variable") 
-
-# Order by average in each row
-# Discuss those above 75%
-# Others:
-
-# Argue - avoided OVB by construction
-# Then discuss why some variables are omitted
-```
-
-# Principal components
-
-Loadings in the 2nd, 3rd and 4th principal components for each election.
-
-```{r loadings2, fig.cap = "Loadings of each variable in the second principal of each election year (points), with a line showing the range across years."}
-vis_loadings %>% 
-  ggplot(aes(x=reorder(metric,-PC2), y=PC2)) + geom_line(col = "orange", size = 2, alpha = 0.7) +
-  geom_point(size = 1, alpha = 1) + 
-  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
-  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
-
-```
-
-```{r loadings3, fig.cap = "Loadings of each variable in the third principal of each election year (points), with a line showing the range across years."}
-vis_loadings %>% 
-  ggplot(aes(x=reorder(metric,-PC3), y=PC3)) + geom_line(col = "purple", size = 2, alpha = 0.4) +
-  geom_point(size = 1, alpha = 1) + 
-  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
-  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
-```
-
-```{r loadings4, fig.cap = "Loadings of each variable in the fourth principal of each election year (points), with a line showing the range across years."}
-vis_loadings %>% 
-  ggplot(aes(x=reorder(metric,-PC4), y=PC4)) + geom_line(col = "dark green", size = 2, alpha = 0.5) +
-  geom_point(size = 1, alpha = 1) + 
-  theme(axis.text.x = element_text(angle = 60, hjust=1, size = 6)) +
-  labs(x = "Socio-demographic variable", y = "Loading in first principal component")
-```
-
-
+No obvious patterns in the residuals vs omitted variables.
 
