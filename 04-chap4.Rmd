@@ -1,6 +1,8 @@
 # Modelling {#ch:Modelling}
 
-Now that socio-demographic variables for each election have been calculated, we consider how to answer the research question; *What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?*
+Now that socio-demographic variables for each election have been calculated, we consider how to best answer the research question; *What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?*
+
+ADD AN OUTLINE OF SECTION HERE
 
 ## Choosing an econometric model
 
@@ -183,7 +185,7 @@ The resultant two-way interactions are:
 
 ## Models
 
-Final models are then fit using the superset of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
+Now that model specification has been determined, the final models are fit using the superset of 10 main effects and the four two-way interactions. The equation, estimated separately for each year, is as follows:
 
 $TPP_i = \beta_0 + \beta_1*\text{MedianAge}_i + \beta_2*\text{BornSEEurope}_i + \beta_3*\text{ExtractiveJobs}_i + \beta_4*\text{AdminJobs}_i + \beta_5*\text{RentLoan}_i + \beta_6*\text{NoReligion}_i + \beta_7*\text{OneParentHouse}_i + \beta_8*\text{BornUK}_i + \beta_9*\text{Education}_i + \beta_{10}*\text{CurrentlyStudying}_i + \beta_{11}*\Big(\text{MedianAge}_i*\text{Education}_i\Big) + \beta_{12}*\Big(\text{ExtractiveJobs}_i*\text{AdminJobs}_i\Big) + \beta_{13}*\Big(\text{OneParentHouse}_i*\text{Education}_i\Big) + \beta_{14}*\text{AdminJobs}_i*\text{Education}_i\Big) + \varepsilon_i,$
 
@@ -199,7 +201,9 @@ On the surface, variables like income and labor force participation might seen r
 
 Of course there may be other relevant variables not captured by the Census that could potentially cause omitted variable bias. However, this is beyond the scope of this project.
 
-\newpage
+## Summary
+
+In this section, we have described why modelling each election as a separate cross-section is the most appropriate econometric model, outlined the steps involved in dimension reduction, chosen two-way interactions and estimated the final election models. This involved grouping similar variables into factors, which reduced the set of socio-demographic predictors from $p=63$ to $p=30$ predictors. From this set, the top five most important variables are identified in each election, which were combined into a superset. Two-way interactions were chosen, and final models are estimated, which include the ten socio-demographic variables in the superset, and four two-way interactions. The estimated socio-demographic effects are illustrated in Section \@ref(ch:Insights) using data visualisations, in order to gain insights from the models.
 
 ```{r allmodels1, results = 'asis'}
 stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, fit_ss_10, fit_ss_13, fit_ss_16, header = FALSE, 
