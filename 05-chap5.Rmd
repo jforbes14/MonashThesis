@@ -1,14 +1,20 @@
 # Insights {#ch:Insights}
 
-As socio-demographic variables are standardized within each election year, and model specification is consistent across elections, we can directly compare the estimated effects of covariates across elections and obtain rich insights into the two-party preferred vote. In the following section, we outline our expectations based on the raw data, and extract findings from the estimated models. 
+As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^5]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are extracted from the final models using data visualization, providing insight into electoral voting behaviour.
 
-In the final model, five of the ten variables are not included in an interaction, so marginal effects can be interpreted directly. To illustrate these effects, we plot partial residuals against the predictor with a prediction line and 95% confidence band, using tools from the `visreg` package. This reveals the direction and significance of the effect, and the slope matches the estimated coefficient. Plots of the estimated coefficients with 95% confidence bands are also included. 
+The variables included in the final model specification, but not in an interaction, are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The effect of two-way interactions are illustrated with raster plots, which depict the effect of the possible two-way variable combinations using colour. Each interaction is analysed separately. First, the variables not included in an interaction (main effects) are analysed, followed by two-way interaction terms.
 
-Raster plots are constructed for each of the two-way interactions, which illustrate the predicted effect of each combination of the interacted (continuous) variables, using colour. White regions represent a combination that does not have an affiliation with either party, whereas strong red regions identify with Labor, and blue support Liberal. The main effect of a variable in an interaction can also be directly interpreted when its counterpart is fixed at zero - which is the mean in this case, as variables have been standardized.
-
-Note that partial residuals for a variable $j$ are given by: ${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$, where -j subscript indicates the removal of the jth column/element [@Faraway]. These are equivalent $y$ adjusted for all variables other than $x_j$. In a partial residual plot, if we can draw a horizontal line all the way through the 95% confidence band, then the effect is not significant.
+In addition to extracting insights from the models, scatterplots of each socio-demographic variable and the two-party preferred vote are included to illustrate the effects one might expect a model to reveal. 
 
 ## Main effects
+
+Of the ten socio-demographic variables included in the final models, five are not involved in an interaction. To interpret the estimated effect of one these variables, partial residuals are plotted against that variable, for each election. Let partial residuals $\bf r_j$ for a variable $j$, which are defined
+
+$${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$$
+
+where $\bf \text -j$ subscript indicates the removal of the jth column/element [@Faraway], let $\bf y$ denote a vector containing the response variable, let $\bf X$ be a matrix of socio-demographic predictors and let $\hat \beta_j$ be a vector of estimated coefficients. Partial residuals are equivalent to $\bf y$ adjusted for all variables other than $\bf x_j$. 
+
+Each partial residual plot includes a prediction line and 95% confidence band, constucted using tools from the `visreg` package. This reveals the direction, size and significance of the effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant.
 
 ### Immigrant population
 
@@ -150,6 +156,8 @@ Education policy is typically a key policy issue in the weeks leading up to a fe
 There is no reason to expect rental prices and mortgage loan repayments to have a distinct relationship with party preference, based on the scatterplots. We find that in the 2010 election, higher median payment amounts had a significant positive relationship with support for the Liberal party, whereas there was no effect in the others.
 
 ## Interactions
+
+There are four two-way interactions in the final models. For each interaction, raster plots are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with mean characteristics, whereas strong red regions identify more with the Labor party, and blue are stronger supporters of the Liberal party.
 
 ### Education and Age
 
@@ -607,3 +615,5 @@ Based on the most recent (2016) election, we construct a hypothetical electorate
 \hline \\[-1.8ex] 
 \end{tabular} 
 \end{table}
+
+[^5]: See Section \@ref(ch:Data)
