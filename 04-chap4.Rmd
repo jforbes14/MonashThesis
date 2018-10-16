@@ -1,8 +1,6 @@
 # Modelling {#ch:Modelling}
 
-Now that socio-demographic variables for each election have been calculated, we consider how to best answer the research question; *What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?*
-
-ADD AN OUTLINE OF SECTION HERE
+Socio-demographic variables for each electorate have now been calculated and matched with the two-party preferred vote, for all six elections. In this section, we consider how to best answer the research question; *What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?* This involves discussing an appropriate econometric model, reducing the dimension of the data by grouping similar variables together, selecting the most important predictors and adding interaction terms. Each of these four steps are described in subsections below, followed by the estimated models. 
 
 ## Choosing an econometric model
 
@@ -117,7 +115,7 @@ pc_all_interpret %>%
 
 As a final note, all variables not contained in a factor proceed on to the next stage as a potentially important variable. The only exceptions are electoral age distribution variables, for example `Age1524`, although `MedianAge` is retained. The resultant data set has $p=30$ socio-demographic predictors.
 
-### Superset creation
+## Selecting a superset
 
 We now move on to describe the second stage of the data reduction process.
 
