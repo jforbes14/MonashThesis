@@ -6,21 +6,21 @@ Given there are two types of variables, those that appear in an interaction and 
 
 ## Main effects {#maineff}
 
-Of the ten socio-demographic variables included in the final models, five are not involved in an interaction. To interpret the estimated effect of one these variables, partial residuals are plotted against that variable, for each election. Before defining the partial residuals, recall that the fitted model is given by ${\bf \hat y} =  {\bf X} \hat\beta$. Let partial residual vector $\bf r_j$ associated with variable $j$, is defined by
+Of the ten socio-demographic variables included in the final models, five are not involved in an interaction. To interpret the estimated effect of one these variables, partial residuals are plotted against that variable, for each election. Before defining the partial residuals, recall that the fitted model is given by ${\bf \hat y} =  {\bf X} \hat\beta$. Let partial residual vector $\bf r_j$ associated with variable $j$, be defined by
 
 $${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$$
 
-where $\bf \text -j$ indicates the removal of the jth column of $\bf X$ and the removal of the jth element of $\hat\beta$ [@Faraway]. Partial residuals are equivalent to $\bf y$ adjusted for all variables other than the jth regressor, $\bf x_j$. 
+where $\bf \text -j$ indicates the removal of the jth column of $\bf X$ and the removal of the jth element of $\hat\beta$ [see for example, @Faraway]. Partial residuals are equivalent to $\bf y$ adjusted for all variables other than the jth regressor, $\bf x_j$. 
 
-Each partial residual plot in the following subsections include a prediction line and 95% confidence band, constructed using tools from the `visreg` package. The plots reveals the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
+Each partial residual plot in the following subsections includes a prediction line and a 95% confidence band, constructed using tools from the `visreg` package. The plots reveal the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
 
 Where partial residual plots are omitted, they can be located in Appendix \@ref(a:extrainsights). Plots of the estimated coefficients with t-based 95% confidence intervals are also included, in addition to the partial residuals plots.
 
-### Immigrant population
+### Migrant population
 
 Two socio-demographic variables in the model relate to migrant populations, `BornSEEurope` and `BornUK`. These represent the proportion of an electorate population born in South-Eastern Europe and the United Kingdom, respectively. Across all six elections, `BornSEEurope` has a significant negative effect on the two-party preferred vote. This means that electorates with more immigrants from South-Eastern Europe were more likely to support Labor. The prediction lines in the partial residual plots (Figure \@ref(fig:SE1)) have significant negative slopes that do not vary much across years. On the other hand, `BornUK` does not have a significant effect on two-party preference in any of the elections. Partial residual plots for `BornUK` can be located in Appendix \@ref(a:extrainsights). 
 
-```{r SE1, out.width='100%', fig.cap="Partial residual plots for effect of populations born in South-Eastern Europe across years."}
+```{r SE1, out.width='100%', fig.cap="Partial residual plots for the effect of population born in South-Eastern Europe, across election years."}
 Born_SE_01 <- visreg(fit_ss_01, "BornSEEurope", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -61,10 +61,10 @@ Born_SE_16 <- visreg(fit_ss_16, "BornSEEurope", gg = T, print.cond = FALSE) +
 grid.arrange(Born_SE_01, Born_SE_04, Born_SE_07, Born_SE_10, Born_SE_13, Born_SE_16, 
              nrow = 2, 
              left = textGrob("Two-party preferred vote (%)", gp = gpar(cex = 0.8), rot = 90), 
-             bottom = textGrob("Population born in South-Eastern Europe (relative)", gp = gpar(cex = 0.8)))
+             bottom = textGrob("Population born in South-Eastern Europe", gp = gpar(cex = 0.8)))
 ```
 
-```{r SE2, out.width='75%', fig.cap="Estimated coefficients for population born in South-Eastern Europe across years with 95\\% confidence bands."}
+```{r SE2, out.width='75%', fig.cap="Estimated coefficients for the population born in South-Eastern Europe, across election years and with 95\\% confidence bands."}
 # Coefficients
 all_coefs %>% filter(term == "BornSEEurope") %>%
   ggplot(aes(x=year, y=estimate)) +
@@ -80,9 +80,9 @@ all_coefs %>% filter(term == "BornSEEurope") %>%
 
 ### No Religion
 
-Recall that in section \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
+Recall that in Section \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
 
-```{r norelig1, fig.cap="Partial residual plots illustrating the estimated effect of the proportion population not identifying with a religion, across years."}
+```{r norelig1, fig.cap="Partial residual plots for the effect of the population proportion not identifying with a religion, across election years."}
 NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -123,10 +123,10 @@ NoReligion_16 <- visreg(fit_ss_16, "NoReligion", gg = T, print.cond = FALSE) +
 grid.arrange(NoReligion_01, NoReligion_04, NoReligion_07, NoReligion_10, NoReligion_13, NoReligion_16, 
              nrow = 2, 
              left = textGrob("Two-party preferred vote (%)", gp = gpar(cex = 0.8), rot = 90), 
-             bottom = textGrob("Population not identifying with a religion (relative)", gp = gpar(cex = 0.8)))
+             bottom = textGrob("Population not identifying with a religion", gp = gpar(cex = 0.8)))
 ```
 
-```{r norelig2, out.width='75%', fig.cap="Estimated coefficients for population not identifying with a religion with 95\\% confidence bands."}
+```{r norelig2, out.width='75%', fig.cap="Estimated coefficients for population proportion not identifying with a religion, across election years and with 95\\% confidence bands."}
 # Coefficients
 all_coefs %>% filter(term == "NoReligion") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -145,7 +145,7 @@ all_coefs %>% filter(term == "NoReligion") %>%
 The proportion of the electorate population currently studying is reflected in the variable `CurrentlyStudying`.
 In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a negative, albeit insignificant effect. From 2007, there is a distinct change, as the slopes in Figure \@ref(fig:studying) are positive for these elections. Only in 2010 is this positive relationship significant (by the horizontal line test).
 
-```{r studying, fig.cap="Partial residual plots illustrating the estimated effect of student populations, across years."}
+```{r studying, fig.cap="Partial residual plots for the effect of student populations, across election years."}
 CurrentlyStudying_01 <- visreg(fit_ss_01, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -186,10 +186,10 @@ CurrentlyStudying_16 <- visreg(fit_ss_16, "CurrentlyStudying", gg = T, print.con
 grid.arrange(CurrentlyStudying_01, CurrentlyStudying_04, CurrentlyStudying_07, CurrentlyStudying_10, CurrentlyStudying_13, CurrentlyStudying_16, 
              nrow = 2, 
              left = textGrob("Two-party preferred vote (%)", gp = gpar(cex = 0.8), rot = 90), 
-             bottom = textGrob("Population currently studying (relative)", gp = gpar(cex = 0.8)))
+             bottom = textGrob("Population currently studying", gp = gpar(cex = 0.8)))
 ```
 
-```{r studying2, out.width='75%', fig.cap="Estimated coefficients for population currently studying, with 95\\% confidence bands."}
+```{r studying2, out.width='75%', fig.cap="Estimated coefficients for population currently studying, across election years and with 95\\% confidence bands."}
 # Coefficients
 all_coefs %>% filter(term == "CurrentlyStudying") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -209,15 +209,15 @@ The factor `RentLoan` combines electoral median rent and loan payments. In the 2
 
 ## Interactions {#interactions}
 
-There are four two-way interactions in the final models. For each interaction, raster plots are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with otherwise mean characteristics, whereas strong red regions identify more with the Labor party, and blue are stronger supporters of the Liberal party. For the purpose of illustration, the scale of each raster plot is set so that an electorate with mean characteristics has a two-party preferred vote of 50%.
+There are four two-way interactions in the final model. For each interaction, raster plots are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with mean characteristics, whereas strong red regions identify with the Labor party, and blue are stronger supporters of the Liberal party. For the purpose of illustration, the scale of each raster plot is set so that an electorate with mean characteristics has a two-party preferred vote of 50%.
 
 ### Education and Age
 
-Even though the population is ageing, and education levels have been improving all across Australia (as seen in section \@ref(ch:Data)), it appears that the young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
+Even though the population is ageing, and education levels have been improving all across Australia (as seen in Section \@ref(ch:Data)), it appears that young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
 
-The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each raster plot in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as the top left corner of each plot in Figure \@ref(fig:educage) is white. This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
+The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each raster plot in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
 
-```{r educage, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and median age."}
+```{r educage, fig.cap="Raster plot of the predicted two-party preferred vote for combinations of education and median age, in each election year."}
 educage_df <- data.frame(
   MedianAge = rep(seq(-4,4, by = 0.01), times = 801),
   Education = rep(seq(-4,4, by = 0.01), each = 801),
@@ -332,9 +332,9 @@ grid.arrange(Educ_Age_01, Educ_Age_04, Educ_Age_07, Educ_Age_10, Educ_Age_13, Ed
 
 ### Education and Single parent households
 
-The proportion of single parent households, `OneParentHouse` is interacted with `Education`, and the predicted two-party preferred vote for each combination is illustrated in Figure \@ref(fig:educOP). Electorates with higher education levels and low proportions of single parent households have been consistently strong supporters of the Liberal party across all election. It also evident that for all education levels, increasing the proportion of single parent households shifts predicted support away from Liberal towards Labor. This effect is stronger for electorates with higher education levels. 
+The proportion of single parent households, `OneParentHouse` is interacted with `Education`, and the predicted two-party preferred vote for each combination is illustrated in Figure \@ref(fig:educOP). Electorates with higher education levels and low proportions of single parent households have been consistently strong supporters of the Liberal party across all elections. It also evident that for all education levels, increasing the proportion of single parent households shifts predicted support away from Liberal towards Labor. This effect is stronger for electorates with higher education levels. 
 
-```{r educOP, fig.cap="Modelled two-party preferred vote (fill) for combinations of education and proportion of single parent households."}
+```{r educOP, fig.cap="Raster plot of the predicted two-party preferred vote for combinations of education levels and the proportion of single parent households, in each election year."}
 educOP_df <- data.frame(
   OneParentHouse = rep(seq(-4,4, by = 0.01), times = 801),
   Education = rep(seq(-4,4, by = 0.01), each = 801),
@@ -441,13 +441,13 @@ grid.arrange(Educ_OP_01, Educ_OP_04, Educ_OP_07, Educ_OP_10, Educ_OP_13, Educ_OP
 ```
 
 
-### Extractive Jobs and administrative jobs
+### Extractive jobs and Administrative jobs
 
-There are two work related variables included in the final model, `ExtractiveJobs` and `AdminJobs`, which reflect the proportion of people working in an industry relating to natural resources (e.g. mining, gas, water, agriculture etc.), and the proportion of jobs in administration, clerical, sales and managerial roles, respectively. These two terms are included in an interaction, and the fitted effect of possible combinations is depicted in Figure \@ref(fig:jobs1).
+There are two work related variables included in the final model, `ExtractiveJobs` and `AdminJobs`. These reflect the proportion of people working in an industry relating to natural resources (e.g. mining, gas, water, agriculture), and the proportion of administrative jobs (e.g. administration, clerical, sales and managerial roles), respectively. These two variables are included in an interaction, and the fitted effect of possible combinations is depicted in Figure \@ref(fig:jobs1).
 
-Increasing percentages of people employed in either administrative jobs, or extractive industries, increased support for the Liberal party in all elections. Furthermore, electorates with few workers both work categories have been supportive of Labor, whereas having many workers in both lead to high Liberal support. There does not appear to be any evidence of time-varying effect between these two variables.
+Higher values of either `ExtractiveJobs` or `AdminJobs` is associated with increased support for the Liberal party in all elections. Furthermore, electorates with few workers in both of these job types have been supportive of Labor, whereas having many such workers is found to have strong stronger Liberal support. There does not appear to be any evidence of a time-varying effect for these two variables.
 
-```{r jobs1, fig.cap="Modelled two-party preferred vote (fill) for combinations of ExtractiveJobs and administrative related jobs."}
+```{r jobs1, fig.cap="Raster plot of the predicted two-party preferred vote for combinations of extractive jobs and administrative jobs, in each election year."}
 jobs_df <- data.frame(
   AdminJobs = rep(seq(-4,4, by = 0.01), times = 801),
   ExtractiveJobs = rep(seq(-4,4, by = 0.01), each = 801),
@@ -547,7 +547,7 @@ grid.arrange(ExtractiveJobs_Office_01, ExtractiveJobs_Office_04, ExtractiveJobs_
              layout_matrix = rbind(c(7, 7, 7),
                                    c(1,2,3),
                                    c(4,5,6)),
-             bottom = textGrob("ExtractiveJobs jobs", gp = gpar(cex = 0.8)), 
+             bottom = textGrob("Extractive jobs", gp = gpar(cex = 0.8)), 
              left = textGrob("Administrative jobs", gp = gpar(cex = 0.8), rot = 90))
 
 ```
@@ -555,17 +555,17 @@ grid.arrange(ExtractiveJobs_Office_01, ExtractiveJobs_Office_04, ExtractiveJobs_
 
 ### Administrative Jobs and Education
 
-In each election, an electorate with the combination of an above-average proportion of administrative jobs and low education levels is predicted to strongly support the Liberal party. Otherwise, an electorate is predicted to support Labor. This is consistent across elections. Raster plots for this interaction can be found in Appendix \@ref(a:moreinsights).
+In each election, an electorate with the combination of an above-average proportion of administrative jobs and low education levels is predicted to strongly support the Liberal party. Otherwise, an electorate is predicted to support Labor. This is consistent across elections. Raster plots for this interaction can be found in Appendix \@ref(a:extrainsights).
 
 ## Summary
 
-The estimated main effects and two-way interactions for each election have been illustrated in this section. We find that electoral socio-demographics have a consistent relationship with two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the effect of being an older electorate with low education levels.
+The estimated main effects and two-way interactions for each election have been illustrated in this section. We find that electoral socio-demographics have consistent relationships with the two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the combined effect of being an older electorate with low education levels.
 
 \newpage
 
-## A typical electorate
+## Typical electorates
 
-Based on the model for the most recent election (2016), hypothetical electorates are constructed in Table 5.1 to represent the properties that would are predicted to have the strongest support for each of the Labor and Liberal parties.
+Based on the model for the most recent election (2016), hypothetical electorates are constructed in Table 5.1 to represent the socio-demographics that are predicted to have the strongest support for each of the Labor and Liberal parties.
 
 \begin{table}[!htbp] \centering 
 \caption{Hypothetical electorates predicted to strongly support each of the Labor and Liberal parties in the 2016 election.}
@@ -578,13 +578,13 @@ Based on the model for the most recent election (2016), hypothetical electorates
 \\[-1.8ex] & \bf{Labor} & \bf{Liberal} \\ 
 \hline \\[-1.8ex] 
 \bf{Age} & Young & Old \\ 
-\bf{Atheists} & Many & Few \\
+\bf{No Religion} & Many & Few \\
 \bf{Immigrants} & Many & Few \\
 \bf{Education} & High & Low \\
 \bf{Student population} & Low & High \\
 \bf{Rent and loan payments} & Low & High \\
-\bf{ExtractiveJobs workers} & Few & Many \\
-\bf{Administrative workers} & Few & Many \\
+\bf{Extractive jobs} & Few & Many \\
+\bf{Administrative jobs} & Few & Many \\
 \bf{Single parent households} & Many & Few \\
 \hline 
 \hline \\[-1.8ex] 

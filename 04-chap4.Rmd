@@ -191,7 +191,7 @@ where $\varepsilon_i \overset{iid}\sim N(0,\sigma^2)$.
 
 Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six election years. 
 
-Model diagnostics are conducted in Appendix \@ref(a:diagnostics), including tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points.
+Model diagnostics are shown in Appendix \@ref(a:diagnostics), including the outcomes of tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points.
 
 ## A note on omitted variables
 
