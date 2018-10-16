@@ -298,5 +298,7 @@ profiles %>%
 
 Illustrating the changes in these three areas demonstrates that socio-demographic characteristics of electorates have evolved over the years.
 
+## Summary
+
 In this section we have detailed the steps of data collection, preliminary transformations and imputation that result in a cross-sectional data set of electoral socio-demographics and two-party preferred vote for each of the six elections. Violin plots summarising the full set of socio-demographic variables can be found in Appendix \@ref(a:summary). Socio-demographic (explanatory) variables are standardized so that the data scales are consistent across years, which allows for comparison of effects across elections. The next steps are to determine what econometric model to pursue, and how to deal with the problem of having a small number of observations each election ($n=150$), relative to the number of available predictors ($p=63$). This is explored in Section \@ref(ch:Modelling).
 
