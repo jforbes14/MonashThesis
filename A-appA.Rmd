@@ -293,6 +293,137 @@ print(tab_aw, comment = FALSE, include.rownames = FALSE)
 ```
 
 
+# Scatterplots of two-party preferred against predictors in the superset {#a:scatterplots}
+
+```{r rawSE, fig.cap="Scatterplot of population born in South-Eastern Europe against two-party preferred vote."}
+## Voting against BornSEEurope
+data_mod %>% ggplot(aes(x = BornSEEurope, y = Perc_LNP)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in South-Eastern Europe", y = "Two-party preferred (%)")
+```
+
+```{r rawUK, fig.cap="Scatterplot of population born in the United Kingdom against two-party preferred vote."}
+## Voting against BornUK
+data_mod %>% ggplot(aes(x = BornUK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in the United Kingdom", y = "Two-party preferred (%)")
+```
+
+
+```{r rawNoRelig, fig.cap="Scatterplot of population not identifying with a religion against two-party preferred vote."}
+## Voting against NoReligion
+data_mod %>% ggplot(aes(x = NoReligion, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of population not identifying with a religion", y = "Two-party preferred (%)")
+```
+
+
+```{r rawrentloan, fig.cap="Scatterplot of rental and loan payments against two-party preferred vote."}
+## Voting against RentLoan
+data_mod %>% ggplot(aes(x = RentLoan, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Rental and loan payments", y = "Two-party preferred (%)")
+```
+
+
+```{r raweduc, fig.cap="Scatterplot of education levels against two-party preferred vote."}
+## Voting against Education
+data_mod %>% ggplot(aes(x = Education, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education level", y = "Two-party preferred (%)")
+```
+
+
+```{r rawage, fig.cap="Scatterplot of median age against two-party preferred vote."}
+## Voting against MedianAge
+data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Median age", y = "Two-party preferred (%)")
+```
+
+
+```{r rawOP, fig.cap = "Scatterplot of single parent households against two-party preferred vote."}
+## Voting against OneParentHouse
+data_mod %>% ggplot(aes(x = OneParentHouse, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of single parent households", y = "Two-party preferred (%)")
+```
+
+
+```{r, fig.cap="Scatterplot of population working in ExtractiveJobs jobs against two-party preferred vote."}
+## Voting against ExtractiveJobs
+data_mod %>% ggplot(aes(x = ExtractiveJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Jobs in ExtractiveJobs industries", y = "Two-party preferred (%)")
+```
+
+
+```{r, fig.cap="Scatterplot of population working in administrative jobs against two-party preferred vote."}
+## Voting against AdminJobs
+data_mod %>% ggplot(aes(x = AdminJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Administrative jobs", y = "Two-party preferred (%)")
+```
+
+
+
+# Diagnostics {#a:diagnostics}
+
+## Residuals
+
+```{r augment}
+aug_all <- bind_rows(augment(fit_ss_01) %>% mutate(year = "2001"), 
+                     augment(fit_ss_04) %>% mutate(year = "2004"), 
+                     augment(fit_ss_07) %>% mutate(year = "2007"), 
+                     augment(fit_ss_10) %>% mutate(year = "2010"), 
+                     augment(fit_ss_13) %>% mutate(year = "2013"), 
+                     augment(fit_ss_16) %>% mutate(year = "2016"))
+```
+
+There are is little evidence of residual non-normality in the histograms and quantile-quantile plots, nor are there signs of residual heteroskedasticity (figures in \@ref(fig:alldiagnostics)). We produced plots of residuals against predictors in the model, which did not reveal any significant non-linear relationships. Doing the same for residuals against predictors excluded from the model, we do not find evidence of significant relationships between omitted socio-demographics and the residuals (see appendix D). All of this validates our assumptions about the distribution of the errors, and our model specification.
+
+```{r alldiagnostics, fig.cap = "Diagnostics plots. Left are the histograms of the residuals in each year. Middle are the quantile-quantile plots. Right are the residuals against fitted values."}
+# Histogram
+d1 <- aug_all %>% 
+  ggplot(aes(x = .resid)) + 
+  geom_histogram() +
+  facet_wrap(~year, nrow = 6) + 
+  labs(x = "Residuals", y = "Count", title = "Residual histograms") +
+  theme(axis.title = element_text(size = 8), title = element_text(size = 8))
+
+# QQ plots
+d2 <- aug_all %>% 
+  ggplot(aes(sample = .resid)) + 
+  geom_qq(alpha = 0.4) + geom_qq_line() + 
+  facet_wrap(~year, nrow = 6) +
+  labs(x = "Theoretical quantiles", y = "Sample residual quantiles", title = "Residual quantile-quantile plots") +
+  theme(axis.title = element_text(size = 8), title = element_text(size = 8))
+
+# Residuals vs fitted
+d3 <- aug_all %>% 
+  ggplot(aes(x=.fitted, y=.resid)) + 
+  geom_point() + geom_smooth() +
+  facet_wrap(~year, nrow = 6) + 
+  labs(x = "Fitted values", y = "Residuals", title = "Residuals against fitted values") +
+  theme(axis.title = element_text(size = 8), title = element_text(size = 8))
+
+grid.arrange(d1,d2,d3, nrow = 1)
+```
+
+## Influence
+
+Across the six elections, only two electorates have moderately large influence - Kalgoorlie (2001, 2004) and Sydney (2007, 2016) - as they have cook's distance greater than 0.2. The Kalgoorlie electorate supports the Liberal party  in these years ($TPP$ of around 55), but has an extremely low incidence of administrative jobs and a high incidence of atheism which are strong factors of Labor support. Sydney is a staunch Labor electorate, with $TPP$ ranging from 30.50% to 35.35% across the six years, but has very large student populations, low incidence of single parent households and high rental/loan prices. All of the observations with moderately large influence have hat values over 0.3, indicating that these also have unusual socio-demographic compositions.
+
+The most influential electorate is Kalgoorlie in 2001, with cook distance of 0.31. As this is not particularly high, it does not appear that there are any outliers that have high influence on the model, and hence no observations should be removed. 
+
+
+## Non-linearities: Residuals against predictors
+```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
+aug_all %>%
+  filter(year == "2016") %>% 
+  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
+  ggplot(aes(x = value, y = .resid)) +
+  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x")
+```
+
+No obvious non-linearities in 2001, 2004, 2007, 2010, 2013, 2016.
+
+## Residuals vs Predictors not in model
+```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No clear ."}
+vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
+
+aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
+  filter(year == "2013") %>% 
+  select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
+  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
+  ggplot(aes(x = value, y = .resid)) +
+  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free")
+```
+
+No obvious patterns in the residuals vs omitted variables.
+
 # Omitted variables {#a:omittedvar}
 
 We linearly regress each omitted variable against the superset of predictors, and record the R-squared values in each election.
@@ -336,7 +467,7 @@ OVB_all %>%
 ```
 
 
-# Interpretation of more socio-demographics {#a:extrainsight}
+# Interpretation of more socio-demographics {#a:extrainsights}
 
 This section contains the scatterplots and model visualizations that were omitted from the Insights section.
 
@@ -346,26 +477,7 @@ Electorates with larger populations from the United Kingdom does not have a sign
 
 We expect greater populations from the UK to have a weakly positive relationship with support for the Liberal party (see figure \@ref(fig:rawUK)). The modelled effect is  Our model confirms this. BornUK is insignificant in every election. 
 
-```{r rawUK, fig.cap="Scatterplot of population born in the United Kingdom against two-party preferred vote."}
-## Voting against BornUK
-data_mod %>% ggplot(aes(x = BornUK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in the United Kingdom", y = "Two-party preferred (%)")
-```
-
-```{r UK1, fig.cap="Estimated coefficients for population born in the United Kingdom across years with 95% confidence bands."}
-# Coefficients
-all_coefs %>% filter(term == "BornUK") %>% 
-  ggplot(aes(x=year, y=estimate)) +
-  geom_point(size = 3) + geom_linerange(aes(ymin = lower95, ymax = upper95), size = 1.5) + 
-  geom_hline(aes(yintercept = 0), alpha = 0.5, size = 2) + 
-  lims(y=c(-6.5,2.5)) +
-  theme_bw() +
-  theme(axis.text.x = element_text(size = 12), axis.text.y = element_text(size = 12), 
-        axis.title = element_text(size = 12)) + 
-  coord_fixed(0.15) + 
-  labs(x = "", y = "Coefficient estimate: BornUK")
-```
-
-```{r UK2, out.width="100%"}
+```{r UK1, out.width="100%"}
 BornUK_01 <- visreg(fit_ss_01, "BornUK", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -404,37 +516,63 @@ grid.arrange(BornUK_01, BornUK_04, BornUK_07, BornUK_10, BornUK_13, BornUK_16,
              bottom = textGrob("Population born in the United Kingdom (relative)", gp = gpar(cex = 0.8)))
 ```
 
-### Student population
 
-```{r rawcurrstud, fig.cap="Scatterplot of population currently studying against two-party preferred vote."}
-## Voting against CurrentlyStudying
-data_mod %>% ggplot(aes(x = CurrentlyStudying, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Student population", y = "Two-party preferred (%)")
-```
-
-```{r currstud1, fig.cap="Estimated coefficients for student population across years with 95% confidence bands."}
+```{r UK2, fig.cap="Estimated coefficients for population born in the United Kingdom across years with 95% confidence bands."}
 # Coefficients
-all_coefs %>% filter(term == "CurrentlyStudying") %>% 
+all_coefs %>% filter(term == "BornUK") %>% 
   ggplot(aes(x=year, y=estimate)) +
   geom_point(size = 3) + geom_linerange(aes(ymin = lower95, ymax = upper95), size = 1.5) + 
   geom_hline(aes(yintercept = 0), alpha = 0.5, size = 2) + 
-  lims(y=c(-8,8)) +
+  lims(y=c(-6.5,2.5)) +
   theme_bw() +
   theme(axis.text.x = element_text(size = 12), axis.text.y = element_text(size = 12), 
         axis.title = element_text(size = 12)) + 
   coord_fixed(0.15) + 
-  labs(x = "", y = "Coefficient estimate: CurrentlyStudying")
+  labs(x = "", y = "Coefficient estimate: BornUK")
 ```
 
 ### Rental and Loan Payments
 
-Rental prices and mortgage loan repayments do not appear to have a signficant relationship with party preference, based on the scatterplots. We find that in the 2010 election, higher median payment amounts had a highly positive relationship with support for the Liberal party. There is no obvious explanation for this, as housing affordability was not on the political agenda in the 2010 election.
+```{r rentloan1, out.width="100%", fig.cap="Partial residual plots for the rental and loan payments factor across years."}
+RentLoan_01 <- visreg(fit_ss_01, "RentLoan", gg = T, print.cond = FALSE) + 
+  labs(x = "", y = "", title = "2001") +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
+  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
+RentLoan_04 <- visreg(fit_ss_04, "RentLoan", gg = T, print.cond = FALSE) + 
+  labs(x = "", y = "", title = "2004") +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
+  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
+RentLoan_07 <- visreg(fit_ss_07, "RentLoan", gg = T, print.cond = FALSE) + 
+  labs(x = "", y = "", title = "2007") +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5))  +
+  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
+RentLoan_10 <- visreg(fit_ss_10, "RentLoan", gg = T, print.cond = FALSE) + 
+  labs(x = "", y = "", title = "2010") +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
+  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
+RentLoan_13 <- visreg(fit_ss_13, "RentLoan", gg = T, print.cond = FALSE) + 
+  labs(x = "", y = "", title = "2013") +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
+  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
+RentLoan_16 <- visreg(fit_ss_16, "RentLoan", gg = T, print.cond = FALSE) + 
+  labs(x = "", y = "", title = "2016") +
+  theme_bw() + 
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
+  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
 
-```{r rawrentloan, fig.cap="Scatterplot of rental and loan payments against two-party preferred vote."}
-## Voting against RentLoan
-data_mod %>% ggplot(aes(x = RentLoan, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Rental and loan payments", y = "Two-party preferred (%)")
+grid.arrange(RentLoan_01, RentLoan_04, RentLoan_07, RentLoan_10, RentLoan_13, RentLoan_16, 
+             nrow = 2, 
+             #top = textGrob("South-Eastern European Influence", gp = gpar(cex = 0.8)), 
+             left = textGrob("Two-party preferred vote (%)", gp = gpar(cex = 0.8), rot = 90), 
+             bottom = textGrob("Rent and Loan prices (factor)", gp = gpar(cex = 0.8)))
 ```
 
-```{r rentloan1, fig.cap="Estimated coefficients for rental and loan payments across years with 95% confidence bands."}
+```{r rentloan2, fig.cap="Estimated coefficients for rental and loan payments across years with 95% confidence bands."}
 
 # Coefficients
 all_coefs %>% filter(term == "RentLoan") %>% 
@@ -478,106 +616,85 @@ Educ_Admin_16 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z16)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2016") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2016"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2016"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z16)))) +  
   guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
+  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Admin_13 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z13)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2013") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2013"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2013"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z13)))) +  
   guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
+  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Admin_10 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z10)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2010") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2010"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2010"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z10)))) +  
   guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
+  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Admin_07 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z07)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2007"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2007"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z07)))) +  
   guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
+  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Admin_04 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z04)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2004") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2004"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2004"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z04)))) +  
   guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
+  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Admin_01 <- admineduc_df %>% ggplot(aes(x=Education, y=AdminJobs)) +
   geom_raster(aes(fill = z01)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2001") +
   theme_bw() + 
-  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2001"), alpha = 0.5) +  
+  theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=AdminJobs), data = data_mod %>% filter(year == "2001"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(admineduc_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(admineduc_df$z01)))) +  
   guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 4.6/6.9)
+  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
-grid.arrange(Educ_Admin_01, Educ_Admin_04, Educ_Admin_07, Educ_Admin_10, Educ_Admin_13, Educ_Admin_16, 
-             nrow = 2, 
+grid.arrange(Educ_Admin_01, Educ_Admin_04, Educ_Admin_07, Educ_Admin_10, Educ_Admin_13, Educ_Admin_16, TPP_scale,
+             nrow = 3, 
+             widths = c(1,1,1),
+             heights = c(0.25, 1, 1),
+             layout_matrix = rbind(c(7, 7, 7),
+                                   c(1,2,3),
+                                   c(4,5,6)), 
              bottom = textGrob("Education level", gp = gpar(cex = 0.8)), 
              left = textGrob("Administrative jobs", gp = gpar(cex = 0.8), rot = 90))
 
 ```
 
-```{r admineducscale, out.width="50%"}
-## TPP scale
-TPP_scale <- readPNG("figures/TPP_scale.png")
- grid.raster(TPP_scale)
-```
 
-
-# Model diagnostics {#diagnostics}
-
-## Non-linearities: Residuals against predictors
-```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
-aug_all %>%
-  filter(year == "2016") %>% 
-  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
-  ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x")
-```
-
-No obvious non-linearities in 2001, 2004, 2007, 2010, 2013, 2016.
-
-## Residuals vs Predictors not in model
-```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No clear ."}
-vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
-
-aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
-  filter(year == "2013") %>% 
-  select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
-  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
-  ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free")
-```
-
-No obvious patterns in the residuals vs omitted variables.
 
