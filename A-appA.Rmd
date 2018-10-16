@@ -2,7 +2,7 @@
 
 # Socio-demographic metrics for each electorate {#a:describeSD}
 
-ID: Commonwealth Electoral Divison (Census division) number
+ID: Commonwealth Electoral Division (Census division) number
 
 Electorate: Name of Commonwealth Electoral Division
 
@@ -50,19 +50,19 @@ MedianLoanPay: Median mortgage loan repayment amount (of mortgage payments)
 
 **Religion**
 
-Christianity: Percentage of respondents that identified as Chrisitan (excluding overseas visitors)
+Christianity: Percentage of respondents that identified as Christian (excluding overseas visitors)
 
 Anglican: Percentage of respondents that identified as Anglican (excluding overseas visitors)
 
 Catholic: Percentage of respondents that identified as Catholic (excluding overseas visitors)
 
-Buddhism: Percentage of respondents that identified as Buddist (excluding overseas visitors)
+Buddhism: Percentage of respondents that identified as Buddhist (excluding overseas visitors)
 
 Islam: Percentage of respondents that identified as Muslim (excluding overseas visitors)
 
 Judaism: Percentage of respondents that identified as Jewish (excluding overseas visitors)
 
-NoReligion: Percentage of respondents that identified as "no religion", "athiest" etc. (excluding overseas visitors)
+NoReligion: Percentage of respondents that identified as "no religion", "atheist" etc. (excluding overseas visitors)
 
 OtherChrist: Percentage of respondents that identified as Christian, but not Anglican or Catholic (excluding overseas visitors)
 
@@ -116,7 +116,7 @@ Distributive: Percentage of employed persons (respondents) who work in wholesale
 
 Finance: Percentage of employed persons (respondents) who work in finance or insurance
 
-SocialServ: Percentage of employed persons (respondents) who work in education and training, healthcare, wocial work, community, arts and recreation
+SocialServ: Percentage of employed persons (respondents) who work in education and training, healthcare, social work, community, arts and recreation
 
 **Occupation Groups**
 

@@ -1,8 +1,8 @@
 # Insights {#ch:Insights}
 
-As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^5]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualisation, providing insights into electoral voting behaviour.
+As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^5]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualization, providing insights into electoral voting behaviour.
 
-Given there are two types of variables, those that appear in an interaction and those that only appear as a main effect, we use two main methods of visualisation. The estimated effect of variables that do not appear in an interaction are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The estimated effect of two-way interactions are illustrated with raster plots, which depict predictions of two-way variable combinations using colour. Each interaction is analysed separately. We first analyse the variables not included in an interaction (main effects) in Section \@ref(maineff), followed by a discussion of two-way interactions in Section \@ref(interactions).
+Given there are two types of variables, those that appear in an interaction and those that only appear as a main effect, we use two main methods of visualization. The estimated effect of variables that do not appear in an interaction are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The estimated effect of two-way interactions are illustrated with raster plots, which depict predictions of two-way variable combinations using colour. Each interaction is analysed separately. We first analyse the variables not included in an interaction (main effects) in Section \@ref(maineff), followed by a discussion of two-way interactions in Section \@ref(interactions).
 
 ## Main effects {#maineff}
 
@@ -12,7 +12,7 @@ $${\bf r_j} = {\bf y - X_{-j}}\hat\beta_{\bf -j}$$
 
 where $\bf \text -j$ indicates the removal of the jth column of $\bf X$ and the removal of the jth element of $\hat\beta$ [@Faraway]. Partial residuals are equivalent to $\bf y$ adjusted for all variables other than the jth regressor, $\bf x_j$. 
 
-Each partial residual plot in the following subsections include a prediction line and 95% confidence band, constucted using tools from the `visreg` package. The plots reveals the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
+Each partial residual plot in the following subsections include a prediction line and 95% confidence band, constructed using tools from the `visreg` package. The plots reveals the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
 
 Where partial residual plots are omitted, they can be located in Appendix \@ref(a:extrainsights). Plots of the estimated coefficients with t-based 95% confidence intervals are also included, in addition to the partial residuals plots.
 
@@ -80,7 +80,7 @@ all_coefs %>% filter(term == "BornSEEurope") %>%
 
 ### No Religion
 
-Recall that in section \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the porportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
+Recall that in section \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
 
 ```{r norelig1, fig.cap="Partial residual plots illustrating the estimated effect of the proportion population not identifying with a religion, across years."}
 NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
@@ -143,7 +143,7 @@ all_coefs %>% filter(term == "NoReligion") %>%
 ### Student population
 
 The proportion of the electorate population currently studying is reflected in the variable `CurrentlyStudying`.
-In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a negative, albeit insignficant effect. From 2007, there is a distint change, as the slopes in Figure \@ref(fig:studying) are positive for these elections. Only in 2010 is this positive relationship significant (by the horizontal line test).
+In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a negative, albeit insignificant effect. From 2007, there is a distinct change, as the slopes in Figure \@ref(fig:studying) are positive for these elections. Only in 2010 is this positive relationship significant (by the horizontal line test).
 
 ```{r studying, fig.cap="Partial residual plots illustrating the estimated effect of student populations, across years."}
 CurrentlyStudying_01 <- visreg(fit_ss_01, "CurrentlyStudying", gg = T, print.cond = FALSE) + 

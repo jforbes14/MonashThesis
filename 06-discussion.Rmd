@@ -37,11 +37,9 @@ $$y = X \beta + (I_n-\rho W)^{-1}\varepsilon$$
 Estimation can be done using the `spdep` package.
 
 ### Spatial imputation using a finer level of disaggregation
+
 Imputing electorate profiles using Census data aggregated at *division* level should provide reasonable estimates, but perhaps using the lowest level of disaggregation (mesh blocks) could improve accuracy. We did do this but with postal areas, of which there are approximately 2,400 in Australia. Using the 2011 Census divisions as a test case, we estimated test error using both postal areas and Census divisions from the 2006 and 2016 Censuses. There was no evidence to suggest that postal areas improved the accuracy of the imputation, compared with the higher aggregation level of Census divisions.
 
-?????
-Although not included here, the same process In an attempt to improve imputation accuracy, we 
-and we also extract the same information in post code boundaries (postal areas). Both Census divisions and postal areas could be used in the imputation algorithm, however we find that Census divisions are sufficient for the purpose of this study. This is elaborated in later parts of this thesis.??
-
 ### Considering polling booths, rather than electorates
+
 Matching polling booths with their Census collection districts, which is done in existing Australian socio-political studies, presents another way to model voter behaviour. Instead of having $n=150$, we would have $n=6000$. However, modelling results at electorate level is still the key point of interest because electorates ultimately determine the results of Australian federal elections. It is unclear whether this higher degree of resolution will provide any greater insight, as our findings confirm and add to the existing literature of studies that use polling booths.
