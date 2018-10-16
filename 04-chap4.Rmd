@@ -165,7 +165,7 @@ After calculating the Akaike weights $w_m$ and determine the ranks of variables 
 
 - Student population [1]
 
-A table of the sums of Akaike weights for all variables, in each year, is given in Appendix \@ref(fig:allSAW).
+A table of the sums of Akaike weights for all variables, in each year, is given in Appendix \@ref(fig:allSAW). Additionally, scatterplots of the response against each variable contained in this superset may be found in Appendix \@ref(a:scatterplots).
 
 ## Adding interactions
 
@@ -191,7 +191,9 @@ $TPP_i = \beta_0 + \beta_1*\text{MedianAge}_i + \beta_2*\text{BornSEEurope}_i + 
 
 where $\varepsilon_i \overset{iid}\sim N(0,\sigma^2)$.
 
-Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six election years.
+Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six election years. 
+
+Model diagnostics are conducted in Appendix \@ref(a:diagnostics), including tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points.
 
 ## A note on omitted variables
 
@@ -203,7 +205,7 @@ Of course there may be other relevant variables not captured by the Census that 
 
 ## Summary
 
-In this section, we have described why modelling each election as a separate cross-section is the most appropriate econometric model, outlined the steps involved in dimension reduction, chosen two-way interactions and estimated the final election models. This involved grouping similar variables into factors, which reduced the set of socio-demographic predictors from $p=63$ to $p=30$ predictors. From this set, the top five most important variables are identified in each election, which were combined into a superset. Two-way interactions were chosen, and final models are estimated, which include the ten socio-demographic variables in the superset, and four two-way interactions. The estimated socio-demographic effects are illustrated in Section \@ref(ch:Insights) using data visualisations, in order to gain insights from the models.
+In this section, we have described why modelling each election as a separate cross-section is the most appropriate approach, outlined the steps involved in dimension reduction, chosen two-way interactions and estimated the final election models. This involved grouping similar variables into factors, which reduced the set of socio-demographic predictors from $p=63$ to $p=30$ predictors. From this set, the top five most important variables are identified in each election, which were combined into a superset. Two-way interactions were chosen, and final model estimated, which include the ten socio-demographic variables in the superset, and four two-way interactions. The estimated socio-demographic effects are illustrated in Section \@ref(ch:Insights) using data visualisation, in order to gain insights from the models.
 
 ```{r allmodels1, results = 'asis'}
 stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, fit_ss_10, fit_ss_13, fit_ss_16, header = FALSE, 
