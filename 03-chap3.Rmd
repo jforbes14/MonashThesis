@@ -39,7 +39,7 @@ Recall that the Census is aggregated to Census divisions, and the two-party pref
 
 Now that the spatial and temporal differences between election and Census data have been explained, we outline the chosen method of spatio-temporal imputation. This procedure estimates electoral socio-demographic variables for an election.
 
-The essence of the algorithm is to estimate the socio-demographic composition of electorates had their boundary been in place at the time of the two nearest Censuses, one before and one after, and then to linearly interpolate between these time points. For example, the 2013 electoral boundaries are estimated at the time of the 2011 and 2016 Censuses. This algorithm predominantly uses tools from the `sp`, `rgeos` and `dplyr` packages, and is formulated from the piecewise approximation method of areal imputation in @Goodchild1993. 
+The essence of the algorithm is to estimate the socio-demographic composition of electorates had their boundary been in place at the time of the two nearest Censuses, one before and one after, and then to linearly interpolate between these time points. For example, the 2013 electoral boundaries are estimated at the time of the 2011 and 2016 Censuses. This algorithm predominantly uses tools from the `sp` [@spdep], `rgeos`, `dplyr` and `ggplot2` [@ggplot2] packages, and is formulated from the piecewise approximation method of areal imputation in @Goodchild1993. 
 
 We now detail the steps of the algorithm, followed by an example.
 

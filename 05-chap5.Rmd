@@ -2,7 +2,7 @@
 
 This chapter summarises the main findings made about the relationships between socio-demographic chracteristics and voting behaviour. A separate model is estimated for each election, consisting of the same ten main effects and four two-way interactions. Additionally, all socio-demographic variables are centered to have mean zero and standardised to have variance one. Chapter \@ref(ch:Data) on the data processing explained this in detail. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. These effects are illustrated using data visualization, providing insights into electoral voting behaviour.
 
-*As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^6]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualization, providing insights into electoral voting behaviour.*
+*As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^7]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualization, providing insights into electoral voting behaviour.*
 
 Plots are used to investigate the variables indicated as being important predictors of voting patterns. There are two main visualisation methods employed; partial residual plots are used for examining main effect contributions, and 2D heatmaps are used to illustrate interaction effects. Partial residual plots show the direction, size and significance of the estimated effect, and 2D heatmaps depict the predicted effect of two-way variable combinations using colour. Each interaction is analysed separately. The variables not included in an interaction (main effects) are analysed in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).
 
@@ -20,9 +20,7 @@ $${\bf r}_j = {\bf y} - {\bf X}_{-j}\boldsymbol{\hat\beta}_{-j}$$
 
 where $-j$ indicates the removal of the $j$th column of $\bf X$ and the removal of the $j$th element of $\boldsymbol{\hat\beta}$ [see for example, @Faraway]. Partial residuals are equivalent to $\bf y$ adjusted for all variables other than the $j$th regressor, $\bf x_j$. 
 
-Partial residual plots are produced using the `visreg` package, and a prediction line with 95% confidence band is overlaid. The plots reveal the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
-
-Partial residual plots are produced using the `visreg` package, and a prediction line with 95% confidence band is overlaid.
+Partial residual plots are produced using the `visreg` package [@visreg], and a prediction line with 95% confidence band is overlaid. The plots reveal the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
 
 Additional visual summaries can be found in Appendix \@ref(a:extrainsights). Plots of the estimated coefficients with t-based 95% confidence intervals are also included, in addition to the partial residuals plots.
 
@@ -291,8 +289,8 @@ Educ_Age_16 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z16)))) +  
-  geom_point(aes(x=Education,y=MedianAge, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 1) +  
-  geom_point(aes(x=Education,y=MedianAge), shape = 1, data = data_mod %>% filter(year == "2016"), alpha = 0.2, size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 0.8) +  
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, data = data_mod %>% filter(year == "2016"), alpha = 0.2, size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials16), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials16)))) +  
@@ -308,8 +306,8 @@ Educ_Age_13 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z13)))) +  
-  geom_point(aes(x=Education,y=MedianAge,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 1) + 
-  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2013"), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 0.8) + 
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2013"), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials13), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials13)))) +  
@@ -325,8 +323,8 @@ Educ_Age_10 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z10)))) +  
-  geom_point(aes(x=Education,y=MedianAge, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 1) +  
-  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 0.8) +  
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials10), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials10)))) +  
@@ -342,8 +340,8 @@ Educ_Age_07 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z07)))) +  
-  geom_point(aes(x=Education,y=MedianAge, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 1) +  
-  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2007"), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 0.8) +  
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2007"), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials07), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials07)))) +  
@@ -359,8 +357,8 @@ Educ_Age_04 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z04)))) +  
-  geom_point(aes(x=Education,y=MedianAge, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 1) + 
-  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2004"), size = 1) + 
+  geom_point(aes(x=Education,y=MedianAge, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 0.8) + 
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2004"), size = 0.8) + 
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials04), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials04)))) +  
@@ -376,8 +374,8 @@ Educ_Age_01 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z01)))) +  
-  geom_point(aes(x=Education,y=MedianAge, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
-  geom_point(aes(x=Education,y=MedianAge), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 0.8) +  
+  geom_point(aes(x=Education,y=MedianAge), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials01), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials01)))) +  
@@ -464,8 +462,8 @@ Educ_OP_16 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z16)))) +  
-  geom_point(aes(x=Education,y=OneParentHouse, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 1) +
-  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2016"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 0.8) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2016"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials16), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials16)))) +  
@@ -482,8 +480,8 @@ Educ_OP_13 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z13)))) +  
-  geom_point(aes(x=Education,y=OneParentHouse,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 1) +
-  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape=1, data = data_mod %>% filter(year == "2013"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 0.8) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape=1, data = data_mod %>% filter(year == "2013"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials13), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials13)))) +  
@@ -499,8 +497,8 @@ Educ_OP_10 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z10)))) +  
-  geom_point(aes(x=Education,y=OneParentHouse, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 1) +
-  geom_point(aes(x=Education,y=OneParentHouse), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 1) +  
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 0.8) +
+  geom_point(aes(x=Education,y=OneParentHouse), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials10), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials10)))) +  
@@ -516,8 +514,8 @@ Educ_OP_07 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z07)))) +  
-  geom_point(aes(x=Education,y=OneParentHouse, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 1) +
-  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2007"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 0.8) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2007"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials07), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials07)))) +  
@@ -533,8 +531,8 @@ Educ_OP_04 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z04)))) +  
-  geom_point(aes(x=Education,y=OneParentHouse, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 1) +
-  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2004"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 0.8) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2004"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials04), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials04)))) +  
@@ -550,8 +548,8 @@ Educ_OP_01 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z01)))) +  
-  geom_point(aes(x=Education,y=OneParentHouse, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +   
-  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 0.8) +   
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials01), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials01)))) +  
@@ -641,8 +639,8 @@ ExtractiveJobs_Office_16 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z16)))) +  
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 1) +
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2016"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 0.8) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2016"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials16), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials16)))) +  
@@ -658,8 +656,8 @@ ExtractiveJobs_Office_13 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z13)))) +  
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 1) +
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2013"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 0.8) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2013"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials13), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials13)))) +  
@@ -675,8 +673,8 @@ ExtractiveJobs_Office_10 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z10)))) +  
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 1) +
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 1) +  
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 0.8) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials10), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials10)))) +  
@@ -692,8 +690,8 @@ ExtractiveJobs_Office_07 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z07)))) +  
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 1) +
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2007"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 0.8) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2007"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials07), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials07)))) +  
@@ -709,8 +707,8 @@ ExtractiveJobs_Office_04 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z04)))) +  
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 1) +
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2004"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 0.8) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2004"), size = 0.8) +
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials04), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials04)))) +  
@@ -726,8 +724,8 @@ ExtractiveJobs_Office_01 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z01)))) +  
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +   
-  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 0.8) +   
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 0.8) +  
   scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(partials01), -8, -4, -2, 
                                                   0, 2, 4, 8, max(partials01)))) +  

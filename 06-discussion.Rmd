@@ -34,7 +34,7 @@ The spatial error model is specified:
 
 $$y = X \beta + (I_n-\rho W)^{-1}\varepsilon$$
 
-Estimation can be done using the `spdep` package.
+Estimation can be done using the `spdep` package [@spdep].
 
 ### Spatial imputation using a finer level of disaggregation
 

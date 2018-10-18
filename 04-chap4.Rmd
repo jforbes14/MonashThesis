@@ -189,7 +189,7 @@ $TPP_i = \beta_0 + \beta_1*\text{MedianAge}_i + \beta_2*\text{BornSEEurope}_i + 
 
 where $\varepsilon_i \overset{iid}\sim N(0,\sigma^2)$.
 
-Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six election years. 
+Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six election years[^6]. 
 
 Model diagnostics are shown in Appendix \@ref(a:diagnostics), including the outcomes of tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points.
 
@@ -216,4 +216,4 @@ stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, fit_ss_10, fit_ss_13, fit_
                      notes.align = "l")
 ```
 
-
+[^6]: Table produced using the `stargazer` package [@stargazer].

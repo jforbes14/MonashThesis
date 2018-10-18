@@ -35,7 +35,7 @@
 \ifsingleside@%
   \LoadClass[a4paper,oneside,openany,draft,11pt]{report}
 \else%
-  \LoadClass[a4paper,11pt,openright,twoside]{report}
+  \LoadClass[a4paper,11pt,openany,twoside]{report}
 \fi%
 
 %% Page dimensions
