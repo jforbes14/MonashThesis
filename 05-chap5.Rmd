@@ -219,7 +219,7 @@ The factor `RentLoan` combines electoral median rent and loan payments. In the 2
 
 ## Interactions {#interactions}
 
-There are four two-way interactions in the final model. For each interaction, 2D heatmaps are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with mean characteristics, whereas strong red regions identify with the Labor party, and blue are stronger supporters of the Liberal party. For the purpose of illustration, the colour scale of each 2D heatmap is set so that an electorate with mean characteristics has a two-party preferred vote of 50%. Points for the electorates are overlaid on the 2D heatmaps, which are coloured by their partial residuals (see Chapter \@ref(maineff) for a description of partial residuals).
+There are four two-way interactions in the final model. For each interaction, 2D heatmaps are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with mean characteristics, whereas strong red regions identify with the Labor party, and blue are stronger supporters of the Liberal party. For the purpose of illustration, the colour scale of each 2D heatmap is set so that an electorate with mean characteristics has a two-party preferred vote of 50%. Points for the electorates are overlaid on the 2D heatmaps, with each point coloured by its partial residual (see Chapter \@ref(maineff) for a description of partial residuals).
 
 ### Education and Age
 
