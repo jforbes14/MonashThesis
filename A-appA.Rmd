@@ -163,7 +163,7 @@ DiffAddress: Percentage of respondents who live at a different address to what t
 
 # Summary of variables in each election {#a:summary}
 
-As seen in section \@ref(ch:Data), violin plots are used to depict the distributions of socio-demographic variables across years. Violin plots depict the distribution as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
+As seen in Chapter \@ref(ch:Data), violin plots are used to depict the distributions of socio-demographic variables across years. Violin plots depict the distribution as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
 
 ```{r violinall1, fig.height=10, fig.cap = "Distribution of each socio-demographic variable across elections (part 1)."}
 # Unscaled violin plots go here

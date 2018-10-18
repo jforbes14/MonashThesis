@@ -1,26 +1,36 @@
 # Insights {#ch:Insights}
 
-As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^6]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualization, providing insights into electoral voting behaviour.
+This chapter summarises the main findings made about the relationships between socio-demographic chracteristics and voting behaviour. A separate model is estimated for each election, consisting of the same ten main effects and four two-way interactions. Additionally, all socio-demographic variables are centered to have mean zero and standardised to have variance one[^6]. Chapter \@ref(ch:Data) on the data processing explained this in detail. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. These effects are illustrated using data visualization, providing insights into electoral voting behaviour.
 
-Given there are two types of variables, those that appear in an interaction and those that only appear as a main effect, we use two main methods of visualization. The estimated effect of variables that do not appear in an interaction are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The estimated effect of two-way interactions are illustrated with raster plots, which depict predictions of two-way variable combinations using colour. Each interaction is analysed separately. We first analyse the variables not included in an interaction (main effects) in Section \@ref(maineff), followed by a discussion of two-way interactions in Section \@ref(interactions).
+*As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^6]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualization, providing insights into electoral voting behaviour.*
+
+Plots are used to investigate the variables indicated as being important predictors of voting patterns. There are two main visualisation methods employed; partial residual plots are used for examining main effect contributions, and 2D heatmaps are used to illustrate interaction effects. Partial residual plots depict the direction, size and significance of the estimated effect, and 2D heatmaps show the predicted effect of two-way variable combinations using colour. Each interaction is analysed separately. The variables not included in an interaction (main effects) are analysed in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).
+
+*Given there are two types of variables, those that appear in an interaction and those that only appear as a main effect, we use two main methods of visualization. The estimated effect of variables that do not appear in an interaction are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The estimated effect of two-way interactions are illustrated with raster plots, which depict predictions of two-way variable combinations using colour. Each interaction is analysed separately. We first analyse the variables not included in an interaction (main effects) in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).*
 
 ## Main effects {#maineff}
 
-Of the ten socio-demographic variables included in the final models, five are not involved in an interaction. To interpret the estimated effect of one these variables, partial residuals are plotted against that variable, for each election. Before defining the partial residuals, recall that the fitted model is given by ${\bf \hat y} =  {\bf X} \boldsymbol{\hat\beta}$. Let partial residual vector ${\bf r}_j$ associated with variable $j$, be defined by
+The five socio-demographic variables contributing as main effects only are `BornSEEurope`, `BornUK`, `NoReligion`, `RentLoan` and `CurrentlyStudying`. Partial residual plots are used to examine their contribution over the elections. A partial residual plot is constructed by plotting partial residuals from the model without that variable, against the variable. 
+
+Recall that the fitted model is given by ${\bf \hat y} =  {\bf X} \boldsymbol{\hat\beta}$. Let partial residual vector ${\bf r}_j$ associated with variable $j$, be defined by
+
+*Of the ten socio-demographic variables included in the final models, five are not involved in an interaction. To interpret the estimated effect of one these variables, partial residuals are plotted against that variable, for each election. Before defining the partial residuals, recall that the fitted model is given by ${\bf \hat y} =  {\bf X} \boldsymbol{\hat\beta}$. Let partial residual vector ${\bf r}_j$ associated with variable $j$, be defined by*
 
 $${\bf r}_j = {\bf y} - {\bf X}_{-j}\boldsymbol{\hat\beta}_{-j}$$
 
 where $-j$ indicates the removal of the $j$th column of $\bf X$ and the removal of the $j$th element of $\boldsymbol{\hat\beta}$ [see for example, @Faraway]. Partial residuals are equivalent to $\bf y$ adjusted for all variables other than the $j$th regressor, $\bf x_j$. 
 
-Each partial residual plot in the following subsections includes a prediction line and a 95% confidence band, constructed using tools from the `visreg` package. The plots reveal the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
+Partial residual plots are produced using the `visreg` package, and a prediction line with 95% confidence band is overlaid. The plots reveal the direction, size and significance of the estimated effect, as the slope of the prediction line matches the estimated coefficient. If a horizontal line can be drawn all the way through the 95% confidence band, then the effect is deemed to be statistically insignificant. 
 
-Where partial residual plots are omitted, they can be located in Appendix \@ref(a:extrainsights). Plots of the estimated coefficients with t-based 95% confidence intervals are also included, in addition to the partial residuals plots.
+Partial residual plots are produced using the `visreg` package, and a prediction line with 95% confidence band is overlaid.
+
+Additional visual summaries can be found in Appendix \@ref(a:extrainsights). Plots of the estimated coefficients with t-based 95% confidence intervals are also included, in addition to the partial residuals plots.
 
 ### Migrant population
 
-Two socio-demographic variables in the model relate to migrant populations, `BornSEEurope` and `BornUK`. These represent the proportion of an electorate population born in South-Eastern Europe and the United Kingdom, respectively. Across all six elections, `BornSEEurope` has a significant negative effect on the two-party preferred vote. This means that electorates with more immigrants from South-Eastern Europe were more likely to support Labor. The prediction lines in the partial residual plots (Figure \@ref(fig:SE1)) have significant negative slopes that do not vary much across years. On the other hand, `BornUK` does not have a significant effect on two-party preference in any of the elections. Partial residual plots for `BornUK` can be located in Appendix \@ref(a:extrainsights). 
+Two socio-demographic variables in the model relate to migrant populations, `BornSEEurope` and `BornUK`. These represent the proportion of an electorate population born in South-Eastern Europe and the United Kingdom, respectively. Across all six elections, the prediction line for `BornSEEurope` has a significant negative slope (Figure \@ref(fig:SE1)), indicating that electorates with more immigrants from South-Eastern Europe were more likely to support Labor. These slopes do not vary much across years. On the other hand, `BornUK` does not have a significant effect on two-party preference in any of the elections. Partial residual plots for `BornUK` can be located in Appendix \@ref(a:extrainsights). 
 
-```{r SE1, out.width='100%', fig.cap="Partial residual plots for the effect of population born in South-Eastern Europe, across election years. A linear regression line is overlayed to illustrate the decreasing relationship."}
+```{r SE1, out.width='100%', fig.cap="Partial residual plots for the effect of population born in South-Eastern Europe, across election years. A linear regression line is overlaid to illustrate the decreasing relationship."}
 Born_SE_01 <- visreg(fit_ss_01, "BornSEEurope", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -64,7 +74,7 @@ grid.arrange(Born_SE_01, Born_SE_04, Born_SE_07, Born_SE_10, Born_SE_13, Born_SE
              bottom = textGrob("Population born in South-Eastern Europe", gp = gpar(cex = 0.8)))
 ```
 
-```{r SE2, out.width='75%', fig.cap="Estimated coefficients for the population born in South-Eastern Europe, across election years and with 95\\% confidence bands. A significant negative effect is found in each election."}
+```{r SE2, out.width='75%', fig.cap="Estimated coefficients for the population born in South-Eastern Europe, across election years and with 95\\% confidence bands. Electorates with higher proportions of South-Eastern European populations were associated with higher Labor party preference."}
 # Coefficients
 all_coefs %>% filter(term == "BornSEEurope") %>%
   ggplot(aes(x=year, y=estimate)) +
@@ -80,9 +90,9 @@ all_coefs %>% filter(term == "BornSEEurope") %>%
 
 ### No Religion
 
-Recall that in Section \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
+Recall that in Chapter \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
 
-```{r norelig1, fig.cap="Partial residual plots for the effect of the population proportion not identifying with a religion, across election years. The overlayed regression lines show that a significant negative effect emerges in 2010."}
+```{r norelig1, fig.cap="Partial residual plots for the effect of the population proportion not identifying with a religion, across election years. The overlaid regression lines show that a significant negative effect emerges in 2010."}
 NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -126,7 +136,7 @@ grid.arrange(NoReligion_01, NoReligion_04, NoReligion_07, NoReligion_10, NoRelig
              bottom = textGrob("Population not identifying with a religion", gp = gpar(cex = 0.8)))
 ```
 
-```{r norelig2, out.width='75%', fig.cap="Estimated coefficients for population proportion not identifying with a religion, across election years and with 95\\% confidence bands. From 2010 onwards, the effect is significant."}
+```{r norelig2, out.width='75%', fig.cap="Estimated coefficients for population proportion not identifying with a religion, across election years and with 95\\% confidence bands. From 2010 onwards, Labor was assoicated with electorates with a higher proportion of people not identifying with a religion."}
 # Coefficients
 all_coefs %>% filter(term == "NoReligion") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -143,9 +153,9 @@ all_coefs %>% filter(term == "NoReligion") %>%
 ### Student population
 
 The proportion of the electorate population currently studying is reflected in the variable `CurrentlyStudying`.
-In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a negative, albeit insignificant effect. From 2007, there is a distinct change, as the slopes in Figure \@ref(fig:studying) are positive for these elections. Only in 2010 is this positive relationship significant (by the horizontal line test).
+In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a weak (insignificant) effect in the direction of the Labor party. From 2007, there is a distinct change, as the positive slopes in Figure \@ref(fig:studying) indicate that this effect has shifted towards the Liberal party. Only in 2010 is this relationship significant (by the horizontal line test).
 
-```{r studying, fig.cap="Partial residual plots for the effect of student populations, across election years. A positive effect is estimated from 2007, but is only significant in 2010."}
+```{r studying, fig.cap="Partial residual plots for the effect of student populations, across election years. A Liberal (positive) effect is estimated from 2007, but is only significant in 2010."}
 CurrentlyStudying_01 <- visreg(fit_ss_01, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -189,7 +199,7 @@ grid.arrange(CurrentlyStudying_01, CurrentlyStudying_04, CurrentlyStudying_07, C
              bottom = textGrob("Population currently studying", gp = gpar(cex = 0.8)))
 ```
 
-```{r studying2, out.width='75%', fig.cap="Estimated coefficients for population currently studying, across election years and with 95\\% confidence bands. The estimated effect shifts from negative to positive, but is only significant in 2010."}
+```{r studying2, out.width='75%', fig.cap="Estimated coefficients for population currently studying, across election years and with 95\\% confidence bands. The estimated effect shifts from Labor (negative) to Liberal (positive), but is only significant in 2010."}
 # Coefficients
 all_coefs %>% filter(term == "CurrentlyStudying") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -213,7 +223,7 @@ There are four two-way interactions in the final model. For each interaction, ra
 
 ### Education and Age
 
-Even though the population is ageing, and education levels have been improving all across Australia (as seen in Section \@ref(ch:Data)), it appears that young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
+Even though the population is ageing, and education levels have been improving all across Australia (as seen in Chapter \@ref(ch:Data)), it appears that young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
 
 The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each raster plot in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
 
@@ -559,7 +569,7 @@ In each election, an electorate with the combination of an above-average proport
 
 ## Summary
 
-The estimated main effects and two-way interactions for each election have been illustrated in this section. We find that electoral socio-demographics have consistent relationships with the two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the combined effect of being an older electorate with low education levels.
+The estimated main effects and two-way interactions for each election have been illustrated in this chapter. We find that electoral socio-demographics have consistent relationships with the two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the combined effect of being an older electorate with low education levels.
 
 \newpage
 
@@ -592,4 +602,4 @@ Based on the model for the most recent election (2016), hypothetical electorates
 \end{table}
 
 
-[^6]: See Section \@ref(ch:Data)
+[^6]: See Chapter \@ref(ch:Data)
