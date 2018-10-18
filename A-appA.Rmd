@@ -295,7 +295,7 @@ tab_aw <- var_imp_all %>%
   rename(Variable = varname) %>% 
   xtable::xtable(caption = "Sum of Akaike weights for each variable, in each election.")
 
-print(tab_aw, comment = FALSE, include.rownames = FALSE, size = "\\scriptsize")
+print(tab_aw, comment = FALSE, include.rownames = FALSE, size = "\\footnotesize")
 ```
 
 
@@ -408,32 +408,21 @@ aug_all %>%
 
 ## Residuals vs predictors in the model {#a:patternsin}
 
-Testing for significant non-linearities in the relationships between the predictors in the model and the residuals, by fitting a loess smooth with a 95% confidence band. If zero is contained in the confidence band for all values of the predictor, then there are no significant non-linearities. No obvious non-linearities are found in any election.
+Testing for significant non-linearities in the relationships between the predictors in the model and the residuals, by fitting a loess smooth with a 95% confidence band. If zero is contained in the confidence band for all values of the predictor, then there are no significant non-linearities. No obvious non-linearities are found in any election. Plots for 2016 are shown in Figure \@ref(fig:resvpred).
 
-```{r, fig.cap = "Residuals vs. predictors in the model. No obvious signs of non-linearity."}
+```{r resvpred, out.width='100%', fig.cap = "Residuals vs. predictors in the 2016 election model. No obvious signs of non-linearity."}
 aug_all %>%
   filter(year == "2016") %>% 
   gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
   ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x", nrow = 4) +
-  labs(x = "Socio-demographic variable", y = "Residuals")
+  geom_point() + geom_smooth() + facet_wrap(~variable, nrow = 4) + coord_fixed(.1) +
+  labs(x = "Socio-demographic variable", y = "Residuals") +
+  theme(plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))
 ```
 
 ## Residuals vs predictors not in model {#a:patternsout}
 
-Scatterplots of the residuals against socio-demographic predictors that are not included in the superset are shown below. A loess smooth is fit and overlaid in each scatterplot. No significant relationships are found between the residuals and predictors not in the superset.
-
-```{r, fig.cap = "Residuals vs. predictors in the model. No significant relationships are found between the residuals and a predictor not in the superset."}
-vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
-
-aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
-  filter(year == "2013") %>% 
-  select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
-  gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
-  ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free", nrow = 5) +
-  labs(x = "Socio-demographic variable", y = "Residuals")
-```
+Scatterplots of the residuals against socio-demographic predictors were produced with a loess smooth fit and overlaid in each plot. No significant relationships were found between the residuals and predictors not in the superset, in any of the election. 
 
 ## Influence {#a:influence}
 
