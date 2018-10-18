@@ -10,4 +10,4 @@ Another method to differentiate between party preference is to use principal com
 
 Other election related studies that aim to understand party preference predominantly model individual voter behaviour using survey data (see @Schram92, @Wilson2011 and @Gibson2011).
 
-Seemingly absent from previous Australian studies is the use of a regression framework to examine these socio-political relationships over time. It also appears that no study has attempted any type of econometric analysis of socio-demographics in conjunction with voter behaviour in Australia since 2007. In this thesis, all six elections thus far held in the 21st century are examined. 
+Seemingly absent from previous Australian studies is the use of a regression framework to examine these socio-political relationships over time. It also appears that no study has attempted any type of statistical analysis of socio-demographics in conjunction with voter behaviour in Australia since 2007. In this thesis, all six elections thus far held in the 21st century are examined. 
