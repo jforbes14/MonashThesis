@@ -410,14 +410,14 @@ aug_all %>%
 
 Testing for significant non-linearities in the relationships between the predictors in the model and the residuals, by fitting a loess smooth with a 95% confidence band. If zero is contained in the confidence band for all values of the predictor, then there are no significant non-linearities. No obvious non-linearities are found in any election. Plots for 2016 are shown in Figure \@ref(fig:resvpred).
 
-```{r resvpred, out.width='100%', fig.cap = "Residuals vs. predictors in the 2016 election model. No obvious signs of non-linearity."}
+```{r resvpred, fig.cap = "Residuals vs. predictors in the 2016 election model. No obvious signs of non-linearity."}
 aug_all %>%
   filter(year == "2016") %>% 
   gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
   ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth() + facet_wrap(~variable, nrow = 4) + coord_fixed(.1) +
+  geom_point(size = 0.5) + geom_smooth() + facet_wrap(~variable, nrow = 3) + coord_fixed(.1) +
   labs(x = "Socio-demographic variable", y = "Residuals") +
-  theme(plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))
+  theme(plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"), axis.text = element_text(size = 10))
 ```
 
 ## Residuals vs predictors not in model {#a:patternsout}
