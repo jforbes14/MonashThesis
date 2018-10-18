@@ -571,35 +571,4 @@ In each election, an electorate with the combination of an above-average proport
 
 The estimated main effects and two-way interactions for each election have been illustrated in this chapter. We find that electoral socio-demographics have consistent relationships with the two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the combined effect of being an older electorate with low education levels.
 
-\newpage
-
-## Typical electorates
-
-Based on the model for the most recent election (2016), hypothetical electorates are constructed in Table 5.1 to represent the socio-demographics that are predicted to have the strongest support for each of the Labor and Liberal parties.
-
-\begin{table}[!htbp] \centering 
-\caption{Characteristics of a hypothetical electorate that is predicted to strongly support each party in the 2016 election.}
-\normalsize
-\begin{tabular}{@{\extracolsep{5pt}}lll} 
-\\[-1.8ex]\hline 
-\hline \\[-1.8ex] 
- & \multicolumn{2}{c}{\textit{Typical electoral characteristics in 2016:}} \\ 
-\cline{2-3}
-\\[-1.8ex] & \bf{Labor} & \bf{Liberal} \\ 
-\hline \\[-1.8ex] 
-\bf{Age} & Young & Old \\ 
-\bf{No Religion} & Many & Few \\
-\bf{Immigrants} & Many & Few \\
-\bf{Education} & High & Low \\
-\bf{Student population} & Low & High \\
-\bf{Rent and loan payments} & Low & High \\
-\bf{Extractive jobs} & Few & Many \\
-\bf{Administrative jobs} & Few & Many \\
-\bf{Single parent households} & Many & Few \\
-\hline 
-\hline \\[-1.8ex] 
-\end{tabular} 
-\end{table}
-
-
 [^6]: See Chapter \@ref(ch:Data)
