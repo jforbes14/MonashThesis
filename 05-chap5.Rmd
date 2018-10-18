@@ -1,12 +1,12 @@
 # Insights {#ch:Insights}
 
-This chapter summarises the main findings made about the relationships between socio-demographic chracteristics and voting behaviour. A separate model is estimated for each election, consisting of the same ten main effects and four two-way interactions. Additionally, all socio-demographic variables are centered to have mean zero and standardised to have variance one[^6]. Chapter \@ref(ch:Data) on the data processing explained this in detail. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. These effects are illustrated using data visualization, providing insights into electoral voting behaviour.
+This chapter summarises the main findings made about the relationships between socio-demographic chracteristics and voting behaviour. A separate model is estimated for each election, consisting of the same ten main effects and four two-way interactions. Additionally, all socio-demographic variables are centered to have mean zero and standardised to have variance one. Chapter \@ref(ch:Data) on the data processing explained this in detail. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. These effects are illustrated using data visualization, providing insights into electoral voting behaviour.
 
 *As determined in the previous section, final models for the six elections are estimated separately, consisting of the same ten main effects and four two-way interactions. Furthermore, recall that all socio-demographic variables are centered to have mean zero and standardized to have variance one, within each election year[^6]. By specifying models in this way, estimated socio-demographic effects can be directly compared across elections. In this section, these effects are illustrated using data visualization, providing insights into electoral voting behaviour.*
 
-Plots are used to investigate the variables indicated as being important predictors of voting patterns. There are two main visualisation methods employed; partial residual plots are used for examining main effect contributions, and 2D heatmaps are used to illustrate interaction effects. Partial residual plots depict the direction, size and significance of the estimated effect, and 2D heatmaps show the predicted effect of two-way variable combinations using colour. Each interaction is analysed separately. The variables not included in an interaction (main effects) are analysed in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).
+Plots are used to investigate the variables indicated as being important predictors of voting patterns. There are two main visualisation methods employed; partial residual plots are used for examining main effect contributions, and 2D heatmaps are used to illustrate interaction effects. Partial residual plots show the direction, size and significance of the estimated effect, and 2D heatmaps depict the predicted effect of two-way variable combinations using colour. Each interaction is analysed separately. The variables not included in an interaction (main effects) are analysed in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).
 
-*Given there are two types of variables, those that appear in an interaction and those that only appear as a main effect, we use two main methods of visualization. The estimated effect of variables that do not appear in an interaction are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The estimated effect of two-way interactions are illustrated with raster plots, which depict predictions of two-way variable combinations using colour. Each interaction is analysed separately. We first analyse the variables not included in an interaction (main effects) in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).*
+*Given there are two types of variables, those that appear in an interaction and those that only appear as a main effect, we use two main methods of visualization. The estimated effect of variables that do not appear in an interaction are interpreted using partial residual plots. These plots depict the direction, size and significance of the estimated effect in each election. The estimated effect of two-way interactions are illustrated with 2D heatmaps, which depict predictions of two-way variable combinations using colour. Each interaction is analysed separately. We first analyse the variables not included in an interaction (main effects) in Chapter \@ref(maineff), followed by a discussion of two-way interactions in Chapter \@ref(interactions).*
 
 ## Main effects {#maineff}
 
@@ -219,15 +219,49 @@ The factor `RentLoan` combines electoral median rent and loan payments. In the 2
 
 ## Interactions {#interactions}
 
-There are four two-way interactions in the final model. For each interaction, raster plots are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with mean characteristics, whereas strong red regions identify with the Labor party, and blue are stronger supporters of the Liberal party. For the purpose of illustration, the scale of each raster plot is set so that an electorate with mean characteristics has a two-party preferred vote of 50%.
+There are four two-way interactions in the final model. For each interaction, 2D heatmaps are used to illustrate the predicted effect of the interacted variables, using colour. White regions represent a combination of the two variables that are predicted to have the same two-party preference as an electorate with mean characteristics, whereas strong red regions identify with the Labor party, and blue are stronger supporters of the Liberal party. For the purpose of illustration, the colour scale of each 2D heatmap is set so that an electorate with mean characteristics has a two-party preferred vote of 50%. Points for the electorates are overlaid on the 2D heatmaps, which are coloured by their partial residuals (see Chapter \@ref(maineff) for a description of partial residuals).
 
 ### Education and Age
 
 Even though the population is ageing, and education levels have been improving all across Australia (as seen in Chapter \@ref(ch:Data)), it appears that young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
 
-The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each raster plot in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
+The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each 2D heatmap in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
 
-```{r educage, fig.cap="Raster plot of combinations of education and median age, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with high education levels and low median age consistently support Labor (bottom-right). Older electorates with low education levels shift to support Liberal from 2007 (top-left)."}
+```{r educage, fig.cap="2D heatmap of combinations of education and median age, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with high education levels and low median age consistently support Labor (bottom-right). Older electorates with low education levels shift to support Liberal from 2007 (top-left)."}
+
+# Partial residuals for each year
+dat16 <- data_mod %>% 
+  filter(year == "2016") %>% 
+  mutate(Education = 0, MedianAge = 0)
+partials16 <- dat16$Perc_LNP - predict(fit_ss_16, dat16)
+
+dat13 <- data_mod %>% 
+  filter(year == "2013") %>% 
+  mutate(Education = 0, MedianAge = 0)
+partials13 <- dat13$Perc_LNP - predict(fit_ss_13, dat13)
+
+dat10 <- data_mod %>% 
+  filter(year == "2010") %>% 
+  mutate(Education = 0, MedianAge = 0)
+partials10 <- dat10$Perc_LNP - predict(fit_ss_10, dat10)
+
+dat07 <- data_mod %>% 
+  filter(year == "2007") %>% 
+  mutate(Education = 0, MedianAge = 0)
+partials07 <- dat07$Perc_LNP - predict(fit_ss_07, dat07)
+
+dat04 <- data_mod %>% 
+  filter(year == "2004") %>% 
+  mutate(Education = 0, MedianAge = 0)
+partials04 <- dat04$Perc_LNP - predict(fit_ss_04, dat04)
+
+dat01 <- data_mod %>% 
+  filter(year == "2001", !is.na(Perc_LNP)) %>% 
+  mutate(Education = 0, MedianAge = 0)
+partials01 <- dat01$Perc_LNP - predict(fit_ss_01, dat01)
+
+
+# 2D Heatmap
 educage_df <- data.frame(
   MedianAge = rep(seq(-4,4, by = 0.01), times = 801),
   Education = rep(seq(-4,4, by = 0.01), each = 801),
@@ -254,11 +288,15 @@ Educ_Age_16 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
-  geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2016"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z16)))) +  
-  guides(fill = FALSE) +
+  geom_point(aes(x=Education,y=MedianAge, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, data = data_mod %>% filter(year == "2016"), alpha = 0.2, size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials16), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials16)))) +  
+  guides(fill = FALSE, col = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Age_13 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
@@ -267,11 +305,15 @@ Educ_Age_13 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
-  geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2013"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z13)))) +  
-  guides(fill = FALSE) +
+  geom_point(aes(x=Education,y=MedianAge,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 1) + 
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2013"), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials13), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials13)))) +  
+  guides(fill = FALSE, col = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Age_10 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
@@ -280,11 +322,15 @@ Educ_Age_10 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
-  geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2010"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z10)))) +  
-  guides(fill = FALSE) +
+  geom_point(aes(x=Education,y=MedianAge, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials10), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials10)))) +  
+  guides(fill = FALSE, col = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Age_07 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
@@ -292,12 +338,16 @@ Educ_Age_07 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
-  geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2007"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z07)))) +  
-  guides(fill = FALSE) +
+  geom_point(aes(x=Education,y=MedianAge, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2007"), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials07), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials07)))) +  
+  guides(fill = FALSE, col = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Age_04 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
@@ -306,11 +356,15 @@ Educ_Age_04 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
-  geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2004"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z04)))) +  
-  guides(fill = FALSE) +
+  geom_point(aes(x=Education,y=MedianAge, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 1) + 
+  geom_point(aes(x=Education,y=MedianAge), shape = 1, alpha = 0.2, data = data_mod %>% filter(year == "2004"), size = 1) + 
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials04), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials04)))) +  
+  guides(fill = FALSE, col = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_Age_01 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
@@ -319,11 +373,15 @@ Educ_Age_01 <- educage_df %>% ggplot(aes(x=Education, y=MedianAge)) +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
-  geom_point(aes(x=Education,y=MedianAge), data = data_mod %>% filter(year == "2001"), alpha = 0.5, size = 0.5) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educage_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educage_df$z01)))) +  
-  guides(fill = FALSE) +
+  geom_point(aes(x=Education,y=MedianAge, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  geom_point(aes(x=Education,y=MedianAge), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials01), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials01)))) +  
+  guides(fill = FALSE, col = FALSE) +
   lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 # Plot
@@ -344,7 +402,39 @@ grid.arrange(Educ_Age_01, Educ_Age_04, Educ_Age_07, Educ_Age_10, Educ_Age_13, Ed
 
 The proportion of single parent households, `OneParentHouse` is interacted with `Education`, and the predicted two-party preferred vote for each combination is illustrated in Figure \@ref(fig:educOP). Electorates with higher education levels and low proportions of single parent households have been consistently strong supporters of the Liberal party across all elections. It also evident that for all education levels, increasing the proportion of single parent households shifts predicted support away from Liberal towards Labor. This effect is stronger for electorates with higher education levels. 
 
-```{r educOP, fig.cap="Raster plot of combinations of education levels and the proportion of single parent households, in each election year. Colour indicates the predicted two-party preferred vote. For all education levels, a higher proportion of single parent households shifts predicted support to Labor."}
+```{r educOP, fig.cap="2D heatmap of combinations of education levels and the proportion of single parent households, in each election year. Colour indicates the predicted two-party preferred vote. For all education levels, a higher proportion of single parent households shifts predicted support to Labor."}
+
+# Partial residuals for each year
+dat16 <- data_mod %>% 
+  filter(year == "2016") %>% 
+  mutate(Education = 0, OneParentHouse = 0)
+partials16 <- dat16$Perc_LNP - predict(fit_ss_16, dat16)
+
+dat13 <- data_mod %>% 
+  filter(year == "2013") %>% 
+  mutate(Education = 0, OneParentHouse = 0)
+partials13 <- dat13$Perc_LNP - predict(fit_ss_13, dat13)
+
+dat10 <- data_mod %>% 
+  filter(year == "2010") %>% 
+  mutate(Education = 0, OneParentHouse = 0)
+partials10 <- dat10$Perc_LNP - predict(fit_ss_10, dat10)
+
+dat07 <- data_mod %>% 
+  filter(year == "2007") %>% 
+  mutate(Education = 0, OneParentHouse = 0)
+partials07 <- dat07$Perc_LNP - predict(fit_ss_07, dat07)
+
+dat04 <- data_mod %>% 
+  filter(year == "2004") %>% 
+  mutate(Education = 0, OneParentHouse = 0)
+partials04 <- dat04$Perc_LNP - predict(fit_ss_04, dat04)
+
+dat01 <- data_mod %>% 
+  filter(year == "2001", !is.na(Perc_LNP)) %>% 
+  mutate(Education = 0, OneParentHouse = 0)
+partials01 <- dat01$Perc_LNP - predict(fit_ss_01, dat01)
+
 educOP_df <- data.frame(
   OneParentHouse = rep(seq(-4,4, by = 0.01), times = 801),
   Education = rep(seq(-4,4, by = 0.01), each = 801),
@@ -370,72 +460,104 @@ Educ_OP_16 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2016"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z16)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2016"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials16), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials16)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+
 
 Educ_OP_13 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z13)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2013"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z13)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=Education,y=OneParentHouse,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape=1, data = data_mod %>% filter(year == "2013"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials13), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials13)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_OP_10 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z10)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2010"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z10)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials10), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials10)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_OP_07 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z07)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2007"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z07)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2007"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials07), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials07)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_OP_04 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z04)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2004"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z04)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 1) +
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2004"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials04), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials04)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 Educ_OP_01 <- educOP_df %>% ggplot(aes(x=Education, y=OneParentHouse)) +
   geom_raster(aes(fill = z01)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=Education,y=OneParentHouse), data = data_mod %>% filter(year == "2001"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(educOP_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(educOP_df$z01)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1.5,3.3), y = c(-3.0, 3.3)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=Education,y=OneParentHouse, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +   
+  geom_point(aes(x=Education,y=OneParentHouse), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials01), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials01)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+
 
 grid.arrange(Educ_OP_01, Educ_OP_04, Educ_OP_07, Educ_OP_10, Educ_OP_13, Educ_OP_16, TPP_scale,
              nrow = 3, 
@@ -457,7 +579,39 @@ There are two work related variables included in the final model, `ExtractiveJob
 
 Higher values of either `ExtractiveJobs` or `AdminJobs` is associated with increased support for the Liberal party in all elections. Furthermore, electorates with few workers in both of these job types have been supportive of Labor, whereas having many such workers is found to have strong stronger Liberal support. There does not appear to be any evidence of a time-varying effect for these two variables.
 
-```{r jobs1, fig.cap="Raster plot of combinations of extractive jobs and administrative jobs, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with many workers in both job types are predicted to support Liberal, whilst those with few workers in both job types support Labor."}
+```{r jobs1, fig.cap="2D heatmap of combinations of extractive jobs and administrative jobs, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with many workers in both job types are predicted to support Liberal, whilst those with few workers in both job types support Labor."}
+# Partial residuals for each year
+dat16 <- data_mod %>% 
+  filter(year == "2016") %>% 
+  mutate(ExtractiveJobs = 0, AdminJobs = 0)
+partials16 <- dat16$Perc_LNP - predict(fit_ss_16, dat16)
+
+dat13 <- data_mod %>% 
+  filter(year == "2013") %>% 
+  mutate(ExtractiveJobs = 0, AdminJobs = 0)
+partials13 <- dat13$Perc_LNP - predict(fit_ss_13, dat13)
+
+dat10 <- data_mod %>% 
+  filter(year == "2010") %>% 
+  mutate(ExtractiveJobs = 0, AdminJobs = 0)
+partials10 <- dat10$Perc_LNP - predict(fit_ss_10, dat10)
+
+dat07 <- data_mod %>% 
+  filter(year == "2007") %>% 
+  mutate(ExtractiveJobs = 0, AdminJobs = 0)
+partials07 <- dat07$Perc_LNP - predict(fit_ss_07, dat07)
+
+dat04 <- data_mod %>% 
+  filter(year == "2004") %>% 
+  mutate(ExtractiveJobs = 0, AdminJobs = 0)
+partials04 <- dat04$Perc_LNP - predict(fit_ss_04, dat04)
+
+dat01 <- data_mod %>% 
+  filter(year == "2001", !is.na(Perc_LNP)) %>% 
+  mutate(ExtractiveJobs = 0, AdminJobs = 0)
+partials01 <- dat01$Perc_LNP - predict(fit_ss_01, dat01)
+
+
 jobs_df <- data.frame(
   AdminJobs = rep(seq(-4,4, by = 0.01), times = 801),
   ExtractiveJobs = rep(seq(-4,4, by = 0.01), each = 801),
@@ -483,72 +637,102 @@ ExtractiveJobs_Office_16 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=ExtractiveJobs,y=AdminJobs), data = data_mod %>% filter(year == "2016"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z16), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z16)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials16), alpha = 0.7, data = data_mod %>% filter(year == "2016"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2016"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials16), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials16)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 ExtractiveJobs_Office_13 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs)) +
   geom_raster(aes(fill = z13)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=ExtractiveJobs,y=AdminJobs), data = data_mod %>% filter(year == "2013"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z13), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z13)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs,col=partials13), alpha = 0.7, data = data_mod %>% filter(year == "2013"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2013"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials13), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials13)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 ExtractiveJobs_Office_10 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs)) +
   geom_raster(aes(fill = z10)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=ExtractiveJobs,y=AdminJobs), data = data_mod %>% filter(year == "2010"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z10), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z10)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials10), alpha = 0.7, data = data_mod %>% filter(year == "2010"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), shape = 1, alpha = 0.2,  data = data_mod %>% filter(year == "2010"), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials10), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials10)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 ExtractiveJobs_Office_07 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs)) +
   geom_raster(aes(fill = z07)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=ExtractiveJobs,y=AdminJobs), data = data_mod %>% filter(year == "2007"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) +  
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z07), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z07)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials07), alpha = 0.7, data = data_mod %>% filter(year == "2007"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2007"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials07), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials07)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 ExtractiveJobs_Office_04 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs)) +
   geom_raster(aes(fill = z04)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=ExtractiveJobs,y=AdminJobs), data = data_mod %>% filter(year == "2004"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z04), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z04)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials04), alpha = 0.7, data = data_mod %>% filter(year == "2004"), size = 1) +
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2004"), size = 1) +
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials04), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials04)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 ExtractiveJobs_Office_01 <- jobs_df %>% ggplot(aes(x=ExtractiveJobs, y=AdminJobs)) +
   geom_raster(aes(fill = z01)) + 
   labs(x = "", y = "", fill = "Marginal effect on two-party preferred (%)", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
-        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + geom_point(aes(x=ExtractiveJobs,y=AdminJobs), data = data_mod %>% filter(year == "2001"), alpha = 0.5, size = 0.5) +  
+        plot.margin=unit(c(0.2,-1.5,-0.5,-1.5), "cm")) + 
   scale_fill_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
                        values = scales::rescale(c(min(jobs_df$z01), -12, -6, -3, 
                                                   0, 3, 6, 12, max(jobs_df$z01)))) +  
-  guides(fill = FALSE) +
-  lims(x = c(-1,3.6), y = c(-3.9, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs, col=partials01), alpha = 0.7, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +   
+  geom_point(aes(x=ExtractiveJobs,y=AdminJobs), alpha = 0.2, shape = 1, data = data_mod %>% filter(year == "2001", !is.na(Perc_LNP)), size = 1) +  
+  scale_color_gradientn(colours = c("#ff0000", "#ff6666", "#ff9999", "#ffcccc", "white", "#cce6ff", "#3399ff", "#3385ff", "#3366ff"), 
+                       values = scales::rescale(c(min(partials01), -8, -4, -2, 
+                                                  0, 2, 4, 8, max(partials01)))) +  
+  guides(fill = FALSE, col = FALSE) +
+  lims(x = c(-1.5,3.3), y = c(-2.8, 3.0)) + coord_fixed(expand=FALSE, ratio = 2/3)
 
 grid.arrange(ExtractiveJobs_Office_01, ExtractiveJobs_Office_04, ExtractiveJobs_Office_07, ExtractiveJobs_Office_10, ExtractiveJobs_Office_13, ExtractiveJobs_Office_16, TPP_scale,
              nrow = 3, 
@@ -565,10 +749,8 @@ grid.arrange(ExtractiveJobs_Office_01, ExtractiveJobs_Office_04, ExtractiveJobs_
 
 ### Administrative Jobs and Education
 
-In each election, an electorate with the combination of an above-average proportion of administrative jobs and low education levels is predicted to strongly support the Liberal party. Otherwise, an electorate is predicted to support Labor. This is consistent across elections. Raster plots for this interaction can be found in Appendix \@ref(a:extrainsights).
+In each election, an electorate with the combination of an above-average proportion of administrative jobs and low education levels is predicted to strongly support the Liberal party. Otherwise, an electorate is predicted to support Labor. This is consistent across elections. 2D heatmaps for this interaction can be found in Appendix \@ref(a:extrainsights).
 
 ## Summary
 
 The estimated main effects and two-way interactions for each election have been illustrated in this chapter. We find that electoral socio-demographics have consistent relationships with the two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the combined effect of being an older electorate with low education levels.
-
-[^6]: See Chapter \@ref(ch:Data)
