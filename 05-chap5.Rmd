@@ -748,7 +748,3 @@ grid.arrange(ExtractiveJobs_Office_01, ExtractiveJobs_Office_04, ExtractiveJobs_
 ### Administrative Jobs and Education
 
 In each election, an electorate with the combination of an above-average proportion of administrative jobs and low education levels is predicted to strongly support the Liberal party. Otherwise, an electorate is predicted to support Labor. This is consistent across elections. 2D heatmaps for this interaction can be found in Appendix \@ref(a:extrainsights).
-
-## Summary
-
-The estimated main effects and two-way interactions for each election have been illustrated in this chapter. We find that electoral socio-demographics have consistent relationships with the two-party preferred vote over the six elections. Notable exceptions are the effect of `NoReligion`, and the combined effect of being an older electorate with low education levels.
