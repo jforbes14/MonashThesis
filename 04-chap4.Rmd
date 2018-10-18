@@ -143,25 +143,25 @@ For each election, the model set $m$ we use, and for which Akaike weights are co
 
 After calculating the Akaike weights $w_m$ and determine the ranks of variables according to $s_j$ for each election, the following superset is obtained. The number of elections for which a variable is included in the top five most important variables is given in square brackets.
 
-- Population born in South-Eastern Europe [6] 
+- `BornSEEurope`: Proportion of population born in South-Eastern Europe [6] 
 
-- Administrative occupations (manager, admin, clerical and sales) [6]
+- `AdminJobs`: Proportion of workers in administrative occupations (manager, admin, clerical and sales) [6]
 
-- Working in extractive industries (mining, gas, energy related etc.) [5]
+- `ExtractiveJobs`: Proportion of employed people in working in extractive industries (mining, gas, energy related etc.) [5]
 
-- Median rental and loan payments [3]
+- `RentLoan`: Median rental and loan payments [3]
 
-- Single parent households [3]
+- `OneParentHouse`: Proportion of single parent households [3]
 
-- Median age [2]
+- `MedianAge`: Median age [2]
 
-- No religion [2]
+- `NoReligion`: Proportion of population not identifying with a religion [2]
 
-- Education levels [1]
+- `Education`: Education qualifications [1]
 
-- Population born in the United Kingdom [1]
+- `BornUK`: Proportion of population born in the United Kingdom [1]
 
-- Student population [1]
+- `CurrenlyStudying`: Student population as a proportion of the total population [1]
 
 A table of the sums of Akaike weights for all variables, in each year, is given in Appendix \@ref(a:allSAW). Additionally, scatterplots of the response against each variable contained in this superset may be found in Appendix \@ref(a:scatterplots).
 
