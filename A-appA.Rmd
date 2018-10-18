@@ -217,7 +217,7 @@ data_mod %>%
 
 # Principal components {#a:PCloadings}
 
-Loadings in the 2nd, 3rd and 4th principal components for each election.
+The variable loadings in the first principal component are relatively common across years, which was shown in Figure \@ref(fig:loadings-1) in Chapter \@ref(ch:Modelling). The same is true for the second component, and to a lesser extent the third and four components (see Figures \@ref(fig:loadings2), \@ref(fig:loadings3) and \@ref(fig:loadings4) below. 
 
 ```{r loadings2, fig.cap = "Loadings of each variable in the second principal of each election year (points), with a line showing the range across years."}
 vis_loadings %>% 
@@ -250,19 +250,21 @@ vis_loadings %>%
 
 # Why choose all five variable linear models? {#a:fivevar}
 
-For each election, we compute all possible five variable linear models as a model set from which Akaike weights will be computed. *Five* variable models are a compromise between computational burden and capturing sufficient information in the model set. 
+For each election, we compute all possible five variable linear models, from which Akaike weights are computed. *Five* variable models are a compromise between computational burden and capturing sufficient information. 
 
-It is too burdensome to run linear models for all possible combinations of our predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where how the incremental gain in R-squared from adding a variable reduces as the number of predictors increases. This is done by fitting 20 models for each number of predictors. This means 20 models with 2 variables, 20 models with 3 variables and so on. The process is as follows:
+It is too burdensome to run linear models for all possible combinations of our predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where incremental gain in R-squared from adding a variable plateaus. 
+
+This iterative procedure involves collecting 20 models for each possible number of predictors $p$ in $p = 3, 4, ..., 30$. This means 20 models with 3 variables, 20 models with 4 variables and so on. The process is as follows:
 
 1. Fit all possible 2 variable models.
 
 2. Retain the 10 models with highest R-squared, and another 10 models selected at random.
 
-3. Fit all possible three variable models that nest these 20 two-variable models, by adding one variable. This means for every retained model, there will be $30 - 2 = 28$ models fit.
+3. Fit all possible three variable models that nest these 20 two-variable models, by adding one variable. This means for every retained model, there will be $28$ models fit.
 
-4. Repeat steps 2 and 3 for the 3 variable models, 4 variable models, and so on, until reaching a model with all 30 variables.
+4. Repeat steps 2 and 3 for the threevariable models, four variable models, and so on, until reaching a model with all 30 variables.
 
-Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. We see that around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
+Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. Around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
 
 All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and as demonstrated, it can still includes models that have large R-squared.
 
@@ -295,6 +297,8 @@ print(tab_aw, comment = FALSE, include.rownames = FALSE)
 
 # Scatterplots of two-party preferred against predictors in the superset {#a:scatterplots}
 
+Scatterplots of each variable across election years are shown in the plots below. A regression line is overlaid in each plot with a 95% confidence band.
+
 ```{r rawSE, fig.cap="Scatterplot of population born in South-Eastern Europe against two-party preferred vote."}
 ## Voting against BornSEEurope
 data_mod %>% ggplot(aes(x = BornSEEurope, y = Perc_LNP)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in South-Eastern Europe", y = "Two-party preferred (%)")
@@ -305,44 +309,42 @@ data_mod %>% ggplot(aes(x = BornSEEurope, y = Perc_LNP)) + geom_point() + geom_s
 data_mod %>% ggplot(aes(x = BornUK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in the United Kingdom", y = "Two-party preferred (%)")
 ```
 
-
 ```{r rawNoRelig, fig.cap="Scatterplot of population not identifying with a religion against two-party preferred vote."}
 ## Voting against NoReligion
 data_mod %>% ggplot(aes(x = NoReligion, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of population not identifying with a religion", y = "Two-party preferred (%)")
 ```
-
 
 ```{r rawrentloan, fig.cap="Scatterplot of rental and loan payments against two-party preferred vote."}
 ## Voting against RentLoan
 data_mod %>% ggplot(aes(x = RentLoan, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Rental and loan payments", y = "Two-party preferred (%)")
 ```
 
-
 ```{r raweduc, fig.cap="Scatterplot of education levels against two-party preferred vote."}
 ## Voting against Education
 data_mod %>% ggplot(aes(x = Education, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education level", y = "Two-party preferred (%)")
 ```
 
+```{r rawstudy, fig.cap="Scatterplot of population currently studying against two-party preferred vote."}
+## Voting against Currently studying
+data_mod %>% ggplot(aes(x = CurrentlyStudying, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of population currently studying", y = "Two-party preferred (%)")
+```
 
 ```{r rawage, fig.cap="Scatterplot of median age against two-party preferred vote."}
 ## Voting against MedianAge
 data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Median age", y = "Two-party preferred (%)")
 ```
 
-
 ```{r rawOP, fig.cap = "Scatterplot of single parent households against two-party preferred vote."}
 ## Voting against OneParentHouse
 data_mod %>% ggplot(aes(x = OneParentHouse, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of single parent households", y = "Two-party preferred (%)")
 ```
 
-
-```{r, fig.cap="Scatterplot of population working in ExtractiveJobs jobs against two-party preferred vote."}
+```{r rawext, fig.cap="Scatterplot of population working in ExtractiveJobs jobs against two-party preferred vote."}
 ## Voting against ExtractiveJobs
 data_mod %>% ggplot(aes(x = ExtractiveJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Jobs in ExtractiveJobs industries", y = "Two-party preferred (%)")
 ```
 
-
-```{r, fig.cap="Scatterplot of population working in administrative jobs against two-party preferred vote."}
+```{r rawadmin, fig.cap="Scatterplot of population working in administrative jobs against two-party preferred vote."}
 ## Voting against AdminJobs
 data_mod %>% ggplot(aes(x = AdminJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Administrative jobs", y = "Two-party preferred (%)")
 ```
@@ -351,7 +353,9 @@ data_mod %>% ggplot(aes(x = AdminJobs, y = Perc_LNP)) + geom_point(aes(label = E
 
 # Diagnostics {#a:diagnostics}
 
-## Residuals
+In this section, regression diagnostics are conducted to test the appropriateness of the assumptions involved in estimating a linear model. Residual heteroskedasticity and non-normality are tested in \@ref(a:resids). Tests for non-linear patterns in the residuals against included predictors are in \@ref(a:patternsin), and patterns in the residuals against missing predictors are contained in \@ref(a:patternsout). Tests for influential points are found in \@ref(a:influence).
+
+## Residuals {#a:resids}
 
 ```{r augment}
 aug_all <- bind_rows(augment(fit_ss_01) %>% mutate(year = "2001"), 
@@ -362,7 +366,7 @@ aug_all <- bind_rows(augment(fit_ss_01) %>% mutate(year = "2001"),
                      augment(fit_ss_16) %>% mutate(year = "2016"))
 ```
 
-There are is little evidence of residual non-normality in the histograms and quantile-quantile plots, nor are there signs of residual heteroskedasticity (figures in \@ref(fig:alldiagnostics)). We produced plots of residuals against predictors in the model, which did not reveal any significant non-linear relationships. Doing the same for residuals against predictors excluded from the model, we do not find evidence of significant relationships between omitted socio-demographics and the residuals (see appendix D). All of this validates our assumptions about the distribution of the errors, and our model specification.
+There are is little evidence of residual non-normality in the histograms and quantile-quantile plots, nor are there signs of residual heteroskedasticity (figures in \@ref(fig:alldiagnostics)). We produced plots of residuals against predictors in the model, which did not reveal any significant non-linear relationships. Doing the same for residuals against predictors excluded from the model, we do not find evidence of significant relationships between omitted socio-demographics and the residuals. All of this validates our assumptions about the distribution of the errors, and our model specification.
 
 ```{r alldiagnostics, fig.cap = "Diagnostics plots. Left are the histograms of the residuals in each year. Middle are the quantile-quantile plots. Right are the residuals against fitted values."}
 # Histogram
@@ -371,47 +375,48 @@ d1 <- aug_all %>%
   geom_histogram() +
   facet_wrap(~year, nrow = 6) + 
   labs(x = "Residuals", y = "Count", title = "Residual histograms") +
-  theme(axis.title = element_text(size = 8), title = element_text(size = 8))
+  theme(axis.title = element_text(size = 6), title = element_text(size = 6),
+        plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.75)
 
 # QQ plots
 d2 <- aug_all %>% 
   ggplot(aes(sample = .resid)) + 
   geom_qq(alpha = 0.4) + geom_qq_line() + 
   facet_wrap(~year, nrow = 6) +
-  labs(x = "Theoretical quantiles", y = "Sample residual quantiles", title = "Residual quantile-quantile plots") +
-  theme(axis.title = element_text(size = 8), title = element_text(size = 8))
+  labs(x = "Theoretical quantiles", y = "Sample residual quantiles", title = "Residual quantile-quantile\nplots") +
+  theme(axis.title = element_text(size = 6), title = element_text(size = 6),
+        plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.1)
 
 # Residuals vs fitted
 d3 <- aug_all %>% 
   ggplot(aes(x=.fitted, y=.resid)) + 
   geom_point() + geom_smooth() +
   facet_wrap(~year, nrow = 6) + 
-  labs(x = "Fitted values", y = "Residuals", title = "Residuals against fitted values") +
-  theme(axis.title = element_text(size = 8), title = element_text(size = 8))
+  labs(x = "Fitted values", y = "Residuals", title = "Residuals against\nfitted values") +
+  theme(axis.title = element_text(size = 6), title = element_text(size = 6),
+        plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.75)
 
 grid.arrange(d1,d2,d3, nrow = 1)
 ```
 
-## Influence
+## Residuals vs predictors in the model {#a:patternsin}
 
-Across the six elections, only two electorates have moderately large influence - Kalgoorlie (2001, 2004) and Sydney (2007, 2016) - as they have cook's distance greater than 0.2. The Kalgoorlie electorate supports the Liberal party  in these years ($TPP$ of around 55), but has an extremely low incidence of administrative jobs and a high incidence of atheism which are strong factors of Labor support. Sydney is a staunch Labor electorate, with $TPP$ ranging from 30.50% to 35.35% across the six years, but has very large student populations, low incidence of single parent households and high rental/loan prices. All of the observations with moderately large influence have hat values over 0.3, indicating that these also have unusual socio-demographic compositions.
+Testing for significant non-linearities in the relationships between the predictors in the model and the residuals, by fitting a loess smooth with a 95% confidence band. If zero is contained in the confidence band for all values of the predictor, then there are no significant non-linearities. No obvious non-linearities are found in any election.
 
-The most influential electorate is Kalgoorlie in 2001, with cook distance of 0.31. As this is not particularly high, it does not appear that there are any outliers that have high influence on the model, and hence no observations should be removed. 
-
-
-## Non-linearities: Residuals against predictors
-```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No signs of non-linearity."}
+```{r, fig.cap = "Residuals vs. predictors in the model. No obvious signs of non-linearity."}
 aug_all %>%
   filter(year == "2016") %>% 
   gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
   ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x")
+  geom_point() + geom_smooth() + facet_wrap(~variable, scales = "free_x", nrow = 4) +
+  labs(x = "Socio-demographic variable", y = "Residuals")
 ```
 
-No obvious non-linearities in 2001, 2004, 2007, 2010, 2013, 2016.
+## Residuals vs predictors not in model {#a:patternsout}
 
-## Residuals vs Predictors not in model
-```{r, out.width="100%", fig.cap = "Residuals vs. predictors in the model. No clear ."}
+Scatterplots of the residuals against socio-demographic predictors that are not included in the superset are shown below. A loess smooth is fit and overlaid in each scatterplot. No significant relationships are found between the residuals and predictors not in the superset.
+
+```{r, fig.cap = "Residuals vs. predictors in the model. No significant relationships are found between the residuals and a predictor not in the superset."}
 vars_not_in <- names(data_mod)[which(!names(data_mod) %in% superset$varname)]
 
 aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>% 
@@ -419,10 +424,15 @@ aug_all %>% bind_cols(data_mod %>% filter(!is.na(Perc_LNP))) %>%
   select(starts_with("."), c(vars_not_in), -c(Swing, year, Election_Division)) %>% 
   gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP)) %>%
   ggplot(aes(x = value, y = .resid)) +
-  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free")
+  geom_point() + geom_smooth(level = 0.95) + facet_wrap(~variable, scales = "free", nrow = 5) +
+  labs(x = "Socio-demographic variable", y = "Residuals")
 ```
 
-No obvious patterns in the residuals vs omitted variables.
+## Influence {#a:influence}
+
+Across the six elections, only two electorates have moderately large influence - Kalgoorlie (2001, 2004) and Sydney (2007, 2016) - as they have a cook's distance greater than 0.2. The Kalgoorlie electorate supports the Liberal party  in these years ($TPP$ of around 55%), but has an extremely low incidence of administrative jobs and a high incidence of atheism which are strong factors of Labor support. Sydney is a staunch Labor electorate, with $TPP$ ranging from 30.50% to 35.35% across the six years, whilst having very large student populations, a low incidence of single parent households and high rental/loan prices. All of the observations with moderately large influence have hat values over 0.3, indicating that these also have unusual socio-demographic compositions.
+
+The most influential electorate is Kalgoorlie in 2001, with cook distance of 0.31. As this is not particularly high (using a threshold of 0.5), it does not appear that there are any outliers that have high influence on the model, and hence no observations need to be removed. 
 
 # Omitted variables {#a:omittedvar}
 
