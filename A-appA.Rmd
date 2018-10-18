@@ -280,18 +280,22 @@ ggplot(aes(x = num_vars, y = r2), data = step_all) +
 
 # Resultant Akaike weights {#a:allSAW}
 
-The sum of Akaike weights $s_j$ for each variable $j$ in each of the elections is shown in the table \@ref(fig:allSAW) below.
+The sum of Akaike weights $s_j$ for each variable $j$ in each of the elections is shown in the Table E.1 below.
 
 ```{r allSAW, fig.cap = "Sum of Akaike weights for each variable, in each election.", results = 'asis'}
 load("../Modelling-Elections/Clean-Data/var_imp_all.rda")
 
 tab_aw <- var_imp_all %>% 
+  mutate(varname = gsub("_", "", varname),
+         varname = ifelse(varname == "ManagerAdminClericalSales", "AdminJobs", varname),
+         varname = ifelse(varname == "Extractive", "ExtractiveJobs", varname),
+         varname = ifelse(varname == "Educ", "Education", varname)) %>% 
   select(varname, year, sum_w) %>% 
   spread("year", "sum_w") %>% 
   rename(Variable = varname) %>% 
   xtable::xtable(caption = "Sum of Akaike weights for each variable, in each election.")
 
-print(tab_aw, comment = FALSE, include.rownames = FALSE)
+print(tab_aw, comment = FALSE, include.rownames = FALSE, size = "\\scriptsize")
 ```
 
 
@@ -366,37 +370,40 @@ aug_all <- bind_rows(augment(fit_ss_01) %>% mutate(year = "2001"),
                      augment(fit_ss_16) %>% mutate(year = "2016"))
 ```
 
-There are is little evidence of residual non-normality in the histograms and quantile-quantile plots, nor are there signs of residual heteroskedasticity (figures in \@ref(fig:alldiagnostics)). We produced plots of residuals against predictors in the model, which did not reveal any significant non-linear relationships. Doing the same for residuals against predictors excluded from the model, we do not find evidence of significant relationships between omitted socio-demographics and the residuals. All of this validates our assumptions about the distribution of the errors, and our model specification.
+There are is little evidence of residual non-normality in the histograms (Figure \@ref(fig:histograms)) and quantile-quantile plots (Figure \@ref(fig:QQplots)), nor are there signs of residual heteroskedasticity (Figure \@ref(fig:reshet)). We produced plots of residuals against predictors in the model, which did not reveal any significant non-linear relationships. Doing the same for residuals against predictors excluded from the model, we do not find evidence of significant relationships between omitted socio-demographics and the residuals. All of this validates our assumptions about the distribution of the errors, and our model specification.
 
-```{r alldiagnostics, fig.cap = "Diagnostics plots. Left are the histograms of the residuals in each year. Middle are the quantile-quantile plots. Right are the residuals against fitted values."}
+```{r histograms, fig.cap="Residual histogram for each election. Residual distributions do not appear to be too dissimilar from a normal distribution."}
 # Histogram
-d1 <- aug_all %>% 
+aug_all %>% 
   ggplot(aes(x = .resid)) + 
   geom_histogram() +
-  facet_wrap(~year, nrow = 6) + 
+  facet_wrap(~year, nrow = 2) + 
   labs(x = "Residuals", y = "Count", title = "Residual histograms") +
-  theme(axis.title = element_text(size = 6), title = element_text(size = 6),
+  theme(axis.title = element_text(size = 10), title = element_text(size = 10),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.75)
+```
 
+```{r QQplots, fig.cap="Quantiles of the residuals in each election against the quantiles of a normal distribution. Residual quantiles closely match the normal quantiles in each election."}
 # QQ plots
-d2 <- aug_all %>% 
+aug_all %>% 
   ggplot(aes(sample = .resid)) + 
   geom_qq(alpha = 0.4) + geom_qq_line() + 
-  facet_wrap(~year, nrow = 6) +
-  labs(x = "Theoretical quantiles", y = "Sample residual quantiles", title = "Residual quantile-quantile\nplots") +
-  theme(axis.title = element_text(size = 6), title = element_text(size = 6),
+  facet_wrap(~year, nrow = 2) +
+  labs(x = "Theoretical quantiles", y = "Sample residual quantiles", title = "Residual quantile-quantile plots") +
+  theme(axis.title = element_text(size = 10), title = element_text(size = 10),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.1)
+```
 
+
+```{r reshet, fig.cap="Residuals vs. fitted values of the response variable for each election. No signs of heteroskedasticity are seen."}
 # Residuals vs fitted
-d3 <- aug_all %>% 
+aug_all %>% 
   ggplot(aes(x=.fitted, y=.resid)) + 
-  geom_point() + geom_smooth() +
-  facet_wrap(~year, nrow = 6) + 
-  labs(x = "Fitted values", y = "Residuals", title = "Residuals against\nfitted values") +
-  theme(axis.title = element_text(size = 6), title = element_text(size = 6),
+  geom_point() +
+  facet_wrap(~year, nrow = 2) + 
+  labs(x = "Fitted values", y = "Residuals", title = "Residuals against fitted values") +
+  theme(axis.title = element_text(size = 10), title = element_text(size = 10),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.75)
-
-grid.arrange(d1,d2,d3, nrow = 1)
 ```
 
 ## Residuals vs predictors in the model {#a:patternsin}
