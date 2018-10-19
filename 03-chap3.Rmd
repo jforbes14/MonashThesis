@@ -24,13 +24,13 @@ First, consider the temporal difference between election data (two-party preferr
 
 ```{r timeline, fig.cap="Timeline of Australian elections and Censuses. They do not always occur in the same year.", out.width = "90%", fig.align="center"}
 timeline <- data.frame(year = c(2001:2016)) %>%
-  mutate(election = ifelse(year %in% c(2001, 2004, 2007, 2010, 2013, 2016),1,0),
-         census = ifelse(year %in% c(2001, 2006, 2011, 2016), 1.4, 0)) %>%
-  gather(c(election,census), key = event, value = measure) %>%  filter(measure != 0) %>%
-  mutate(year_vis = ifelse(event == "census", year + 0.1, year))
+  mutate(Election = ifelse(year %in% c(2001, 2004, 2007, 2010, 2013, 2016),1,0),
+         Census = ifelse(year %in% c(2001, 2006, 2011, 2016), 1.4, 0)) %>%
+  gather(c(Election,Census), key = event, value = measure) %>%  filter(measure != 0) %>%
+  mutate(year_vis = ifelse(event == "Census", year + 0.1, year))
 
 
-ggplot(timeline, aes(x=year_vis, y=measure)) + geom_point(aes(color=as.factor(event),shape=as.factor(event)),size = 4) + labs(color = "Event", shape = "Event") + geom_hline(yintercept=0, size =1, color = 'grey', show.legend = FALSE) + geom_segment(x=2001,xend=2001, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2004,xend=2004, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2007,xend=2007, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2010,xend=2010, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2013,xend=2013, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2016,xend=2016, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2001.1,xend=2001.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2006.1,xend=2006.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2011.1,xend=2011.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2016.1,xend=2016.1, y=1.4, yend=0, color = '#F8766D') + labs(x="Year") + theme(text=element_text(size=8), axis.text.x=element_text(size=6),axis.text.y=element_blank(), axis.title.y=element_blank(), plot.background=element_blank(), axis.ticks.y = element_blank(), panel.background = element_blank()) + scale_x_discrete(limits = c(2001:2016)) + coord_fixed(ratio = 2)
+ggplot(timeline, aes(x=year_vis, y=measure)) + geom_point(aes(color=as.factor(event),shape=as.factor(event)),size = 4) + labs(color = "Event", shape = "Event") + geom_hline(yintercept=0, size =1, color = 'grey', show.legend = FALSE) + geom_segment(x=2001,xend=2001, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2004,xend=2004, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2007,xend=2007, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2010,xend=2010, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2013,xend=2013, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2016,xend=2016, y=1, yend=0, color = '#00BFC4') + geom_segment(x=2001.1,xend=2001.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2006.1,xend=2006.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2011.1,xend=2011.1, y=1.4, yend=0, color = '#F8766D') + geom_segment(x=2016.1,xend=2016.1, y=1.4, yend=0, color = '#F8766D') + labs(x="Year") + theme(text=element_text(size=10), axis.text.x=element_text(size=6),axis.text.y=element_blank(), axis.title.y=element_blank(), plot.background=element_blank(), axis.ticks.y = element_blank(), panel.background = element_blank()) + scale_x_discrete(limits = c(2001:2016)) + coord_fixed(ratio = 2)
 ```
 
 Recall that the Census is aggregated to Census divisions, and the two-party preferred vote is aggregated to the electorate level. Electorate boundaries are redrawn regularly by the AEC, and so Census divisions match the electorate boundaries at the time of the Census. Therefore, when a Census is conducted in an election year, such as in 2001 and 2016, the electoral boundaries match the Census divisions. However, for elections in between (2004, 2007, 2010 and 2013), there is no match between Census divisions and electoral boundaries. Therefore, to impute socio-demographic variables for each electorate in these elections, the spatial differences in Census and election data must also be taken into account.
@@ -41,7 +41,7 @@ Now that the spatial and temporal differences between election and Census data h
 
 The essence of the algorithm is to estimate the socio-demographic composition of electorates had their boundary been in place at the time of the two nearest Censuses, one before and one after, and then to linearly interpolate between these time points. For example, the 2013 electoral boundaries are estimated at the time of the 2011 and 2016 Censuses. This algorithm predominantly uses tools from the `sp` [@spdep], `rgeos`, `dplyr` and `ggplot2` [@ggplot2] packages, and is formulated from the piecewise approximation method of areal imputation in @Goodchild1993. 
 
-We now detail the steps of the algorithm, followed by an example.
+The steps of the algorithm are detailed below, followed by an example.
 
 **Algorithm: Spatial imputation**
 
@@ -85,7 +85,7 @@ $$\hat{\lambda}_{e,s} = \frac{s-t_1}{t_2-t_1} \cdot \hat{\lambda}_{e,t_1} + \fra
 
 To illustrate the spacio-temporal algorithm detailed above, consider the imputation of a socio-demographic variable for the electorate of Hume in New South Wales (NSW), at the time of the 2013 federal election. Figure \@ref(fig:hume13) shows this region amongst other NSW electorates.
 
-```{r hume13, fig.cap = "Electoral boundaries in NSW for 2013, with the electoral boundary for Hume, shown in purple."}
+```{r hume13, fig.cap = "Some of the electoral boundaries in NSW for 2013, with the electoral boundary for Hume, shown in purple."}
 # 2013
 hume_only <- map13 %>% filter(Election_Division == "HUME")
 min_lat = min(hume_only$lat - 0.5)
@@ -117,7 +117,7 @@ ggplot() +
   labs(x="Longitude", y="Latitude", title = "2013")
 ```
 
-The Censuses neighbouring the 2013 election are those in 2011 and 2016. Let's start with drawing the boundary for Hume from the 2013 election over the Census divisions from the 2016 Census. Figure \@ref(fig:hume16) shows the same region of NSW as in Figure \@ref(fig:hume13), but now with the with the 2013 electorate of Hume shaded in purple. This purple region is the area whose socio-demographic variables are to be imputed.
+The Censuses neighbouring the 2013 election are those in 2011 and 2016. Let's start with drawing the boundary for Hume from the 2013 election over the Census divisions from the 2016 Census. Figure \@ref(fig:hume16) shows the Census divisions in the same region of NSW as in Figure \@ref(fig:hume13), with the 2013 electorate of Hume shaded in purple. This purple region is the area whose socio-demographic variables are to be imputed.
 
 There are many Census divisions that intersect with the Hume (purple) region, these include the Census divisions of Riverina, Eden-Monaro and Hume which we refer to as CD1, CD2 and CD3. There are also tiny intersecting areas with Fenner, Calare, Gilmore and Whitlam, but we will ignore these intersections for the purpose of this illustration. Figure \@ref(fig:hume16int) shows these three major intersecting Census divisions in colour.
 
@@ -186,7 +186,7 @@ ggplot(data=plot_map_hume_impute) +
   labs(x="Longitude", y="Latitude", title = "2016", fill = "Census divisions")
 ```
 
-The 2013 electoral boundary for Hume (purple) covers  $90.58 \%$ of CD1, $24.89 \%$ of CD2 and $9.96 \%$ of CD3. Having obtained these percentage, we now estimate the population in these intersections via the assumption of uniformly distributed populations within each Census division. For example, the population of CD2 is $155,793$, therefore $38,780$ people are estimated to be in the region of CD1 that intersects with Hume. 
+The 2013 electoral boundary for Hume (purple) covers  $90.58 \%$ of CD1, $24.89 \%$ of CD2 and $9.96 \%$ of CD3. Having obtained these percentages, we now estimate the population in these intersections via the assumption of uniformly distributed populations within each Census division. For example, the population of CD2 is $155,793$, therefore $38,780$ people are estimated to be in the region of CD1 that intersects with Hume. 
 
 ```{r, results = 'asis'}
 ## Table
@@ -210,17 +210,20 @@ Mapping_aec13 %>%
   select(intersecting, Year, Percentage, `Population in Division`, `Estimated Population Allocated to Hume`) %>% 
   rename(`Census Division` = intersecting) %>% 
   xtable() %>% 
-  print(comment=FALSE, digits=NULL, size = "\\small", include.rownames = FALSE)
+  print(comment=FALSE, digits=NULL, size = "\\footnotesize", include.rownames = FALSE)
 ```
 
-Now we compute a weighted average of each socio-demographic variable from the intersecting divisions, using the estimated populations as weights. Recall that $\delta_{c,t}$ represents a given socio-demographic variable for Census division $c$ at time $t$, and that $\hat{\lambda}_{e,t}$ is our estimate of the variable for electorate $e$ at time $t$.
+Now weighted average of each socio-demographic variable is computed from the intersecting divisions, using the estimated populations as weights. Recall that $\delta_{c,t}$ represents a given socio-demographic variable for Census division $c$ at time $t$, and that $\hat{\lambda}_{e,t}$ is our estimate of the variable for electorate $e$ at time $t$.
 
 $$\hat{\lambda}_{Hume, 2016} = \frac{136,458 \cdot \delta_{CD1, 2016} +  38,780 \cdot \delta_{CD2, 2016} +  14,691 \cdot \delta_{CD3, 2016}}{136,458 + 38,780 + 14,691}.$$
 So here $\hat{\lambda}_{Hume, 2016}$ corresponds to the value of the variable estimated for the 2013 Hume electorate at the time of the 2016 Census. 
 
 For example, consider the percentage of the population who are Australian citizens. In 2016, CD1 had 90.0%, CD2 had 89.1% and CD3 had 88.0% Australian citizen. Then the estimated percentage of Australian citizens in the 2013 electorate of Hume, at the time of the 2016 Census is
 
-$$\hat{\lambda}_{Hume, 2016} = \frac{136,458 \cdot 90.0 \% +  38,780 \cdot 89.1 \% +  14,691 \cdot 88.0 \%}{136,458 + 38,780 + 14,691} = 89.66 \% .$$
+\begin{eqnarray*}
+\hat{\lambda}_{Hume, 2016} & = & \frac{136,458 \cdot 90.0 \% +  38,780 \cdot 89.1 \% +  14,691 \cdot 88.0 \%}{136,458 + 38,780 + 14,691} \\
+& = & 89.66 \% .
+\end{eqnarray*}
 
 This weighted average calculation is repeated for all 63 socio-demographic variables. Then, the entire process is repeated using the 2011 Census, where we find $\hat{\lambda}_{Hume, 2011} = 89.58 \%$ Australian citizens.
 
@@ -270,7 +273,7 @@ profiles %>%
 
 Socially "progressive" movements continue to gather momentum all over the world, and Australia is no different, with many people dissociating from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown in Figure \@ref(fig:vis-relig). This trend is observed across all electorates, as the minimum value has increased. In 2016, having any religious affiliation would make you a minority in some electorates! 
 
-```{r vis-relig, out.height='25%', fig.cap="Distribution of no religion across Australian electorates, by election year. Over time, the proportion of electoral populations not identifying with a religion has increased."}
+```{r vis-relig, out.height='25%', fig.cap="Distributions of the proportions of the electoral populations not identifying with a religion, by election year. Over time, the higher proportions of electorates are not identifying with a religion."}
 profiles %>% 
   ggplot(aes(x=year, y=NoReligion, fill=year)) + 
   geom_violin() + 
@@ -282,7 +285,7 @@ profiles %>%
 
 #### Investing in education
 
-Improvement in educational outcomes are evident across all of Australia. Completion rates for high school, Bachelor's degrees and postgraduate degrees have increased for all electorates (see Figure \@ref(fig:vis-educ)). In 2001, all three measures appear positively skewed, and over the years this skewness has reduced and the distributions have flattened. This indicates that some areas with lower levels of education have progressed at a faster rate than the rest of the country.
+Improvement in educational outcomes is evident across all of Australia. Completion rates for high school, Bachelor's degrees and postgraduate degrees increase for all electorates across elections (see Figure \@ref(fig:vis-educ)). In 2001, all three measures appear positively skewed, and over the years this skewness has reduced and the distributions have flattened. This indicates that some areas with lower levels of education have progressed at a faster rate than the rest of the country.
 
 ```{r vis-educ, out.width='100%', fig.cap="Distribution of educational qualification across Australian electorates, by election year. The proportions of electoral populations with these qualifications have grown over time."}
 profiles %>% 
@@ -300,6 +303,6 @@ Illustrating the changes in these three areas demonstrates that socio-demographi
 
 ## Summary
 
-In this chapter we have detailed the steps of data collection, preliminary transformations and imputation that result in a cross-sectional data set of electoral socio-demographics and two-party preferred vote for each of the six elections. Violin plots summarizing the full set of socio-demographic variables can be found in Appendix \@ref(a:summary). Socio-demographic (explanatory) variables are standardized so that the data scales are consistent across years, which allows for comparison of effects across elections.
+In this chapter we have detailed the steps of data collection, preliminary transformations and imputation that result in a cross-sectional data set of electoral socio-demographics and two-party preferred vote for each of the six elections. Violin plots summarizing the full set of socio-demographic variables can be found in Appendix \@ref(a:summary). Socio-demographic (explanatory) variables are also standardized so that the variable scales are consistent across years.
 
 [^4]: Note that in 2001, median age is rounded to the nearest integer.
