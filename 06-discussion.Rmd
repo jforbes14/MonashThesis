@@ -1,17 +1,18 @@
 # Conclusion {#ch:Conclusion}
 
-In this thesis we have demonstrated how socio-demographic information from the Census can be linked to electorates for each Australian federal election between 2001 and 2016, utilising a spatial imputation method to obtain Census profiles for election years in which a Census did not occur. These six cross-sectional data sets provide a foundation for statistical modelling of electorate voting behaviour over time. We have contributed this data to existing the `eechidna` `R` package, for public use.
+In this thesis we have demonstrated how socio-demographic information from the Census can be linked to electorates for each Australian federal election between 2001 and 2016, utilising a spatio-temporal method of imputation. The cross-sectional data set constructed for each election provides a foundation for statistical modelling of electorate voting behaviour over time. This data has been contributed to existing the `eechidna` `R` package, for public use.
 
-The focal point of this research is understanding the key socio-demographic drivers of electorate support for the two major political parties (Liberal and Labor), and how their effects have varied over time. This involved modelling the two-party preferred vote in each election as a function of a superset of *important* socio-demographic characteristics. A reduced set of 10 predictors was obtained by taking the union of the five most important predictors in election, assessed separately, using an information theoretic approach. Principal component analysis was also used to group together variables into what we have called factors. 
+The key aim of this research is to identify the key socio-demographic drivers of electorate support for the two major political parties (Liberal and Labor), and examine how their effects have changed over time. This involved modelling the two-party preferred vote in each election as a function of a superset of *important* socio-demographic characteristics. This superset is made up of a reduced set of 10 predictors, obtained by taking the union of the five most important predictors in election, assessed using an information theoretic approach. Principal component analysis was also used to group together variables in order to reduce the dimension of the data sets. 
 
-We have modelled each election as a separate cross-section with standardized socio-demographics and identical model specification, which allows for the direct comparison of effects across elections. Analysis of temporal trends reveal that most of the socio-demographic effects *have not* changed over time. It is apparent that electorates with higher proportions of workers in extractive and administrative jobs, and a low proportion of single parent households have been consistently strong supporters of the Liberal party. Conversely, areas with higher proportions of populations from South-Eastern Europe, younger age profiles and higher education levels have consistently supported Labor. From the 2010 election, we find that rates of atheism increased Labor approval, whereas older electorates with lower levels of education began supporting Liberal. As the superset of explanatory variables are standardized each year, these insights ultimately reveal that socio-demographics  *relative* to other electorates at the time of the election have been consistent drivers of two-party preference.
+Identical model specification is used across the six elections, allowing the estimated effects in each election to be directly compared. Analysis of temporal trends reveal that most of the socio-demographic effects *have not* changed over time. It is apparent that electorates with higher proportions of workers in extractive and administrative jobs, and a low proportion of single parent households have been consistently strong supporters of the Liberal party. Conversely, areas with higher proportions of populations from South-Eastern Europe, younger age profiles and higher education levels have consistently supported Labor. From the 2010 election, we find that rates of atheism increased Labor approval, whereas older electorates with lower levels of education began supporting Liberal. As the superset of explanatory variables are centered and standardized each year, these insights ultimately reveal that socio-demographics  *relative* to other electorates at the time of the election have been consistent drivers of two-party preference.
 
-Our findings complement the existing literature by modelling temporal trends, which has not previously been done using a regression framework. Furthermore, as far as we can see, no study has modelled an election from 2010 using Census information, whereas we have done so for the most recent six elections. This research is therefore a significant contribution, helping uncover the dynamics of Australian voter behaviour in the 21st century, and by providing a resource for future analysis.
+Our findings complement the existing literature by modelling temporal trends, which has not previously been done using a regression framework. Furthermore, as far as we can see, this study is the first to modelled an election from 2010 onwards using Census information. This research is therefore a significant contribution, as it helps uncover the dynamics of Australian voter behaviour in the 21st century, and by provides a resource for future analysis.
 
 ## Extensions and caveats
 
 ### Spatial dependencies
-A Moran's I test of the residuals in each election reveals significant evidence of spatial correlation (2004, 2007, 2010, 2013, 2016). For this test, we consider the residuals of each electorate to be correlated with electorates it shares a boundary with.
+
+For each election, a Moran's I test for spatial correlation in the residuals reveal that there is significant evidence of spatial correlation in 2004, 2007, 2010, 2013 and 2016 election. For this test, spatial weights are calculated by allowing each electorate to be correlated equally with electorates that share any part of its boundary. See @LeSage2009 for an illustration of this test.
 
 \begin{table}[!htbp] \centering 
 \normalsize
@@ -28,18 +29,22 @@ A Moran's I test of the residuals in each election reveals significant evidence 
 \end{tabular} 
 \end{table}
 
-Although ordinary least-squares estimates are still consistent, standard errors should be adjusted. An extension that we plan to pursue is to use the Spatial Error Model, which allows for spatial correlation in the residuals (spatial heterogeneity).
+Although ordinary least-squares estimates are still consistent, standard errors should be adjusted [@Kramer1987]. An extension that we plan to pursue is to use the Spatial Error Model, which allows for spatial correlation in the residuals.
+
+Let $\rho$ be the parameter governing the extent of spatial correlation, $\bf \varepsilon$ be a spherical error term, and ${\bf W}$ be a matrix of spatial weights (containing proximity of neighbours).
 
 The spatial error model is specified:
 
-$$y = X \beta + (I_n-\rho W)^{-1}\varepsilon$$
+$${\bf y} = {\bf X} {\boldsymbol \beta} + ({\bf I}_n-\rho {\bf W})^{-1}{\bf \varepsilon}$$
 
 Estimation can be done using the `spdep` package [@spdep].
 
 ### Spatial imputation using a finer level of disaggregation
 
-Imputing electorate profiles using Census data aggregated at *division* level should provide reasonable estimates, but perhaps using the lowest level of disaggregation (mesh blocks) could improve accuracy. We did do this but with postal areas, of which there are approximately 2,400 in Australia. Using the 2011 Census divisions as a test case, we estimated test error using both postal areas and Census divisions from the 2006 and 2016 Censuses. There was no evidence to suggest that postal areas improved the accuracy of the imputation, compared with the higher aggregation level of Census divisions.
+To improve the accuracy of the imputated socio-demographic variables in each election, Census data could be collected at a finer level of disaggregation than Census division, as is done in this study. 
+
+However, this was attempted using Census data aggregated to postal areas. There are approximately 2,400 postal areas in Australia. To test the accuracy of these two levels of aggregation, the 2011 Census divisions were used as a test set, for which socio-demographics were imputed using the 2006 and 2016 Censuses. There was no evidence to suggest that postal areas improved the accuracy of the imputation, compared with the higher aggregation level of Census divisions.
 
 ### Considering polling booths, rather than electorates
 
-Matching polling booths with their Census collection districts, which is done in existing Australian socio-political studies, presents another way to model voter behaviour. Instead of having $n=150$, we would have $n=6000$. However, modelling results at electorate level is still the key point of interest because electorates ultimately determine the results of Australian federal elections. It is unclear whether this higher degree of resolution will provide any greater insight, as our findings confirm and add to the existing literature of studies that use polling booths.
+Matching voting results of each polling booth with the nearest Census collection districts, as done in some of the existing Australian socio-political studies, presents another way to model voter behaviour. Instead of having $n=150$ observations (electorates), there would be $n=6000$ observations (polling booths) in a given election. However, modelling results at electorate level is still the key point of interest because electorates ultimately determine the results of Australian federal elections. It is unclear whether this higher degree of resolution will provide any greater insight, as this study both confirms and adds to the findings of the existing studies that use polling booths.
