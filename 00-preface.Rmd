@@ -1,8 +1,8 @@
 # Preface {-}
 
-This document is a draft thesis, intended for submission as a checkpoint of the journey that is EBS Honours 2018.
+This thesis is the final submission in the journey that is EBS Honours 2018.
 
-The research consists of an examination of the relationships that exist between electorate socio-demographics and voting behaviour in Australian federal elections. The six elections occuring from 2001 to 2016 are considered in this study, using socio-demographic information from the Census of Population and Housing. Comparisons are made across the six elections to examine whether socio-demographic variables have changing effects over time.
+This research consists of an examination of the relationships that exist between electorate socio-demographics and voting behaviour in Australian federal elections. The six elections occuring from 2001 to 2016 are considered in this study, using socio-demographic information from the Census of Population and Housing. Comparisons are made across the six elections to examine whether socio-demographic variables have changing effects over time.
 
 Data used in this study is available online from the Australian Bureau of Statistics, and the Australian Electoral Commission. 
 
