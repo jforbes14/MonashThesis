@@ -1,169 +1,168 @@
 \appendix
 
-# Socio-demographic metrics for each electorate {#a:describeSD}
+# Socio-demographic variables for each electorate {#a:describeSD}
 
-ID: Commonwealth Electoral Division (Census division) number
-
-Electorate: Name of Commonwealth Electoral Division
-
-State: State of Census division
-
-Population: Count of persons in Census division
+The socio-demographic variables obtained from the Census are defined as follow.
 
 **Age**
 
-Age0004: Percentage of population aged 0-4 years
+`Age0004`: Percentage of population aged 0-4 years
 
-Age0514: Percentage of population aged 5-14 years
+`Age0514`: Percentage of population aged 5-14 years
 
-Age1519: Percentage of population aged 15-19 years
+`Age1519`: Percentage of population aged 15-19 years
 
-Age2024: Percentage of population aged 20-24 years
+`Age2024`: Percentage of population aged 20-24 years
 
-Age2534: Percentage of population aged 25-34 years
+`Age2534`: Percentage of population aged 25-34 years
 
-Age3544: Percentage of population aged 35-44 years
+`Age3544`: Percentage of population aged 35-44 years
 
-Age4554: Percentage of population aged 45-54 years
+`Age4554`: Percentage of population aged 45-54 years
 
-Age5564: Percentage of population aged 55-64 years
+`Age5564`: Percentage of population aged 55-64 years
 
-Age6574: Percentage of population aged 65-74 years
+`Age6574`: Percentage of population aged 65-74 years
 
-Age7584: Percentage of population aged 75-84 years
+`Age7584`: Percentage of population aged 75-84 years
 
-Age85plus: Percentage of population aged 85+ years
+`Age85plus`: Percentage of population aged 85+ years
 
 **Median Statistics**
 
-MedianPersonalIncome: Median weekly personal income
+`MedianPersonalIncome`: Median weekly personal income
 
-MedianHouseholdIncome: Median weekly household income
+`MedianHouseholdIncome`: Median weekly household income
 
-MedianFamilyIncome: Median weekly family income
+`MedianFamilyIncome`: Median weekly family income
 
-MedianAge: Median age
+`MedianAge`: Median age
 
-MedianRent: Median weekly rental payment amount (of those who rent)
+`MedianRent`: Median weekly rental payment amount (of those who rent)
 
-MedianLoanPay: Median mortgage loan repayment amount (of mortgage payments)
+`MedianLoanPay`: Median mortgage loan repayment amount (of mortgage payments)
 
 **Religion**
 
-Christianity: Percentage of respondents that identified as Christian (excluding overseas visitors)
+`Christianity`: Percentage of respondents that identified as Christian (excluding overseas visitors)
 
-Anglican: Percentage of respondents that identified as Anglican (excluding overseas visitors)
+`Anglican`: Percentage of respondents that identified as Anglican (excluding overseas visitors)
 
-Catholic: Percentage of respondents that identified as Catholic (excluding overseas visitors)
+`Catholic`: Percentage of respondents that identified as Catholic (excluding overseas visitors)
 
-Buddhism: Percentage of respondents that identified as Buddhist (excluding overseas visitors)
+`Buddhism`: Percentage of respondents that identified as Buddhist (excluding overseas visitors)
 
-Islam: Percentage of respondents that identified as Muslim (excluding overseas visitors)
+`Islam`: Percentage of respondents that identified as Muslim (excluding overseas visitors)
 
-Judaism: Percentage of respondents that identified as Jewish (excluding overseas visitors)
+`Judaism`: Percentage of respondents that identified as Jewish (excluding overseas visitors)
 
-NoReligion: Percentage of respondents that identified as "no religion", "atheist" etc. (excluding overseas visitors)
+`NoReligion`: Percentage of respondents that identified as "no religion", "atheist" etc. (excluding overseas visitors)
 
-OtherChrist: Percentage of respondents that identified as Christian, but not Anglican or Catholic (excluding overseas visitors)
+`OtherChrist`: Percentage of respondents that identified as Christian, but not Anglican or Catholic (excluding overseas visitors)
 
 **Language, Heritage, Birthplace and Citizenship**
 
-Indigenous: Percentage of population that identify as Indigenous or Torres Strait Islander
+`Indigenous`: Percentage of population that identify as Indigenous or Torres Strait Islander
 
-AusCitizen: Percentage of population who are Australian Citizens
+`AusCitizen`: Percentage of population who are Australian Citizens
 
-BornAsia: Percentage of respondents born in Asia (includes: Bangladesh, Cambodia, China, Hong Kong, Indonesia, Japan, South Korea, Malaysia, Nepal, Pakistan, Phillipines, Singapore, Sri Lanka, Thailand, Taiwan, Vietnam)
+`BornAsia`: Percentage of respondents born in Asia (includes: Bangladesh, Cambodia, China, Hong Kong, Indonesia, Japan, South Korea, Malaysia, Nepal, Pakistan, Phillipines, Singapore, Sri Lanka, Thailand, Taiwan, Vietnam)
 
-BornMidEast: Percentage of respondents born in Middle East (includes: Afghanistan, Egypt, Iran, Lebanon, Turkey)
+`BornMidEast`: Percentage of respondents born in Middle East (includes: Afghanistan, Egypt, Iran, Lebanon, Turkey)
 
-BornSEEurope: Percentage of respondents born in South-East Europe (includes: Bosnia and Herzegovina, Croatia, Greece, Macedonia, other South-East Europe)
+`BornSEEurope`: Percentage of respondents born in South-East Europe (includes: Bosnia and Herzegovina, Croatia, Greece, Macedonia, other South-East Europe)
 
-BornUK: Percentage of respondents born in the United Kingdom (includes: England, Wales, Scotland, Northern Ireland)
+`BornUK`: Percentage of respondents born in the United Kingdom (includes: England, Wales, Scotland, Northern Ireland)
 
-BornElsewhere: Percentage of respondents born overseas in regions over Asia, Middle East, South-East Europe and UK  (includes overseas visitors)
+`BornElsewhere`: Percentage of respondents born overseas in regions over Asia, Middle East, South-East Europe and UK  (includes overseas visitors)
 
-OtherLanguageHome: Percentage of respondents that speak other languages other than English at home
+`OtherLanguageHome`: Percentage of respondents that speak other languages other than English at home
 
 **Education**
 
-CurrentlyStudying: Percentage of population that are currently studying
+`CurrentlyStudying`: Percentage of population that are currently studying
 
-HighSchool: Percentage of respondents (15 years and over) that have finished High School
+`HighSchool`: Percentage of respondents (15 years and over) that have finished High School
 
-Bachelor: Percentage of respondents (15 years and over) that have completed a Bachelors degree
+`Bachelor`: Percentage of respondents (15 years and over) that have completed a Bachelors degree
 
-Postgraduate: Percentage of respondents (15 years and over) that have completed a Postgraduate degree
+`Postgraduate`: Percentage of respondents (15 years and over) that have completed a Postgraduate degree
 
-DipCert: Percentage of respondents (15 years and over) that have completed a diploma or certificate
+`DipCert`: Percentage of respondents (15 years and over) that have completed a diploma or certificate
 
 Note: respondents is calculated by taking population 15 years and over, less question non-responses
 
 **Employment**
 
-Unemployed: Unemployment rate (percentage)
+`Unemployed`: Unemployment rate (percentage)
 
-LFParticipation: Labour force participation rate (percentage)
+`LFParticipation`: Labour force participation rate (percentage)
 
-Volunteer: Percentage of respondents (15 years and over) that do volunteer work [2006, 2011, 2016]
+`Volunteer`: Percentage of respondents (15 years and over) that do volunteer work [2006, 2011, 2016]
 
 **Industry of Employment**
 
-ExtractiveJobs: Percentage of employed persons (respondents) who work in agriculture, mining, electricity, gas, water or waste
+`ExtractiveJobs`: Percentage of employed persons (respondents) who work in agriculture, mining, electricity, gas, water or waste
 
-Transformative: Percentage of employed persons (respondents) who work in construction or manufacturing
+`Transformative`: Percentage of employed persons (respondents) who work in construction or manufacturing
 
-Distributive: Percentage of employed persons (respondents) who work in wholesale trade, retail trade, transport, post or warehousing
+`Distributive`: Percentage of employed persons (respondents) who work in wholesale trade, retail trade, transport, post or warehousing
 
-Finance: Percentage of employed persons (respondents) who work in finance or insurance
+`Finance`: Percentage of employed persons (respondents) who work in finance or insurance
 
-SocialServ: Percentage of employed persons (respondents) who work in education and training, healthcare, social work, community, arts and recreation
+`SocialServ`: Percentage of employed persons (respondents) who work in education and training, healthcare, social work, community, arts and recreation
 
 **Occupation Groups**
 
-AdminJobs: Percentage of employed persons (respondents) who work in management, administration, clerical duties and sales
+`AdminJobs`: Percentage of employed persons (respondents) who work in management, administration, clerical duties and sales
 
-Professional: Percentage of employed persons (respondents) who work as a professional
+`Professional`: Percentage of employed persons (respondents) who work as a professional
 
-Tradesperson: Percentage of employed persons (respondents) who specialise in a trade
+`Tradesperson`: Percentage of employed persons (respondents) who specialise in a trade
 
-Laborer: Percentage of employed persons (respondents) who work as a laborer
+`Laborer`: Percentage of employed persons (respondents) who work as a laborer
 
 **Family and Relationship**
 
-Married: Percentage of people that are married (excluding overseas visitors, including not stated)
+`Married`: Percentage of people that are married (excluding overseas visitors, including not stated)
 
-DeFacto: Percentage of people that are in a De Facto relationship (excluding overseas visitors, including not stated)
+`DeFacto`: Percentage of people that are in a De Facto relationship (excluding overseas visitors, including not stated)
 
-FamilyRatio: Ratio of people in families to the number of total families (ie. average number of people per family)
+`FamilyRatio`: Ratio of people in families to the number of total families (ie. average number of people per family)
 
-CoupleNoChildHouse: Percentage of households that are made up of an adult couple with no children
+`CoupleNoChildHouse`: Percentage of households that are made up of an adult couple with no children
 
-CoupleWChildHouse: Percentage of households that are made up of an adult couple with children
+`CoupleWChildHouse`: Percentage of households that are made up of an adult couple with children
 
-OneParentHouse: Percentage of households that are made up of a single parent with children
+`OneParentHouse`: Percentage of households that are made up of a single parent with children
 
-SPHouse: Percentage of households that are made up of a single person
+`SPHouse`: Percentage of households that are made up of a single person
 
 **Dwelling**
 
-Owned: Percentage of dwellings that are owned outright (of respondents)
+`Owned`: Percentage of dwellings that are owned outright (of respondents)
 
-Mortgage: Percentage of dwellings that are on a mortgage (of respondents)
+`Mortgage`: Percentage of dwellings that are on a mortgage (of respondents)
 
-Renting: Percentage of dwellings that are being rented (of respondents)
+`Renting`: Percentage of dwellings that are being rented (of respondents)
 
-PublicHousing: Percentage of dwellings that are owned by the government, and rented out to tenants (of respondents)
+`PublicHousing`: Percentage of dwellings that are owned by the government, and rented out to tenants (of respondents)
 
-NotOwned: Percentage of dwellings (respondents only) that are not owned outright or on a mortgage
+`NotOwned`: Percentage of dwellings (respondents only) that are not owned outright or on a mortgage
 
-DiffAddress: Percentage of respondents who live at a different address to what they did 5 years prior
+`DiffAddress`: Percentage of respondents who live at a different address to what they did 5 years prior
+
+**Other**
+
+`Area`: Area of Census division in square kilometers
+
+`Population`: Count of persons in Census division
 
 
+# Distribution of socio-demographic variables across elections {#a:summary}
 
-
-# Summary of variables in each election {#a:summary}
-
-As seen in Chapter \@ref(ch:Data), violin plots are used to depict the distributions of socio-demographic variables across years. Violin plots depict the distribution as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
+As seen in Chapter \@ref(ch:Data), violin plots are used to 
+depict the distributions of socio-demographic variables across years. Violin plots depict the distribution as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
 
 ```{r violinall1, fig.height=10, fig.cap = "Distribution of each socio-demographic variable across elections (part 1)."}
 # Unscaled violin plots go here
@@ -217,7 +216,7 @@ data_mod %>%
 
 # Principal components {#a:PCloadings}
 
-The variable loadings in the first principal component are relatively common across years, which was shown in Figure \@ref(fig:loadings-1) in Chapter \@ref(ch:Modelling). The same is true for the second component, and to a lesser extent the third and four components (see Figures \@ref(fig:loadings2), \@ref(fig:loadings3) and \@ref(fig:loadings4) below. 
+The variable loadings in the first principal component are relatively common across years (see Figure \@ref(fig:loadings-1) in Chapter \@ref(ch:Modelling)). The same is true for the second component, and to a lesser extent the third and four components (see Figures \@ref(fig:loadings2), \@ref(fig:loadings3) and \@ref(fig:loadings4) below. 
 
 ```{r loadings2, fig.cap = "Loadings of each variable in the second principal of each election year (points), with a line showing the range across years."}
 vis_loadings %>% 
@@ -245,14 +244,11 @@ vis_loadings %>%
 ```
 
 
-
-
-
 # Why choose all five variable linear models? {#a:fivevar}
 
-For each election, we compute all possible five variable linear models, from which Akaike weights are computed. *Five* variable models are a compromise between computational burden and capturing sufficient information. 
+For each election, a model set containing all possible five variable linear models is constructed, from which Akaike weights are computed. *Five* variable models are a compromise between computational burden and capturing sufficient information. 
 
-It is too burdensome to run linear models for all possible combinations of our predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where incremental gain in R-squared from adding a variable plateaus. 
+It is too burdensome to run linear models for all possible combinations of the $p=30$ predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where the incremental gain in R-squared from adding a variable plateaus. 
 
 This iterative procedure involves collecting 20 models for each possible number of predictors $p$ in $p = 3, 4, ..., 30$. This means 20 models with 3 variables, 20 models with 4 variables and so on. The process is as follows:
 
@@ -260,11 +256,11 @@ This iterative procedure involves collecting 20 models for each possible number 
 
 2. Retain the 10 models with highest R-squared, and another 10 models selected at random.
 
-3. Fit all possible three variable models that nest these 20 two-variable models, by adding one variable. This means for every retained model, there will be $28$ models fit.
+3. Fit all possible three variable models that nest these 20 two-variable models, by adding one variable. (This means for every retained two variable model, there will be $28$ models fit.)
 
 4. Repeat steps 2 and 3 for the threevariable models, four variable models, and so on, until reaching a model with all 30 variables.
 
-Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained, with the number of predictors on the x-axis, and R-squared on the y-axis. The line represents the maximum R-squared each number of predictors. Around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
+Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained against the number of predictors used. The line represents the maximum R-squared each number of predictors. Around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
 
 All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and includes models that have large R-squared.
 
@@ -280,7 +276,7 @@ ggplot(aes(x = num_vars, y = r2), data = step_all) +
 
 # Resultant Akaike weights {#a:allSAW}
 
-The sum of Akaike weights $s_j$ for each variable $j$ in each of the elections is shown in the Table E.1 below.
+The sum of Akaike weights $s_j$ for each variable $j$ in each of the elections are shown in the Table E.1 below.
 
 ```{r allSAW, fig.cap = "Sum of Akaike weights for each variable, in each election.", results = 'asis'}
 load("../Modelling-Elections/Clean-Data/var_imp_all.rda")
@@ -297,6 +293,34 @@ tab_aw <- var_imp_all %>%
 
 print(tab_aw, comment = FALSE, include.rownames = FALSE, size = "\\footnotesize")
 ```
+
+
+# Summary of socio-demographics in the superset {#a:summarySS}
+
+Violin plots are used in place of summary statistics to describe the distribution of each socio-demographic predictor, along with the two-party preferred vote, in each of the election years.
+
+```{r sumSS, fig.cap="Violin plots of each socio-demographic variable, in each election. This provides an illustration of the distribution of each variable."}
+data_mod %>% 
+  select(c(superset$varname), year) %>% 
+  gather("key", "value", -year) %>% 
+  ggplot(aes(x = year, y = value)) +
+  geom_violin(aes(fill = year)) +
+  facet_wrap(~key) +
+  coord_fixed(ratio = 0.5) +
+  theme(axis.text.x = element_text(size = 8, angle = 75, vjust = 0.5), 
+        axis.text.y = element_text(size=8)) + 
+  guides(fill = FALSE) +
+  labs(x = "Election year", y = "Value of centered and standardized\nsocio-demographic variable")
+```
+```{r TPPviolin, out.width='75%', fig.cap="Violin plots illustrating the distribution of the two-party preferred vote across election years."}
+data_mod %>% 
+  ggplot(aes(x = year, y = Perc_LNP)) + 
+  geom_violin(aes(fill = year)) +
+  labs(x = "Election year", y = "Two-party preferred vote (%)") +
+  theme(axis.text.x = element_text(size = 8, angle = 75, vjust = 0.5), 
+        axis.text.y = element_text(size=8)) + coord_fixed(0.05) + guides(fill = FALSE)
+```
+
 
 
 # Scatterplots of two-party preferred against predictors in the superset {#a:scatterplots}
@@ -357,7 +381,7 @@ data_mod %>% ggplot(aes(x = AdminJobs, y = Perc_LNP)) + geom_point(aes(label = E
 
 # Diagnostics {#a:diagnostics}
 
-In this section, regression diagnostics are conducted to test the assumptions involved in a linear model. Residual heteroskedasticity and non-normality are tested in \@ref(a:resids). Tests for non-linear patterns in the residuals against included predictors are in \@ref(a:patternsin), and patterns in the residuals against missing predictors are contained in \@ref(a:patternsout). Tests for influential points are found in \@ref(a:influence).
+In this section, regression diagnostics are conducted to test the assumptions involved in linear regression. Residual heteroskedasticity and non-normality are tested in \@ref(a:resids). Tests for non-linear patterns in the residuals against included predictors are in \@ref(a:patternsin), and patterns in the residuals against missing predictors are contained in \@ref(a:patternsout). Tests for influential points are found in \@ref(a:influence).
 
 ## Residuals {#a:resids}
 
@@ -378,7 +402,7 @@ aug_all %>%
   ggplot(aes(x = .resid)) + 
   geom_histogram() +
   facet_wrap(~year, nrow = 2) + 
-  labs(x = "Residuals", y = "Count", title = "Residual histograms") +
+  labs(x = "Residuals", y = "Count") +
   theme(axis.title = element_text(size = 10), title = element_text(size = 10),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.75)
 ```
@@ -389,7 +413,7 @@ aug_all %>%
   ggplot(aes(sample = .resid)) + 
   geom_qq(alpha = 0.4) + geom_qq_line() + 
   facet_wrap(~year, nrow = 2) +
-  labs(x = "Theoretical quantiles", y = "Sample residual quantiles", title = "Residual quantile-quantile plots") +
+  labs(x = "Theoretical quantiles", y = "Sample residual quantiles") +
   theme(axis.title = element_text(size = 10), title = element_text(size = 10),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.1)
 ```
@@ -401,7 +425,7 @@ aug_all %>%
   ggplot(aes(x=.fitted, y=.resid)) + 
   geom_point() +
   facet_wrap(~year, nrow = 2) + 
-  labs(x = "Fitted values", y = "Residuals", title = "Residuals against fitted values") +
+  labs(x = "Fitted values", y = "Residuals") +
   theme(axis.title = element_text(size = 10), title = element_text(size = 10),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) + coord_fixed(ratio = 0.75)
 ```
@@ -410,7 +434,7 @@ aug_all %>%
 
 Tests for non-linear relationships between the predictors in the model and the residuals are conducted by fitting a loess smooth to the scatterplot with a 95% confidence band. If zero is contained in the confidence band for all values of the predictor, then is insufficient evidence of a significant non-linearity. No obvious non-linearities are found in any election. Plots for 2016 are shown in Figure \@ref(fig:resvpred).
 
-```{r resvpred, out.width='80%', fig.cap = "Residuals vs. predictors in the 2016 election model. No obvious signs of non-linearity."}
+```{r resvpred, out.width='90%', fig.cap = "Residuals vs. predictors in the 2016 election model. No obvious signs of non-linearity."}
 aug_all %>%
   filter(year == "2016") %>% 
   gather(key = "variable", value = "value", -c(starts_with("."), Perc_LNP, year)) %>% 
@@ -426,13 +450,13 @@ Scatterplots of the residuals against socio-demographic predictors were produced
 
 ## Influence {#a:influence}
 
-Across the six elections, only two electorates have moderately large influence - Kalgoorlie (2001, 2004) and Sydney (2007, 2016) - as they have a cook's distance greater than 0.2 (0.31, 0.22, 0.22 and 0.27 respectively). The Kalgoorlie electorate supports the Liberal party  in these years ($TPP$ of around 55%), but has an extremely low incidence of administrative jobs and a high incidence of atheism which are strong factors of Labor support. Sydney is a staunch Labor electorate, with $TPP$ ranging from 30.50% to 35.35% across the six years, whilst having very large student populations, a low incidence of single parent households and high rental/loan prices. All of the observations with moderately large influence have hat values over 0.3, indicating that these also have unusual socio-demographic compositions.
+Across the six elections, only two electorates have moderately large influence - Kalgoorlie (2001, 2004) and Sydney (2007, 2016) - as they have a cook's distance greater than 0.2 (0.31, 0.22, 0.22 and 0.27 respectively). The Kalgoorlie electorate supports the Liberal party in these years ($TPP$ of around 55%), but has an extremely low incidence of administrative jobs (which is tied to strong Labor support). Sydney is a staunch Labor electorate, with $TPP$ ranging from 30.50% to 35.35% across the six years, whilst having very large student populations and a low incidence of single parent households. All of the observations with moderately large influence have hat values over 0.3, indicating that these also have unusual socio-demographic compositions.
 
 The most influential electorate is Kalgoorlie in 2001, with cook distance of 0.31. Using a threshold of 0.5, no outliers outliers appear in any of the elections, and therefore no observations need to be removed. 
 
 # Omitted variables {#a:omittedvar}
 
-There are twenty socio-demographic predictors that are not in the superset, and some of these may seem releveant and useful to include in a model. However, most of the variation in many of the left out variables is explained by predictors included in the model. To determine the percentage of variation explained, the R-squared is recorded from a regression of each left out predictor on the superset of explanatory variables in the model (including interactions). Figure \@ref(fig:ovb) shows these R-squared values, for each left out predictor, in each election.
+There are twenty socio-demographic predictors that are not in the superset, and some of these may seem releveant and useful to include in a model. However, most of the variation in many of the left out variables can be explained by predictors included in the model. To determine the percentage of variation explained, the R-squared is recorded from a regression of each left out predictor on the superset of explanatory variables in the model (including interactions). Figure \@ref(fig:ovb) shows these R-squared values, for each left out predictor, in each election.
 
 For example, over 85% of the variation in the `Incomes` variable and over 75% of the variation in the variable `LFParticipation`, is actually explained by the superset of variables. Other variables, for example `Judaism`, are not well explained by the superset, but are also not influential in determining two-party preference which justifies their exclusion from the final model.
 
@@ -481,7 +505,9 @@ OVB_all %>%
 
 This section contains the partial residual plots and 2D heatmaps that were omitted from Chapter \@ref(ch:Insights). See Chapter \@ref(ch:Insights) for a discussion of the insights from these visualizations.
 
-### Immigrants from the United Kingdom
+### Migrants from the United Kingdom
+
+The proportion of an electoral population born in the United Kingdom, `BornUK`, does not have a significant effect on two-party preference in any of the elections.
 
 ```{r UK1, out.width="100%", fig.cap="Partial residual plots for the effect of population born in the United Kingdom, across election years. A linear regression line is overlaid. No significant relationship is observed in any election."}
 BornUK_01 <- visreg(fit_ss_01, "BornUK", gg = T, print.cond = FALSE) + 
@@ -537,7 +563,10 @@ all_coefs %>% filter(term == "BornUK") %>%
   labs(x = "", y = "Coefficient estimate: BornUK")
 ```
 
+
 ### Rental and Loan Payments
+
+The factor `RentLoan` combines electoral median rent and loan payments. In the 2010 election, electorates with higher payment amounts were significantly more likely to support the Liberal party, whereas in other elections `RentLoan` did not have a significant effect.
 
 ```{r rentloan1, out.width="100%", fig.cap="Partial residual plots for the effect of rental and loan prices, across election years. A linear regression line is overlaid. In 2010, electorates with higher median rental and loan payments were more likely to support the Liberal party."}
 RentLoan_01 <- visreg(fit_ss_01, "RentLoan", gg = T, print.cond = FALSE) + 
