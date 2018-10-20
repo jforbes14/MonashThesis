@@ -306,13 +306,13 @@ data_mod %>%
   ggplot(aes(x = year, y = value)) +
   geom_violin(aes(fill = year)) +
   facet_wrap(~key) +
-  coord_fixed(ratio = 0.5) +
+  coord_fixed(ratio = 0.3) +
   theme(axis.text.x = element_text(size = 8, angle = 75, vjust = 0.5), 
         axis.text.y = element_text(size=8)) + 
   guides(fill = FALSE) +
   labs(x = "Election year", y = "Value of centered and standardized\nsocio-demographic variable")
 ```
-```{r TPPviolin, out.width='75%', fig.cap="Violin plots illustrating the distribution of the two-party preferred vote across election years."}
+```{r TPPviolin, out.width='50%', fig.cap="Violin plots illustrating the distribution of the two-party preferred vote across election years."}
 data_mod %>% 
   ggplot(aes(x = year, y = Perc_LNP)) + 
   geom_violin(aes(fill = year)) +
