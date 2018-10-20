@@ -66,7 +66,7 @@ grid.arrange(Born_SE_01, Born_SE_04, Born_SE_07, Born_SE_10, Born_SE_13, Born_SE
              bottom = textGrob("Population born in South-Eastern Europe", gp = gpar(cex = 0.8)))
 ```
 
-```{r SE2, out.width='75%', fig.cap="Estimated coefficients for the population born in South-Eastern Europe, across election years and with 95\\% confidence bands. Electorates with higher proportions of South-Eastern European populations were associated with higher Labor party preference."}
+```{r SE2, out.width='75%', fig.cap="Estimated coefficients for the population born in South-Eastern Europe, across election years and with 95\\% confidence bands. Electorates with higher proportions of South-Eastern European populations were associated with higher Labor party preference in all elections."}
 # Coefficients
 all_coefs %>% filter(term == "BornSEEurope") %>%
   ggplot(aes(x=year, y=estimate)) +
@@ -84,7 +84,7 @@ all_coefs %>% filter(term == "BornSEEurope") %>%
 
 Recall that in Chapter \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
 
-```{r norelig1, fig.cap="Partial residual plots for the effect of the population proportion not identifying with a religion, across election years. The overlaid regression lines show that a significant negative effect emerges in 2010."}
+```{r norelig1, fig.cap="Partial residual plots for the effect of the population proportion not identifying with a religion, across election years. The overlaid regression lines show that a significant negative slope emerges in 2010, meaning that Labor is assoicated with electorates with a higher proportion of people not identifying with a religion."}
 NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
@@ -144,8 +144,8 @@ all_coefs %>% filter(term == "NoReligion") %>%
 
 ### Student population
 
-The proportion of the electorate population currently studying is reflected in the variable `CurrentlyStudying`.
-In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a weak (insignificant) effect in the direction of the Labor party. From 2007, there is a distinct change, as the positive slopes in Figure \@ref(fig:studying) indicate that this effect has shifted towards the Liberal party. Only in 2010 is this relationship significant (by the horizontal line test).
+The proportion of an electorate's population currently studying is reflected in the variable `CurrentlyStudying`.
+In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a weak (insignificant) effect in the direction of the Labor party. From 2007, there is a distinct change, as the positive slopes in Figure \@ref(fig:studying) indicate that the effect of larger student populations has shifted towards the Liberal party. Only in 2010 is this relationship significant (by the horizontal line test).
 
 ```{r studying, fig.cap="Partial residual plots for the effect of student populations, across election years. A Liberal (positive) effect is estimated from 2007, but is only significant in 2010."}
 CurrentlyStudying_01 <- visreg(fit_ss_01, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
@@ -215,11 +215,11 @@ There are four two-way interactions in the final model. For each interaction, 2D
 
 ### Education and Age
 
-Even though the population is ageing, and education levels have been improving all across Australia (as seen in Chapter \@ref(ch:Data)), it appears that young electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
+Even though the population is ageing, and education levels have been improving all across Australia (as seen in Chapter \@ref(ch:Data)), it appears that younger electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
 
 The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each 2D heatmap in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
 
-```{r educage, fig.cap="2D heatmap of combinations of education and median age, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with high education levels and low median age consistently support Labor (bottom-right). Older electorates with low education levels shift to support Liberal from 2007 (top-left)."}
+```{r educage, fig.cap="2D heatmap for combinations of education and median age, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with high education levels and low median age consistently support Labor (bottom-right). Older electorates with low education levels shift to support Liberal from 2007 (top-left)."}
 
 # Partial residuals for each year
 dat16 <- data_mod %>% 
@@ -392,9 +392,9 @@ grid.arrange(Educ_Age_01, Educ_Age_04, Educ_Age_07, Educ_Age_10, Educ_Age_13, Ed
 
 ### Education and Single parent households
 
-The proportion of single parent households, `OneParentHouse` is interacted with `Education`, and the predicted two-party preferred vote for each combination is illustrated in Figure \@ref(fig:educOP). Electorates with higher education levels and low proportions of single parent households have been consistently strong supporters of the Liberal party across all elections. It also evident that for all education levels, increasing the proportion of single parent households shifts predicted support away from Liberal towards Labor. This effect is stronger for electorates with higher education levels. 
+The proportion of single parent households, `OneParentHouse` is interacted with `Education`, and the predicted two-party preferred vote for each combination is illustrated in Figure \@ref(fig:educOP). Electorates with higher education levels and low proportions of single parent households are consistently strong supporters of the Liberal party across all elections. It also evident that for all education levels, increasing the proportion of single parent households shifts predicted support away from Liberal towards Labor. This effect is stronger for electorates with higher education levels. 
 
-```{r educOP, fig.cap="2D heatmap of combinations of education levels and the proportion of single parent households, in each election year. Colour indicates the predicted two-party preferred vote. For all education levels, a higher proportion of single parent households shifts predicted support to Labor."}
+```{r educOP, fig.cap="2D heatmap for combinations of education levels and the proportion of single parent households, in each election year. Colour indicates the predicted two-party preferred vote. For all education levels, a higher proportion of single parent households shifts predicted support to Labor."}
 
 # Partial residuals for each year
 dat16 <- data_mod %>% 
@@ -567,11 +567,11 @@ grid.arrange(Educ_OP_01, Educ_OP_04, Educ_OP_07, Educ_OP_10, Educ_OP_13, Educ_OP
 
 ### Extractive jobs and Administrative jobs
 
-There are two work related variables included in the final model, `ExtractiveJobs` and `AdminJobs`. These reflect the proportion of people working in an industry relating to natural resources (e.g. mining, gas, water, agriculture), and the proportion of administrative jobs (e.g. administration, clerical, sales and managerial roles), respectively. These two variables are included in an interaction, and the fitted effect of possible combinations is depicted in Figure \@ref(fig:jobs1).
+There are two work related variables included in the final model, `ExtractiveJobs` and `AdminJobs`. These reflect the proportion of people working in an industry relating to natural resources (e.g. mining, gas, water and agriculture), and the proportion of administrative jobs (e.g. administration, clerical, sales and managerial roles), respectively. These two variables are included in an interaction, and the fitted effect of possible combinations is depicted in Figure \@ref(fig:jobs1).
 
-Higher values of either `ExtractiveJobs` or `AdminJobs` is associated with increased support for the Liberal party in all elections. Furthermore, electorates with few workers in both of these job types have been supportive of Labor, whereas having many such workers is found to have strong stronger Liberal support. There does not appear to be any evidence of a time-varying effect for these two variables.
+Higher values of either `ExtractiveJobs` or `AdminJobs` is associated with increased support for the Liberal party in all elections. Furthermore, electorates with few workers in both of these job types are supportive of Labor, whereas having many such workers is found to have strong stronger Liberal support. There does not appear to be any evidence of a time-varying effect for these two variables.
 
-```{r jobs1, fig.cap="2D heatmap of combinations of extractive jobs and administrative jobs, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with many workers in both job types are predicted to support Liberal, whilst those with few workers in both job types support Labor."}
+```{r jobs1, fig.cap="2D heatmap for combinations of extractive jobs and administrative jobs, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with many workers in both job types are predicted to support Liberal, whilst those with few workers in both job types support Labor."}
 # Partial residuals for each year
 dat16 <- data_mod %>% 
   filter(year == "2016") %>% 
