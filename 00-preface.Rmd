@@ -5,4 +5,3 @@ This thesis is the final submission in the journey that is EBS Honours 2018.
 All data used in this study is available online from the Australian Bureau of Statistics, and the Australian Electoral Commission. 
 
 
-\clearpage\pagenumbering{arabic}\setcounter{page}{1}
