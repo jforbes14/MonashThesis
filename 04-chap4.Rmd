@@ -161,7 +161,7 @@ From the calculation of Akaike weights $w_m$ and subsequent ranking of variables
 
 - `CurrenlyStudying`: Student population as a proportion of the total population [1]
 
-A table of the sums of Akaike weights for all variables, in each year, is given in Appendix \@ref(a:allSAW). Summary statistics in the form of violin plots, and scatterplots of the response against each variable contained in this superset may be found in Appendix \@ref(a:summarySS) and Appendix \@ref(a:scatterplots).
+A table of the sums of Akaike weights for all variables, in each year, is given in Appendix \@ref(a:allSAW). Summary statistics for each variable in the form of violin plots, and scatterplots of the response against each variable contained in this superset are located in Appendix \@ref(a:summarySS) and Appendix \@ref(a:scatterplots).
 
 ## Adding interactions
 
