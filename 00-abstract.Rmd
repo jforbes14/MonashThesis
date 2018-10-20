@@ -11,4 +11,4 @@ This research consists of an examination of the relationships between electoral 
 <!--
 The following line is required to re-set page numbering after preliminary material. Do not remove
 -->
-\clearpage\pagenumbering{arabic}\setcounter{page}{0}
+\clearpage\pagenumbering{arabic}\setcounter{page}{2}
