@@ -1,14 +1,14 @@
 # Modelling {#ch:Modelling}
 
-Socio-demographic variables for each electorate have now been calculated and matched with the two-party preferred vote, for all six elections. In this chapter, we consider how to best answer the research question; *What socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?* This involves discussing an appropriate statistical model, reducing the dimension of the data by grouping similar variables together, selecting the most important predictors and adding interaction terms. Each of these four steps are described in subsections below, followed by the estimated models. 
+Socio-demographic variables for each electorate have now been calculated and matched with the two-party preferred vote, for all six elections. In this chapter, we consider how to best answer the research question; *Which socio-demographics are the key determinants of support between the Labor and Liberal parties, and how have their effects changed over time?* This involves discussing an appropriate statistical model, reducing the dimension of the data by grouping similar variables together, selecting the most important predictors and adding interaction terms. Each of these four steps are described in subsections below, followed by the estimated models. 
 
 ## Choosing a statistical model
 
-With 150 electorates in each election, there are effectively six cross-sectional data sets. There are at least three different approaches which could be pursued. One option is to combine these cross-sections into a single pooled cross-section with 900 observations, allowing for the construction of a longitudinal model. Another option is to construct a panel data set for a particular set of electorate boundaries across all elections. This way we could potentially capture any unobserved individual heterogeneity using either fixed or random effects. A third option is to model each election as a separate cross-section.
+With 150 electorates in each election, there are effectively six cross-sectional data sets. There are at least three different approaches which could be pursued. One option is to combine these cross-sections into a single pooled cross-section with 900 observations, allowing for the construction of a longitudinal model. Another option is to construct a panel data set for a particular set of electoral boundaries across all elections. This way we could potentially capture any unobserved individual heterogeneity using either fixed or random effects. A third option is to model each election as a separate cross-section.
 
 Treating the data as a pooled cross-section would allow us to capture both time invariant and time varying socio-demographic effects, as well as yearly fixed effects (or a time trend). In order to do this, we must specify which regressors are to have time-varying effects (and which will not), despite not knowing at this stage what specification would be suitable. As a key part of the research question is to understand how effects have changed over time, we do not use any restrictions that impose time-invariance on a regressor. Of course, if we were to allow all regressors to be time-varying, and also allowed for a fixed effect for each election, the conclusions would be no different than if each election were modelled separately.
 
-As we saw in Chapter \@ref(ch:Data), electorate boundaries change regularly, so even if an electorate name is used in different elections, it can represent a different region in each instance (consider our example of the Hume electorate in the 2013 and 2016 elections). Therefore, to construct panel data we would have to re-run the spatial imputation algorithm to generate socio-demographic profiles for each election with a common set of boundaries. Additionally, the two-party preferred vote would have to be imputed for these same boundaries, for all elections, which would introduce greater uncertainty. Finally, the same issues of choosing time-varying effects will arise in the panel data context as for the pooled cross-section.
+As we saw in Chapter \@ref(ch:Data), electoral boundaries change regularly, so even if an electorate name is used in different elections, it can represent a different region in each instance (consider our example of the Hume electorate in the 2013 and 2016 elections). Therefore, to construct panel data we would have to re-run the spatial imputation algorithm to generate socio-demographic profiles for each election with a common set of boundaries. Additionally, the two-party preferred vote would have to be imputed for these same boundaries, for all elections, which would introduce greater uncertainty. Finally, the same issues of choosing time-varying effects will arise in the panel data context as for the pooled cross-section.
 
 On this basis, modelling each election as a separate cross-section seems to us as the most appropriate statistical model to pursue. By using identical model specification, effects may be compared across six different elections, enabling the interpretation of temporal changes without concern for undue bias stemming from an incorrectly imposed restriction on any variable.
 
@@ -22,7 +22,7 @@ Therefore, for a given election year, we assume $TPP \sim N(X \beta, \sigma^2)$,
 
 We have $p = 63$ socio-demographic variables at our disposal for each election and only $n = 150$ electorates. If we tried to fit a model for a single election using all 63 variables, we would face serious problems with multi-collinearity and over-fitting, likely leading to erroneous conclusions regarding variable significance - the typical problem associated with having small sample size $n$ and relatively large set of predictor variables $p$. Therefore a form of dimension reduction is needed for this problem.
 
-Instead of throwing everything into a model and using a simple procedure to reduce the dimension of the data (e.g. step-wise or LASSO regression), we adopt a two-stage approach that results in the identification of a reduced predictor set. It is this reduced set that is used to estimate the final election regression models. 
+Instead of putting all variables into a model and using a simple procedure to reduce the dimension of the data (e.g. step-wise or LASSO regression), we adopt a two-stage approach that results in the identification of a reduced predictor set. It is this reduced set that is used to estimate the final election regression models. 
 
 The first step is to identify groups of similar variables, and for this principal component analysis (PCA) is used. These variable groupings are then reviewed to determine whether common meaning can be ascribed. If so, the variables are combined into a *factor* variable. This process reduces the predictor set from $p = 63$ to $p = 30$. However, it is still relatively large, and an additional variable selection method is required. Our target is to end up with a set of around ten variables in the final stage when we model each election. 
 
@@ -67,7 +67,7 @@ vis_loadings %>%
 
 The loadings from the first four principal components produced using the combined data set are considered when deciding the subset of explanatory variables that could be grouped together to create a factor. A factor is created when several variables all have large loadings in a particular component *and* when there is an intuitive reason as to why these variables could represent common information. We consider a loading with magnitude greater than 0.15 to be large.
 
-Four components are selected because there appears to be a kink in the scree plot after the fourth component (see Figure \@ref(fig:PVE-all)). In particular, the fifth component explains less than half of the variation as the fourth component. Importantly, the first four PCs explain 72.31% of the total variation.
+Four components are selected because the fourth is the largest component where there is a sharp drop following it (see Figure \@ref(fig:PVE-all)). That is, from the fifth component onwards, there is little gain in the cumulative proportion of variance explained. Importantly, the first four PCs explain 72.31% of the total variation.
 
 ```{r PVE-all, fig.cap = "Scree plot showing cumulative proportion of total variance explained by each principal component in the combined data set (across all elections). A kink appears after the fourth component."}
 load("../Modelling-Elections/Clean-Data/pve_all.rda")
@@ -165,7 +165,7 @@ A table of the sums of Akaike weights for all variables, in each year, is given 
 
 ## Adding interactions
 
-Before finalizing the common regression model to be fitted for each election year, we consider the inclusion of two-way interactions using an iterative procedure. First, for each election, we fit the model using the superset of predictors as main effects only. Then we consider all models with a single two-way interaction added to the superset, with the interaction tested using a likelihood-ratio test (1% significance level). The number of elections for which a given interaction is significant is tallied, and the interaction that is most frequently significant is selected to remain in the model. This process is repeated until four interactions are included. The number of interactions is limited to four so that the number of observations[^5] ($n=150$) to predictors ($p=14$) exceeds a ratio of 10 to 1.
+Before finalizing the common regression model to be fitted for each election year, we consider the inclusion of two-way interactions using an iterative procedure. First, for each election, we fit the model using the superset of predictors as main effects only. Then we consider all models with a single two-way interaction added to the superset, with the interaction tested using a likelihood-ratio test (1% significance level). The number of elections for which a given interaction is significant is tallied, and the interaction that is most frequently significant is selected to remain in the model. This process is repeated until four interactions are included. The number of interactions is limited to four so that the number of observations[^6] ($n=150$) to predictors ($p=14$) exceeds a ratio of 10 to 1.
 
 The resultant two-way interactions are:
 
@@ -177,7 +177,7 @@ The resultant two-way interactions are:
 
 - `AdminJobs` and `Education`
 
-[^5]: Note that in 2001 $n = 141$.
+[^6]: Note that in 2001 $n = 141$.
 
 ## Models
 
@@ -187,9 +187,9 @@ $TPP_i = \beta_0 + \beta_1*\text{MedianAge}_i + \beta_2*\text{BornSEEurope}_i + 
 
 where $\varepsilon_i \overset{iid}\sim N(0,\sigma^2)$.
 
-Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six election years[^6].
+Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six elections[^7]. These are interpreted in Chapter \@ref(ch:Insights).
 
-Model diagnostics are shown in Appendix \@ref(a:diagnostics), including the outcomes of tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points.
+Model diagnostics are shown in Appendix \@ref(a:diagnostics), including the outcomes of tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points. The results of these assessments indicated no major violation of assumptions.
 
 ## A note on omitted variables
 
@@ -210,4 +210,4 @@ stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, fit_ss_10, fit_ss_13, fit_
                      notes.align = "l")
 ```
 
-[^6]: Table produced using the `stargazer` package [@stargazer].
+[^7]: Table produced using the `stargazer` package [@stargazer].

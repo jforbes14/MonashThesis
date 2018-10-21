@@ -1,8 +1,8 @@
 ---
 title: 'What makes Australians vote the way they do? A socio-demographic study of voter preferences'
-degreetype: 'Econometrics Honours'
+degreetype: 'Bachelor of Commerce (Honours)'
 author: 'Jeremy Forbes'
-degrees: 'B.Sc./B.Com., Monash University'
+degrees: 'Monash University'
 output: bookdown::pdf_book
 site: bookdown::bookdown_site
 link-citations: yes

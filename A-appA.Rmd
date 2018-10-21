@@ -501,7 +501,7 @@ OVB_all %>%
 ```
 
 
-# Interpretation of more socio-demographics {#a:extrainsights}
+# Interpretation of additional socio-demographic variables {#a:extrainsights}
 
 This section contains the partial residual plots and 2D heatmaps that were omitted from Chapter \@ref(ch:Insights). See Chapter \@ref(ch:Insights) for a discussion of the insights from these visualizations.
 
@@ -607,7 +607,7 @@ grid.arrange(RentLoan_01, RentLoan_04, RentLoan_07, RentLoan_10, RentLoan_13, Re
              bottom = textGrob("Rent and Loan prices (factor)", gp = gpar(cex = 0.8)))
 ```
 
-```{r rentloan2, out.width='75%', fig.cap="Estimated coefficients for rental and loan payments across years with 95% confidence bands. Only in 2010 is there a significant effect."}
+```{r rentloan2, out.width='75%', fig.cap="Estimated coefficients for rental and loan payments across years with 95\\% confidence bands. Only in 2010 is there a significant effect."}
 
 # Coefficients
 all_coefs %>% filter(term == "RentLoan") %>% 
