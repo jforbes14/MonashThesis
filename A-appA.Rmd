@@ -161,8 +161,7 @@ Note: respondents is calculated by taking population 15 years and over, less que
 
 # Distribution of socio-demographic variables across elections {#a:summary}
 
-As seen in Chapter \@ref(ch:Data), violin plots are used to 
-depict the distributions of socio-demographic variables across years. Violin plots depict the distribution as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
+As seen in Chapter \@ref(ch:Data), violin plots depict the distribution of a variable as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
 
 ```{r violinall1, fig.height=10, fig.cap = "Distribution of each socio-demographic variable across elections (part 1)."}
 # Unscaled violin plots go here
@@ -216,7 +215,7 @@ data_mod %>%
 
 # Principal components {#a:PCloadings}
 
-The variable loadings in the first principal component are relatively common across years (see Figure \@ref(fig:loadings-1) in Chapter \@ref(ch:Modelling)). The same is true for the second component, and to a lesser extent the third and four components (see Figures \@ref(fig:loadings2), \@ref(fig:loadings3) and \@ref(fig:loadings4) below. 
+The variable loadings in the first principal component are relatively common across years (see Figure \@ref(fig:loadings-1) in Chapter \@ref(ch:Modelling)). The same is true for the second component, and to a lesser extent the third and four components (see Figures \@ref(fig:loadings2), \@ref(fig:loadings3) and \@ref(fig:loadings4) below). 
 
 ```{r loadings2, fig.cap = "Loadings of each variable in the second principal of each election year (points), with a line showing the range across years."}
 vis_loadings %>% 
@@ -248,7 +247,7 @@ vis_loadings %>%
 
 For each election, a model set containing all possible five variable linear models is constructed, from which Akaike weights are computed. *Five* variable models are a compromise between computational burden and capturing sufficient information. 
 
-It is too burdensome to run linear models for all possible combinations of the $p=30$ predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where the incremental gain in R-squared from adding a variable plateaus. 
+It is too burdensome to run linear models for all possible combinations of the $p=30$ predictors. Instead an iterative procedure is employed to sample from the possible linear models, of all sizes. This is done to see where the incremental gain in R-squared from adding a variable hits a plateau. 
 
 This iterative procedure involves collecting 20 models for each possible number of predictors $p$ in $p = 3, 4, ..., 30$. This means 20 models with 3 variables, 20 models with 4 variables and so on. The process is as follows:
 
@@ -317,8 +316,8 @@ data_mod %>%
   ggplot(aes(x = year, y = Perc_LNP)) + 
   geom_violin(aes(fill = year)) +
   labs(x = "Election year", y = "Two-party preferred vote (%)") +
-  theme(axis.text.x = element_text(size = 8, angle = 75, vjust = 0.5), 
-        axis.text.y = element_text(size=8)) + coord_fixed(0.05) + guides(fill = FALSE)
+  theme(axis.text.x = element_text(size = 14, angle = 75, vjust = 0.5), 
+        axis.text.y = element_text(size=14), axis.title = element_text(size = 14)) + coord_fixed(0.05) + guides(fill = FALSE)
 ```
 
 
@@ -329,52 +328,52 @@ Scatterplots of each variable across election years are shown in the plots below
 
 ```{r rawSE, fig.cap="Scatterplot of population born in South-Eastern Europe against two-party preferred vote."}
 ## Voting against BornSEEurope
-data_mod %>% ggplot(aes(x = BornSEEurope, y = Perc_LNP)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in South-Eastern Europe", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = BornSEEurope, y = Perc_LNP)) + geom_point() + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "BornSEEurope: Population born in South-Eastern Europe", y = "Two-party preferred (%)")
 ```
 
 ```{r rawUK, fig.cap="Scatterplot of population born in the United Kingdom against two-party preferred vote."}
 ## Voting against BornUK
-data_mod %>% ggplot(aes(x = BornUK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Population born in the United Kingdom", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = BornUK, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "BornUK: Population born in the United Kingdom", y = "Two-party preferred (%)")
 ```
 
 ```{r rawNoRelig, fig.cap="Scatterplot of population not identifying with a religion against two-party preferred vote."}
 ## Voting against NoReligion
-data_mod %>% ggplot(aes(x = NoReligion, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of population not identifying with a religion", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = NoReligion, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "NoReligion: Proportion of population not identifying with a religion", y = "Two-party preferred (%)")
 ```
 
 ```{r rawrentloan, fig.cap="Scatterplot of rental and loan payments against two-party preferred vote."}
 ## Voting against RentLoan
-data_mod %>% ggplot(aes(x = RentLoan, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Rental and loan payments", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = RentLoan, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "RentLoan: Rental and loan payments", y = "Two-party preferred (%)")
 ```
 
 ```{r raweduc, fig.cap="Scatterplot of education levels against two-party preferred vote."}
 ## Voting against Education
-data_mod %>% ggplot(aes(x = Education, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education level", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = Education, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Education: Education level", y = "Two-party preferred (%)")
 ```
 
 ```{r rawstudy, fig.cap="Scatterplot of population currently studying against two-party preferred vote."}
 ## Voting against Currently studying
-data_mod %>% ggplot(aes(x = CurrentlyStudying, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of population currently studying", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = CurrentlyStudying, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "CurrentlyStudying: Proportion of population currently studying", y = "Two-party preferred (%)")
 ```
 
 ```{r rawage, fig.cap="Scatterplot of median age against two-party preferred vote."}
 ## Voting against MedianAge
-data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Median age", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = MedianAge, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "MedianAge: Median age", y = "Two-party preferred (%)")
 ```
 
 ```{r rawOP, fig.cap = "Scatterplot of single parent households against two-party preferred vote."}
 ## Voting against OneParentHouse
-data_mod %>% ggplot(aes(x = OneParentHouse, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Proportion of single parent households", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = OneParentHouse, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "OneParentHouse: Proportion of single parent households", y = "Two-party preferred (%)")
 ```
 
 ```{r rawext, fig.cap="Scatterplot of population working in ExtractiveJobs jobs against two-party preferred vote."}
 ## Voting against ExtractiveJobs
-data_mod %>% ggplot(aes(x = ExtractiveJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Jobs in ExtractiveJobs industries", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = ExtractiveJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "ExtractiveJobs: Proportion of jobs in extractive industries", y = "Two-party preferred (%)")
 ```
 
 ```{r rawadmin, fig.cap="Scatterplot of population working in administrative jobs against two-party preferred vote."}
 ## Voting against AdminJobs
-data_mod %>% ggplot(aes(x = AdminJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Administrative jobs", y = "Two-party preferred (%)")
+data_mod %>% ggplot(aes(x = AdminJobs, y = Perc_LNP)) + geom_point(aes(label = Election_Division)) + geom_smooth(method = "lm") + facet_wrap(~year) + labs(x = "Adminjobs: Proportion of jobs in administrative jobs", y = "Two-party preferred (%)")
 ```
 
 
@@ -446,7 +445,7 @@ aug_all %>%
 
 ## Residuals vs predictors not in model {#a:patternsout}
 
-Scatterplots of the residuals against socio-demographic predictors were produced with a loess smooth fit and overlaid in each plot. No significant relationships were found between the residuals and predictors not in the superset, in any of the election. 
+Scatterplots of the residuals against socio-demographic predictors are produced with a loess smooth fit and overlaid in each plot. No significant relationships are found between the residuals and predictors not in the superset, in any of the election.
 
 ## Influence {#a:influence}
 
@@ -505,7 +504,7 @@ OVB_all %>%
 
 This section contains the partial residual plots and 2D heatmaps that were omitted from Chapter \@ref(ch:Insights). See Chapter \@ref(ch:Insights) for a discussion of the insights from these visualizations.
 
-### Migrants from the United Kingdom
+## Migrants from the United Kingdom
 
 The proportion of an electoral population born in the United Kingdom, `BornUK`, does not have a significant effect on two-party preference in any of the elections.
 
@@ -564,7 +563,7 @@ all_coefs %>% filter(term == "BornUK") %>%
 ```
 
 
-### Rental and Loan Payments
+## Rental and Loan Payments
 
 The factor `RentLoan` combines electoral median rent and loan payments. In the 2010 election, electorates with higher payment amounts were significantly more likely to support the Liberal party, whereas in other elections `RentLoan` did not have a significant effect.
 
@@ -622,7 +621,7 @@ all_coefs %>% filter(term == "RentLoan") %>%
   labs(x = "", y = "Coefficient estimate: RentLoan")
 ```
 
-### Administrative Jobs and Education
+## Administrative Jobs and Education
 
 Over all years we see that for moderate-to-high proportions of workers in administrative jobs, low education levels lead to support for the Liberal party. Otherwise, an electorate is predicted to support Labor. This is consistent across elections. See Figure \@ref(fig:admineduc).
 
