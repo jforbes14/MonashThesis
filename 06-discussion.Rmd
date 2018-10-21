@@ -14,7 +14,7 @@ Some possible directions for future work are outlined below.
 
 ### Spatial dependencies
 
-For each election, a Moran's I test for spatial correlation amongst the residuals reveals evidence of spatial correlation in all but the 2001 election (see Table 6.1). To implement this test, spatial weights are calculated by allowing each electorate to be equally correlated with any electorate that share any part of its boundary. See @LeSage2009 for an illustration of this test.
+For each election, a Moran's I test for spatial correlation amongst the residuals reveals evidence of spatial correlation in all but the 2001 and 2007 elections (see Table 6.1). To implement this test, spatial weights are calculated by allowing each electorate to be equally correlated with any electorate that share any part of its boundary. See @LeSage2009 for an illustration of this test.
 
 \begin{table}[!htbp] \centering
   \caption{p-values from Moran's I test for spatial correlation in the residuals, for each election.} 

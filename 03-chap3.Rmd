@@ -12,7 +12,7 @@ A map of electoral boundaries in each election is also provided by the AEC in ge
 
 For each election the two-party preferred vote is obtained for all 150 electorates, with the exception of 2001. The electoral two-party preferred vote was not published for the 2001 election[^4]. Instead, we calculate it from the two-candidate preferred vote for the 141 electorates that had Labor and Liberal as the two most popular candidates, leaving nine electorates without a two-party preferred vote recorded. These 9 electorates are omitted from the subsequent analysis.
 
-Socio-demographic variables are derived from the Census of Population and Housing (Census), which is a survey of every household in Australia, recording information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census, and publishes aggregated information (including GIS maps of the aggregated regions). We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in Appendix \@ref(a:describeSD). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
+Socio-demographic variables are derived from the Census of Population and Housing (Census), which is a survey of every household in Australia, recording information such as age, gender, ethnicity, education level and income. There have been four Censuses in the 21st century, being that in 2001, 2006, 2011 and 2016. The Australian Bureau of Statistics (ABS) conducts the Census and publishes aggregated information (including GIS maps of the aggregated regions). We choose the aggregate level of Commonwealth Electoral Divisions, which is the ABS approximation of electorates at the time of the Census. From this aggregate information, 63 socio-demographic variables are computed for each of the Commonwealth Electoral Divisions. A full description of these variables can be found in Appendix \@ref(a:describeSD). From here on, Commonwealth Electoral Divisions will be referred to as *Census divisions*, so that they are not confused with electorates.
 
 At this stage in the process, we have obtained the electoral two-party preferred votes for the six elections, and socio-demographic variables for Census divisions in the four Censuses. In order to model each election, the socio-demographic variables need to be linked with the electorates in each election. Elections and Censuses are not contemporaneous, nor are the boundaries of electorates guaranteed to align with a set of Census divisions - as the AEC redistributes electoral boundaries. Therefore, a method of imputation is required to obtain the desired cross-sections for each election.
 
@@ -45,7 +45,7 @@ The essence of the algorithm is to estimate the socio-demographic composition of
 
 The steps of the algorithm are detailed below, followed by an example.
 
-**Algorithm: Spatial imputation**
+**Algorithm: Spatio-temporal imputation**
 
 Items needed: 
 
@@ -85,7 +85,7 @@ $$\hat{\lambda}_{e,s} = \frac{s-t_1}{t_2-t_1} \cdot \hat{\lambda}_{e,t_1} + \fra
 
 **Example: electorate of Hume in the 2013 election.**
 
-To illustrate the spacio-temporal algorithm detailed above, consider the imputation of a socio-demographic variable for the electorate of Hume in New South Wales (NSW), at the time of the 2013 federal election. Figure \@ref(fig:hume13) shows this region amongst other NSW electorates.
+To illustrate the spatio-temporal algorithm detailed above, consider the imputation of a socio-demographic variable for the electorate of Hume in New South Wales (NSW), at the time of the 2013 federal election. Figure \@ref(fig:hume13) shows this region amongst other NSW electorates.
 
 ```{r hume13, fig.cap = "Some of the electoral boundaries in NSW for 2013, with the electoral boundary for Hume, shown in purple."}
 # 2013
@@ -275,7 +275,7 @@ profiles %>%
 
 Socially "progressive" movements continue to gather momentum all over the world, and Australia is no different, with many people dissociating from traditional religious beliefs and values. The frequency of individuals identifying themselves with a religion has declined over the years, as shown in Figure \@ref(fig:vis-relig). This trend is observed across all electorates, as the minimum value has increased. In 2016, having any religious affiliation would make you a minority in some electorates! 
 
-```{r vis-relig, out.height='25%', fig.cap="Distributions of the proportions of the electoral populations not identifying with a religion, by election year. Over time, the higher proportions of electorates are not identifying with a religion."}
+```{r vis-relig, out.height='25%', fig.cap="Distributions of the proportions of electoral populations not identifying with a religion, by election year. Over time, the higher proportions of electorates are not identifying with a religion."}
 profiles %>% 
   ggplot(aes(x=year, y=NoReligion, fill=year)) + 
   geom_violin() + 

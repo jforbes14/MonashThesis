@@ -4,7 +4,7 @@ Socio-demographic variables for each electorate have now been calculated and mat
 
 ## Choosing a statistical model
 
-With 150 electorates in each election, there are effectively six cross-sectional data sets. There are at least three different approaches which could be pursued. One option is to combine these cross-sections into a single pooled cross-section with 900 observations, allowing for the construction of a longitudinal model. Another option is to construct a panel data set for a particular set of electoral boundaries across all elections. This way we could potentially capture any unobserved individual heterogeneity using either fixed or random effects. A third option is to model each election as a separate cross-section.
+There are at least three different modelling approaches that could be pursued with the six cross-sectional data sets. One option is to combine these cross-sections into a single pooled cross-section with 900 observations, allowing for the construction of a longitudinal model. Another option is to construct a panel data set for a particular set of electoral boundaries across all elections. This way we could potentially capture any unobserved individual heterogeneity using either fixed or random effects. A third option is to model each election as a separate cross-section.
 
 Treating the data as a pooled cross-section would allow us to capture both time invariant and time varying socio-demographic effects, as well as yearly fixed effects (or a time trend). In order to do this, we must specify which regressors are to have time-varying effects (and which will not), despite not knowing at this stage what specification would be suitable. As a key part of the research question is to understand how effects have changed over time, we do not use any restrictions that impose time-invariance on a regressor. Of course, if we were to allow all regressors to be time-varying, and also allowed for a fixed effect for each election, the conclusions would be no different than if each election were modelled separately.
 
@@ -14,7 +14,7 @@ On this basis, modelling each election as a separate cross-section seems to us a
 
 ### Response variable - two-party preferred vote
 
-The two-party preferred vote is a measure of preference between only the two major parties (Labor and Liberal), and is oriented in favour of the Liberal party, sitting in the interval $(0,100)$. For example, $TPP = 70$ represents a 70% preference for Liberal, 30% for Labor. Since the observed values of $TPP$ are never very close to 0 or 100 (minimum $24.05 \%$ and maximum $74.90 \%$), there is no need to impose the constraint of $TPP \in (0,100)$ and so linear regression models are estimated using ordinary least squares.
+The two-party preferred vote is a measure of preference between only the two major parties (Labor and Liberal), and is oriented in favour of the Liberal party, sitting in the interval $(0,100)$. For example, $TPP = 70$ represents a 70% preference for Liberal, 30% for Labor. Since the observed values of $TPP$ are never very close to 0 or 100 (minimum $24.05 \%$ and maximum $74.90 \%$), there is no need to impose the constraint of $TPP \in [0,100]$ and so linear regression models are estimated using ordinary least squares.
 
 Therefore, for a given election year, we assume $TPP \sim N(X \beta, \sigma^2)$, where $TPP$ is an $n \times 1$ vector containing $n=150$ two-party preferred votes, $X$ is an ($n \times p$) matrix of socio-demographic predictors, $\beta$ is a ($p \times 1$) vector of coefficients to be estimated. By assumption, the regression errors are taken to be independent and identically normally distributed with mean $0$ and variance $\sigma^2$. The estimation is done separately for each election.
 
@@ -67,7 +67,7 @@ vis_loadings %>%
 
 The loadings from the first four principal components produced using the combined data set are considered when deciding the subset of explanatory variables that could be grouped together to create a factor. A factor is created when several variables all have large loadings in a particular component *and* when there is an intuitive reason as to why these variables could represent common information. We consider a loading with magnitude greater than 0.15 to be large.
 
-Four components are selected because the fourth is the largest component where there is a sharp drop following it (see Figure \@ref(fig:PVE-all)). That is, from the fifth component onwards, there is little gain in the cumulative proportion of variance explained. Importantly, the first four PCs explain 72.31% of the total variation.
+Four components are selected because there is a kink in the scree plot after the fourth largest component (see Figure \@ref(fig:PVE-all)). That is, from the fifth component onwards, there is little gain in the cumulative proportion of variance explained. Importantly, the first four PCs explain 72.31% of the total variation.
 
 ```{r PVE-all, fig.cap = "Scree plot showing cumulative proportion of total variance explained by each principal component in the combined data set (across all elections). A kink appears after the fourth component."}
 load("../Modelling-Elections/Clean-Data/pve_all.rda")
@@ -189,20 +189,20 @@ where $\varepsilon_i \overset{iid}\sim N(0,\sigma^2)$.
 
 Table 4.1 details the resultant estimated model coefficients and their estimated standard errors for each of the six elections[^7]. These are interpreted in Chapter \@ref(ch:Insights).
 
-Model diagnostics are shown in Appendix \@ref(a:diagnostics), including the outcomes of tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points. The results of these assessments indicated no major violation of assumptions.
+Model diagnostics are shown in Appendix \@ref(a:diagnostics), including the outcomes of tests for heteroskedasticity, residual non-normality, non-linear patterns in the residuals against included predictors, patterns in the residuals against missing predictors and influential points. These assessments did not indicate a major violation of any of the assumptions.
 
 ## A note on omitted variables
 
 When doing any kind of variable selection, omitted variable bias is a concern. By constructing the superset, we have ensured that none of the top five key variables (available from the Census) for each election have been excluded. Therefore any left out predictors should have only relatively small or no effect on the two-party preferred vote, over and above what has been included in the model. 
 
-On the surface, variables like income and labor force participation might seem relevant and useful to include in the model. However, we find that over 85% of the variation in the `Incomes` variable and over 75% of the variation in the variable `LFParticipation`, is actually explained by the superset of variables (as found by regressing each omitted variable on the superset of variables, see Appendix \@ref(a:omittedvar)). Other variables, for example `Judaism`, are not well explained by the superset, but are also not influential in determining two-party preference which justifies their exclusion from the final model.
+On the surface, variables relating to income and labor force participation might seem relevant and useful to include in the model. However, we find that over 85% of the variation in the `Incomes` variable and over 75% of the variation in the variable `LFParticipation`, is explained by the superset of variables (as found by regressing each omitted variable on the superset of variables, see Appendix \@ref(a:omittedvar)). Other variables, for example `Judaism`, are not well explained by the superset, but are also not influential in determining two-party preference which justifies their exclusion from the final model.
 
 Of course there may be other relevant variables not captured by the Census that could potentially cause omitted variable bias. However, this is beyond the scope of this project.
 
 ```{r allmodels1, results = 'asis'}
 stargazer::stargazer(fit_ss_01, fit_ss_04, fit_ss_07, fit_ss_10, fit_ss_13, fit_ss_16, header = FALSE, 
                      column.sep.width = "1pt", 
-                     title = "Estimated model coefficients using the final set of predictor variables for each of the six elections.",
+                     title = "Estimated model using the final set of predictor variables for each of the six elections.",
                      dep.var.labels = "Two-party preferred vote in favor of the Liberal party", 
                      font.size = "scriptsize", df = FALSE, digits = 2, 
                      column.labels = c("2001", "2004", "2007", "2010", "2013", "2016"),

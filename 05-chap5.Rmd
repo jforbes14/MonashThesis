@@ -23,37 +23,37 @@ Additional visual summaries can be found in Appendix \@ref(a:extrainsights). Plo
 Two socio-demographic variables in the model relate to migrant populations, `BornSEEurope` and `BornUK`. These represent the proportion of an electorate's population born in South-Eastern Europe and the United Kingdom, respectively. Across all six elections, the prediction line for `BornSEEurope` has a significant negative slope (Figure \@ref(fig:SE1)), indicating that electorates with more immigrants from South-Eastern Europe were more likely to support Labor. These slopes do not vary much across years. On the other hand, `BornUK` does not have a significant effect on two-party preference in any of the elections. Partial residual plots for `BornUK` can be located in Appendix \@ref(a:extrainsights). 
 
 ```{r SE1, out.width='100%', fig.cap="Partial residual plots for the effect of population born in South-Eastern Europe, across election years. A linear regression line is overlaid to illustrate the decreasing relationship."}
-Born_SE_01 <- visreg(fit_ss_01, "BornSEEurope", gg = T, print.cond = FALSE) + 
+Born_SE_01 <- visreg(fit_ss_01, "BornSEEurope", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) +
   lims(x = c(-1,5.2), y = c(23,70)) + coord_cartesian(expand = FALSE)
-Born_SE_04 <- visreg(fit_ss_04, "BornSEEurope", gg = T, print.cond = FALSE) + 
+Born_SE_04 <- visreg(fit_ss_04, "BornSEEurope", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-1,5.2), y = c(23,70)) + coord_cartesian(expand = FALSE)
-Born_SE_07 <- visreg(fit_ss_07, "BornSEEurope", gg = T, print.cond = FALSE) + 
+Born_SE_07 <- visreg(fit_ss_07, "BornSEEurope", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-1,5.2), y = c(23,70)) + coord_cartesian(expand = FALSE)
-Born_SE_10 <- visreg(fit_ss_10, "BornSEEurope", gg = T, print.cond = FALSE) + 
+Born_SE_10 <- visreg(fit_ss_10, "BornSEEurope", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-1,5.2), y = c(23,70)) + coord_cartesian(expand = FALSE)
-Born_SE_13 <- visreg(fit_ss_13, "BornSEEurope", gg = T, print.cond = FALSE) + 
+Born_SE_13 <- visreg(fit_ss_13, "BornSEEurope", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-1,5.2), y = c(23,70)) + coord_cartesian(expand = FALSE)
-Born_SE_16 <- visreg(fit_ss_16, "BornSEEurope", gg = T, print.cond = FALSE) + 
+Born_SE_16 <- visreg(fit_ss_16, "BornSEEurope", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
@@ -85,37 +85,37 @@ all_coefs %>% filter(term == "BornSEEurope") %>%
 Recall that in Chapter \@ref(ch:Data) it was found that over the years, more Australians have turned away from religion. For the elections up to and including 2007, the proportion of an electorate not identifying with a religion did not have a significant effect. However, from 2010 onwards, less religious electorates became more supportive of the Labor party. This is depicted by significant negative slopes appearing in the partial residual plots (Figure \@ref(fig:norelig1)) from 2010. The slopes do not appear to change much from after 2010.
 
 ```{r norelig1, fig.cap="Partial residual plots for the effect of the population proportion not identifying with a religion, across election years. The overlaid regression lines show that a significant negative slope emerges in 2010, meaning that Labor is assoicated with electorates with a higher proportion of people not identifying with a religion."}
-NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE) + 
+NoReligion_01 <- visreg(fit_ss_01, "NoReligion", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 2.8), y = c(28,70)) + coord_cartesian(expand = FALSE)
-NoReligion_04 <- visreg(fit_ss_04, "NoReligion", gg = T, print.cond = FALSE) + 
+NoReligion_04 <- visreg(fit_ss_04, "NoReligion", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 2.8), y = c(28,70)) + coord_cartesian(expand = FALSE)
-NoReligion_07 <- visreg(fit_ss_07, "NoReligion", gg = T, print.cond = FALSE) + 
+NoReligion_07 <- visreg(fit_ss_07, "NoReligion", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 2.8), y = c(28,70)) + coord_cartesian(expand = FALSE)
-NoReligion_10 <- visreg(fit_ss_10, "NoReligion", gg = T, print.cond = FALSE) + 
+NoReligion_10 <- visreg(fit_ss_10, "NoReligion", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 2.8), y = c(28,70)) + coord_cartesian(expand = FALSE)
-NoReligion_13 <- visreg(fit_ss_13, "NoReligion", gg = T, print.cond = FALSE) + 
+NoReligion_13 <- visreg(fit_ss_13, "NoReligion", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) +
   lims(x = c(-2.8, 2.8), y = c(28,70)) + coord_cartesian(expand = FALSE) 
-NoReligion_16 <- visreg(fit_ss_16, "NoReligion", gg = T, print.cond = FALSE) + 
+NoReligion_16 <- visreg(fit_ss_16, "NoReligion", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
@@ -128,7 +128,7 @@ grid.arrange(NoReligion_01, NoReligion_04, NoReligion_07, NoReligion_10, NoRelig
              bottom = textGrob("Population not identifying with a religion", gp = gpar(cex = 0.8)))
 ```
 
-```{r norelig2, out.width='75%', fig.cap="Estimated coefficients for population proportion not identifying with a religion, across election years and with 95\\% confidence bands. From 2010 onwards, Labor was assoicated with electorates with a higher proportion of people not identifying with a religion."}
+```{r norelig2, out.width='75%', fig.cap="Estimated coefficients for population proportion not identifying with a religion, across election years and with 95\\% confidence bands. From 2010 onwards, Labor is assoicated with electorates with a higher proportion of people not identifying with a religion."}
 # Coefficients
 all_coefs %>% filter(term == "NoReligion") %>% 
   ggplot(aes(x=year, y=estimate)) +
@@ -148,37 +148,37 @@ The proportion of an electorate's population currently studying is reflected in 
 In the 2001 and 2004 elections, `CurrentlyStudying` is estimated to have a weak (insignificant) effect in the direction of the Labor party. From 2007, there is a distinct change, as the positive slopes in Figure \@ref(fig:studying) indicate that the effect of larger student populations has shifted towards the Liberal party. Only in 2010 is this relationship significant (by the horizontal line test).
 
 ```{r studying, fig.cap="Partial residual plots for the effect of student populations, across election years. A Liberal (positive) effect is estimated from 2007, but is only significant in 2010."}
-CurrentlyStudying_01 <- visreg(fit_ss_01, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
+CurrentlyStudying_01 <- visreg(fit_ss_01, "CurrentlyStudying", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 5), y = c(28,70)) + coord_cartesian(expand = FALSE)
-CurrentlyStudying_04 <- visreg(fit_ss_04, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
+CurrentlyStudying_04 <- visreg(fit_ss_04, "CurrentlyStudying", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 5), y = c(28,70)) + coord_cartesian(expand = FALSE)
-CurrentlyStudying_07 <- visreg(fit_ss_07, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
+CurrentlyStudying_07 <- visreg(fit_ss_07, "CurrentlyStudying", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 5), y = c(28,70)) + coord_cartesian(expand = FALSE)
-CurrentlyStudying_10 <- visreg(fit_ss_10, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
+CurrentlyStudying_10 <- visreg(fit_ss_10, "CurrentlyStudying", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm"))  +
   lims(x = c(-2.8, 5), y = c(28,70)) + coord_cartesian(expand = FALSE)
-CurrentlyStudying_13 <- visreg(fit_ss_13, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
+CurrentlyStudying_13 <- visreg(fit_ss_13, "CurrentlyStudying", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
         plot.margin=unit(c(0.2,0.2,0.2,0.2), "cm")) +
   lims(x = c(-2.8, 5), y = c(28,70)) + coord_cartesian(expand = FALSE) 
-CurrentlyStudying_16 <- visreg(fit_ss_16, "CurrentlyStudying", gg = T, print.cond = FALSE) + 
+CurrentlyStudying_16 <- visreg(fit_ss_16, "CurrentlyStudying", gg = T, print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5),
@@ -207,7 +207,7 @@ all_coefs %>% filter(term == "CurrentlyStudying") %>%
 
 ### Rental and Loan Payments
 
-The factor `RentLoan` combines electoral median rent and loan payments. In the 2010 election, electorates with higher payment amounts were significantly more likely to support the Liberal party, whereas in other elections `RentLoan` did not have a significant effect.
+The factor `RentLoan` combines electoral median rent and loan payments. In the 2010 election, electorates with higher payment amounts were significantly more likely to support the Liberal party, whereas in other elections `RentLoan` did not have a significant effect (see Appendix \@ref(a:extrainsights).
 
 ## Interactions {#interactions}
 
@@ -215,9 +215,9 @@ There are four two-way interactions in the final model. For each interaction, 2D
 
 ### Education and Age
 
-Even though the population is ageing, and education levels have been improving all across Australia (as seen in Chapter \@ref(ch:Data)), it appears that younger electorates with higher education levels have always supported Labor, whereas older electorates with lower education levels have changed from indifferent to supporting the Liberal party. 
+Even though the population is ageing, and education levels have been improving all across Australia (as seen in Chapter \@ref(ch:Data)), it appears that younger electorates with higher education levels always support Labor, whereas older electorates with lower education levels change from indifferent to supporting the Liberal party. 
 
-The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each 2D heatmap in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates became strong supporters of the Liberal party. 
+The interaction between `MedianAge` and `Education` represents combinations of the electoral age profile, and education levels. In all six elections, young electorates with above-average levels of education consistently support the Labor party, represented by the red region in the bottom right corner of each 2D heatmap in Figure \@ref(fig:educage). For the 2001 and 2004 elections, electorates with a high median age and a low level of education did not vote differently from an electorate with mean characteristics, as shown by the white in the top left corner of the corresponding plots in Figure \@ref(fig:educage). This same region becomes more blue in 2007, and strongly blue from 2010 onwards, meaning that older, less educated electorates shift to be strong supporters of the Liberal party. 
 
 ```{r educage, fig.cap="2D heatmap for combinations of education and median age, in each election year. Colour indicates the predicted two-party preferred vote. Electorates with high education levels and low median age consistently support Labor (bottom-right). Older electorates with low education levels shift to support Liberal from 2007 (top-left)."}
 

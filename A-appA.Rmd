@@ -36,7 +36,7 @@ The socio-demographic variables obtained from the Census are defined as follow.
 
 `MedianFamilyIncome`: Median weekly family income
 
-`MedianAge`: Median age
+`MedianAge`: Median age (in years)
 
 `MedianRent`: Median weekly rental payment amount (of those who rent)
 
@@ -161,7 +161,7 @@ Note: respondents is calculated by taking population 15 years and over, less que
 
 # Distribution of socio-demographic variables across elections {#a:summary}
 
-As seen in Chapter \@ref(ch:Data), violin plots depict the distribution of a variable as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) (below) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
+As seen in Chapter \@ref(ch:Data), violin plots depict the distribution of a variable as a density plot reflected in the vertical axis. Figures \@ref(fig:violinall1) and \@ref(fig:violinall2) contain violin plots of every socio-demographic variable. Note that these variables have not been standardised.
 
 ```{r violinall1, fig.height=10, fig.cap = "Distribution of each socio-demographic variable across elections (part 1)."}
 # Unscaled violin plots go here
@@ -259,7 +259,7 @@ This iterative procedure involves collecting 20 models for each possible number 
 
 4. Repeat steps 2 and 3 for the threevariable models, four variable models, and so on, until reaching a model with all 30 variables.
 
-Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained against the number of predictors used. The line represents the maximum R-squared each number of predictors. Around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From variable 4 onwards, there is little incremental gain in R-squared from adding another variable.
+Figure \@ref(fig:tradeoff) shows the R-squared for each of the models retained against the number of predictors used. The line represents the maximum R-squared each number of predictors. Around 70% of variation in two-party preference can be explained by a five variable model in each election, and the full variable set explains around 80% of variation (i.e. R-squared of 0.8). From four variables onwards, there is little incremental gain in R-squared from adding another variable.
 
 All possible $p$ variable models for each election involves fitting ${30 \choose p} \times 6$ models. The computational burden here becomes huge very quickly. For this reason, we have chosen $p=5$ variable models, as it is computationally feasible and includes models that have large R-squared.
 
@@ -307,7 +307,7 @@ data_mod %>%
   facet_wrap(~key) +
   coord_fixed(ratio = 0.3) +
   theme(axis.text.x = element_text(size = 8, angle = 75, vjust = 0.5), 
-        axis.text.y = element_text(size=8)) + 
+        axis.text.y = element_text(size=8), axis.title = element_text(size = 10)) + 
   guides(fill = FALSE) +
   labs(x = "Election year", y = "Value of centered and standardized\nsocio-demographic variable")
 ```
@@ -317,7 +317,7 @@ data_mod %>%
   geom_violin(aes(fill = year)) +
   labs(x = "Election year", y = "Two-party preferred vote (%)") +
   theme(axis.text.x = element_text(size = 14, angle = 75, vjust = 0.5), 
-        axis.text.y = element_text(size=14), axis.title = element_text(size = 14)) + coord_fixed(0.05) + guides(fill = FALSE)
+        axis.text.y = element_text(size=14), axis.title = element_text(size = 18)) + coord_fixed(0.05) + guides(fill = FALSE)
 ```
 
 
@@ -459,8 +459,6 @@ There are twenty socio-demographic predictors that are not in the superset, and 
 
 For example, over 85% of the variation in the `Incomes` variable and over 75% of the variation in the variable `LFParticipation`, is actually explained by the superset of variables. Other variables, for example `Judaism`, are not well explained by the superset, but are also not influential in determining two-party preference which justifies their exclusion from the final model.
 
-Of course there may be other relevant variables not captured by the Census that could potentially cause omitted variable bias. However, this is beyond the scope of this project.
-
 ```{r ovb, fig.cap = "R-squared of each omitted variable when regressed on the superset each year."}
 OVB_fn <- function(Year) {
   Year <- as.character(Year)
@@ -509,32 +507,32 @@ This section contains the partial residual plots and 2D heatmaps that were omitt
 The proportion of an electoral population born in the United Kingdom, `BornUK`, does not have a significant effect on two-party preference in any of the elections.
 
 ```{r UK1, out.width="100%", fig.cap="Partial residual plots for the effect of population born in the United Kingdom, across election years. A linear regression line is overlaid. No significant relationship is observed in any election."}
-BornUK_01 <- visreg(fit_ss_01, "BornUK", gg = T, print.cond = FALSE) + 
+BornUK_01 <- visreg(fit_ss_01, "BornUK", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
-BornUK_04 <- visreg(fit_ss_04, "BornUK", gg = T, print.cond = FALSE) + 
+BornUK_04 <- visreg(fit_ss_04, "BornUK", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-BornUK_07 <- visreg(fit_ss_07, "BornUK", gg = T, print.cond = FALSE) + 
+BornUK_07 <- visreg(fit_ss_07, "BornUK", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5))  +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
-BornUK_10 <- visreg(fit_ss_10, "BornUK", gg = T, print.cond = FALSE) + 
+BornUK_10 <- visreg(fit_ss_10, "BornUK", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-BornUK_13 <- visreg(fit_ss_13, "BornUK", gg = T, print.cond = FALSE) + 
+BornUK_13 <- visreg(fit_ss_13, "BornUK", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
   lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-BornUK_16 <- visreg(fit_ss_16, "BornUK", gg = T, print.cond = FALSE) + 
+BornUK_16 <- visreg(fit_ss_16, "BornUK", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
@@ -568,36 +566,36 @@ all_coefs %>% filter(term == "BornUK") %>%
 The factor `RentLoan` combines electoral median rent and loan payments. In the 2010 election, electorates with higher payment amounts were significantly more likely to support the Liberal party, whereas in other elections `RentLoan` did not have a significant effect.
 
 ```{r rentloan1, out.width="100%", fig.cap="Partial residual plots for the effect of rental and loan prices, across election years. A linear regression line is overlaid. In 2010, electorates with higher median rental and loan payments were more likely to support the Liberal party."}
-RentLoan_01 <- visreg(fit_ss_01, "RentLoan", gg = T, print.cond = FALSE) + 
+RentLoan_01 <- visreg(fit_ss_01, "RentLoan", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2001") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
-  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
-RentLoan_04 <- visreg(fit_ss_04, "RentLoan", gg = T, print.cond = FALSE) + 
+  lims(x = c(-2, 4), y = c(28,74)) + coord_cartesian(expand = FALSE)
+RentLoan_04 <- visreg(fit_ss_04, "RentLoan", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2004") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
-  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-RentLoan_07 <- visreg(fit_ss_07, "RentLoan", gg = T, print.cond = FALSE) + 
+  lims(x = c(-2, 4), y = c(28,74)) + coord_cartesian(expand = FALSE) 
+RentLoan_07 <- visreg(fit_ss_07, "RentLoan", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2007") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5))  +
-  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE)
-RentLoan_10 <- visreg(fit_ss_10, "RentLoan", gg = T, print.cond = FALSE) + 
+  lims(x = c(-2, 4), y = c(28,74)) + coord_cartesian(expand = FALSE)
+RentLoan_10 <- visreg(fit_ss_10, "RentLoan", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2010") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
-  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-RentLoan_13 <- visreg(fit_ss_13, "RentLoan", gg = T, print.cond = FALSE) + 
+  lims(x = c(-2, 4), y = c(28,74)) + coord_cartesian(expand = FALSE) 
+RentLoan_13 <- visreg(fit_ss_13, "RentLoan", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2013") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
-  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
-RentLoan_16 <- visreg(fit_ss_16, "RentLoan", gg = T, print.cond = FALSE) + 
+  lims(x = c(-2, 4), y = c(28,74)) + coord_cartesian(expand = FALSE) 
+RentLoan_16 <- visreg(fit_ss_16, "RentLoan", gg = T,  print.cond = FALSE, fill = list(col = "grey75")) + 
   labs(x = "", y = "", title = "2016") +
   theme_bw() + 
   theme(plot.title = element_text(face = "bold", size = 10, hjust = 0.5)) +
-  lims(x = c(-1.8, 5.2), y = c(32,68)) + coord_cartesian(expand = FALSE) 
+  lims(x = c(-2, 4), y = c(28,74)) + coord_cartesian(expand = FALSE) 
 
 grid.arrange(RentLoan_01, RentLoan_04, RentLoan_07, RentLoan_10, RentLoan_13, RentLoan_16, 
              nrow = 2, 
